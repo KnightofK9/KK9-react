@@ -1,5 +1,26 @@
 import randomcolor from 'randomcolor'
 class DummyData{
+    static dummyPrepareFoodList(){
+        let prepareFoodRows = [];
+        let dummyUrl = "http://kiwifoodshop.com.vn/upload/product/1457145854nac-vai-bo-uc.JPG";
+        prepareFoodRows.push(DummyData.createPrepareFoodRow(1,dummyUrl,"Thịt bò",1));
+        prepareFoodRows.push(DummyData.createPrepareFoodRow(2,dummyUrl,"Thịt bò",1));
+        prepareFoodRows.push(DummyData.createPrepareFoodRow(3,dummyUrl,"Thịt bò",1));
+        prepareFoodRows.push(DummyData.createPrepareFoodRow(4,dummyUrl,"Thịt bò",1));
+        prepareFoodRows.push(DummyData.createPrepareFoodRow(5,dummyUrl,"Thịt bò",1));
+        prepareFoodRows.push(DummyData.createPrepareFoodRow(6,dummyUrl,"Thịt bò",1));
+        prepareFoodRows.push(DummyData.createPrepareFoodRow(7,dummyUrl,"Thịt bò",1));
+        return prepareFoodRows;
+    }
+    static createPrepareFoodRow(prepareFoodId,foodImage,foodName,prepareState){
+        return{
+            prepareFoodId,
+            tableId : prepareFoodId,
+            foodImage,
+            foodName,
+            prepareState,
+        }
+    }
     static dummyFoodList(){
         let categorizeName = "Món tráng miệng";
         let foodList = [];

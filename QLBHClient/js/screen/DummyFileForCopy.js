@@ -6,7 +6,7 @@ import {
     View
 } from 'react-native';
 
-import {Container, Label, Button, Header, Content, Form, Item, Input} from 'native-base';
+import {Container,Body,Title, Label, Button, Header, Content, Form, Item, Input} from 'native-base';
 
 export default class DummyFileForCopy extends Component {
     constructor(props){
@@ -17,9 +17,18 @@ export default class DummyFileForCopy extends Component {
 
     render() {
         return (
-            <View>
+            <Container>
+                <Header>
+                    <Body>
+                    <Title>
+                        Menu
+                    </Title>
+                    </Body>
+                </Header>
+                <Content>
 
-            </View>
+                </Content>
+            </Container>
         )
     }
 }

@@ -7,5 +7,9 @@ module.exports = StyleSheet.create({
        width:100,
        height:30,
        justifyContent:'center'
-   }
+   },
+    flexRow:{
+       flexDirection:'row'
+    },
+
 });

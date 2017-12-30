@@ -8,7 +8,7 @@ import {
 
 import {Container, Icon, Label, Button, Header, Content, Form, Item, Input} from 'native-base';
 
-export default class DummyFileForCopy extends Component {
+export default class OrderRow extends Component {
     constructor(props) {
         super(props);
         let orderId = props.orderId;
