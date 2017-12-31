@@ -56,7 +56,7 @@ export default class Menu extends Component {
                     <Right>{cancelButton}</Right>
                 </Header>
                 <Content>
-                    <FoodMenu categorizeName={this.state.categorizeName} foodList={this.state.foodList}/>
+                    <FoodMenu categorizeName={this.state.categorizeName} isCreateOrder={this.isCreateOrder()} foodList={this.state.foodList}/>
                 </Content>
             </Container>
         )

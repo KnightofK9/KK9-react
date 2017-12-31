@@ -15,15 +15,17 @@ export default class FoodMenu extends Component {
         super(props);
         let categorizeName = props.categorizeName;
         let foodList = props.foodList;
+        let isCreateOrder = props.isCreateOrder;
         this.state= {
             categorizeName,
-            foodList
+            foodList,
+            isCreateOrder,
         }
     }
 
     render() {
         let foodListArr = this.state.foodList.map((e,i)=>{
-            return <FoodBox key={e.foodId} foodId={e.foodId} foodName={e.foodName} foodImage={e.foodImage} />
+            return <FoodBox key={e.foodId} isCreateOrder={this.state.isCreateOrder} foodId={e.foodId} foodName={e.foodName} foodImage={e.foodImage} />
         });
         return (
             <View style={styles.container}>
