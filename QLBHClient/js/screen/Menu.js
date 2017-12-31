@@ -33,8 +33,17 @@ export default class Menu extends Component {
             <Icon name="arrow-back"/>
         </Button>
     };
+    createCancelButton = ()=>{
+        if(!this.isCreateOrder()) return null;
+        return <Button transparent onPress={() => {
+            this.goBackToCreateOrder();
+        }}>
+            <Icon name="md-close"/>
+        </Button>
+    };
     render() {
         let backButton = this.createLeftBackButton();
+        let cancelButton = this.createCancelButton();
         return (
             <Container>
                 <Header>
@@ -44,7 +53,7 @@ export default class Menu extends Component {
                         Menu
                     </Title>
                     </Body>
-                    <Right></Right>
+                    <Right>{cancelButton}</Right>
                 </Header>
                 <Content>
                     <FoodMenu categorizeName={this.state.categorizeName} foodList={this.state.foodList}/>

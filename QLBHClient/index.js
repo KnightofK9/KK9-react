@@ -2,6 +2,7 @@ import { AppRegistry } from 'react-native';
 import App from './App';
 import LoginBox from './js/screen/login'
 import MainScreen from './js/screen/MainScreen'
+import TestScreen from './js/screen/TestScreen'
 
 /**
  * Number.prototype.format(n, x)
