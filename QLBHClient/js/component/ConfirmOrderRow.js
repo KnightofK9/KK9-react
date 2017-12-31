@@ -20,25 +20,44 @@ export default class ConfirmOrderRow extends Component {
             foodName,
             quantities,
             index,
-        }
+        };
+        this.dispatcher = props.dispatcher;
+        this.dispatcherDict = props.dispatcherDict;
     }
+
+    addValueToQuantities = (addValue) => {
+        this.setState(prev => {
+            let updatedQuantities = prev.quantities + addValue;
+            if(updatedQuantities < 0) updatedQuantities = 0;
+            this.dispatcher.dispatch({
+                foodId:this.state.foodId,
+                quantities:updatedQuantities,
+            },"update");
+            this.dispatcherDict.dispatch(this.state.foodId.toString(),updatedQuantities,"update");
+            return { quantities:updatedQuantities}
+        })
+    };
 
     render() {
         return (
             <View style={styles.container}>
-                <Text style={styles.indexTxt} >{this.state.index}</Text>
-                <Text style={styles.foodNameTxt} >{this.state.foodName}</Text>
-                <Button transparent>
-                    <Icon name='ios-arrow-dropdown' />
+                <Text style={styles.indexTxt}>{this.state.index}</Text>
+                <Text style={styles.foodNameTxt}>{this.state.foodName}</Text>
+                <Button transparent onPress={()=>{
+                    this.addValueToQuantities(-1);
+                }}>
+                    <Icon name='ios-arrow-dropdown'/>
                 </Button>
                 <Text>
                     {this.state.quantities}
                 </Text>
-                <Button transparent>
-                    <Icon name='ios-arrow-dropup' />
+                <Button transparent onPress={()=>{
+                    this.addValueToQuantities(1);
+                }}>
+                    <Icon name='ios-arrow-dropup'/>
                 </Button>
-                <Button danger>
-                    <Icon name='ios-trash' />
+                <Button dange >
+                    <Icon name='ios-trash'/>
                 </Button>
             </View>
         )
@@ -47,12 +66,12 @@ export default class ConfirmOrderRow extends Component {
 
 const styles = StyleSheet.create({
     container: {
-        flexDirection:'row'
+        flexDirection: 'row'
     },
-    indexTxt:{
-      width:20
+    indexTxt: {
+        width: 20
     },
-    foodNameTxt:{
-        flex:1
+    foodNameTxt: {
+        flex: 1
     }
 });

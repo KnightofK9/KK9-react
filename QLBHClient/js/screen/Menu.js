@@ -26,6 +26,7 @@ import DummyData from '../utilities/DummyData'
 import CommonStyles from '../share/CommonStyles'
 import CommonComponent from '../share/CommonComponent'
 import PropertyDispatcher from '../share/PropertyDispatcher'
+import PropertyDispatcherDict from '../share/PropertyDispatcherDict'
 
 export default class Menu extends Component {
     constructor(props) {
@@ -33,6 +34,7 @@ export default class Menu extends Component {
         this.state = {};
         this.dummy();
         this.dispatcher = this.createDispatcher();
+        this.dispatcherDict = this.createDispatcherDict();
     }
 
     dummy = () => {
@@ -52,8 +54,10 @@ export default class Menu extends Component {
     };
     openConfirmOrder = () =>{
         this.props.navigation.navigate('ConfirmCreateOrder',{
-            foodList:this.state.foodList
-        });
+            foodList:this.state.foodList,
+            dispatcher:this.dispatcher,
+            dispatcherDict:this.dispatcherDict,
+    });
     };
     createConfirmOrderButton = () =>{
         if(!this.isCreateOrder()) return null;
@@ -82,6 +86,9 @@ export default class Menu extends Component {
         propertyDispatcher.connect(handler,"foodList");
         return propertyDispatcher;
     };
+    createDispatcherDict = () =>{
+        return new PropertyDispatcherDict();
+    };
     render() {
         let backButton = this.createLeftBackButton();
         let cancelButton = this.createCancelButton();
@@ -98,7 +105,7 @@ export default class Menu extends Component {
                     <Right>{cancelButton}</Right>
                 </Header>
                 <ScrollView style={styles.foodScrView}>
-                    <FoodMenu dispatcher={this.dispatcher} categorizeName={this.state.categorizeName} isCreateOrder={this.isCreateOrder()}
+                    <FoodMenu dispatcherDict={this.dispatcherDict} dispatcher={this.dispatcher} categorizeName={this.state.categorizeName} isCreateOrder={this.isCreateOrder()}
                               foodList={this.state.foodList}/>
                 </ScrollView>
                 {confirmOrderButton}

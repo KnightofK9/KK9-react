@@ -25,7 +25,7 @@ export default class FoodMenu extends Component {
 
     render() {
         let foodListArr = this.state.foodList.map((e,i)=>{
-            return <FoodBox  dispatcher={this.props.dispatcher} key={e.foodId} quantities={e.quantities} isCreateOrder={this.state.isCreateOrder} foodId={e.foodId} foodName={e.foodName} foodImage={e.foodImage} />
+            return <FoodBox dispatcherDict={this.props.dispatcherDict} dispatcher={this.props.dispatcher} key={e.foodId} quantities={e.quantities} isCreateOrder={this.state.isCreateOrder} foodId={e.foodId} foodName={e.foodName} foodImage={e.foodImage} />
         });
         return (
             <View style={styles.container}>

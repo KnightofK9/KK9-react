@@ -10,6 +10,7 @@ import {
 import {CachedImage} from "react-native-img-cache";
 import {Container, Thumbnail, Label, Button, Header, Content, Form, Item, Input} from 'native-base';
 import DummyData from '../utilities/DummyData'
+import PropertyDispatcher from '../share/PropertyDispatcher'
 
 export default class FoodBox extends Component {
     constructor(props) {
@@ -24,7 +25,17 @@ export default class FoodBox extends Component {
             foodName,
             foodImage,
             quantities,
-        }
+        };
+        let handler = (oldQuantities,newQuantities,type)=>{
+            switch (type){
+                case "update":
+                    return newQuantities;
+            }
+            return oldQuantities;
+        };
+        let foodBoxDispatcher = new PropertyDispatcher(this.state,this);
+        foodBoxDispatcher.connect(handler,"quantities");
+        props.dispatcherDict.registerDispatcher(foodId.toString(),foodBoxDispatcher);
     }
 
     onFoodPress = () => {

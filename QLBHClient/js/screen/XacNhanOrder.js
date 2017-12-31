@@ -6,8 +6,22 @@ import {
     ScrollView,
     View
 } from 'react-native';
-import { NavigationActions } from 'react-navigation'
-import {Container, Body,Left, Title,Right, Label, Button, Icon, Header, Content, Form, Item, Input} from 'native-base';
+import {NavigationActions} from 'react-navigation'
+import {
+    Container,
+    Body,
+    Left,
+    Title,
+    Right,
+    Label,
+    Button,
+    Icon,
+    Header,
+    Content,
+    Form,
+    Item,
+    Input
+} from 'native-base';
 import DummyData from '../utilities/DummyData'
 import ConfirmOrderRow from '../component/ConfirmOrderRow'
 import CommonStyles from '../share/CommonStyles'
@@ -18,27 +32,29 @@ export default class XacNhanOrder extends Component {
         super(props);
         let foodList = props.navigation.state.params.foodList;
         this.state = {
-            confirmOrderList:foodList,
-            totalMoney:10000,
+            confirmOrderList: foodList,
+            totalMoney: 10000,
         };
+        this.dispatcher = this.props.navigation.state.params.dispatcher;
+        this.dispatcherDict = this.props.navigation.state.params.dispatcherDict;
         // this.dummy();
     }
 
     dummy = () => {
         this.state = {
             confirmOrderList: DummyData.dummyConfirmOrderList(),
-            totalMoney:10000
+            totalMoney: 10000
         }
     };
 
     goBackToMenuOrder = () => {
         this.props.navigation.goBack();
     };
-    cancelCreateOrder = () =>{
+    cancelCreateOrder = () => {
         const resetAction = NavigationActions.reset({
             index: 0,
             actions: [
-                NavigationActions.navigate({ routeName: 'Main'})
+                NavigationActions.navigate({routeName: 'Main'})
             ]
         });
         this.props.navigation.dispatch(resetAction);
@@ -51,14 +67,17 @@ export default class XacNhanOrder extends Component {
     createCancelButton = () => {
         return CommonComponent.createCancelButton(this.cancelCreateOrder);
     };
-    render() {
-        let arg = this.state.confirmOrderList.map((e,i)=>{
 
-            if(e.quantities === 0) return null;
+    render() {
+        let arg = this.state.confirmOrderList.map((e, i) => {
+
+            if (e.quantities === 0) return null;
             return <ConfirmOrderRow key={e.foodId}
-                                    index = {i}
+                                    index={i}
                                     foodId={e.foodId}
                                     foodName={e.foodName}
+                                    dispatcher={this.dispatcher}
+                                    dispatcherDict={this.dispatcherDict}
                                     quantities={e.quantities}/>
         });
         let backButton = this.createLeftBackButton();
@@ -107,21 +126,17 @@ export default class XacNhanOrder extends Component {
 }
 
 const styles = StyleSheet.create({
-    container: {
-
+    container: {},
+    confirmOrderListScrV: {
+        flex: 1
     },
-    confirmOrderListScrV:{
-        flex:1
+    totalMoneyView: {
+        flexDirection: 'row',
+        justifyContent: 'center',
     },
-    totalMoneyView:{
-        flexDirection:'row',
-        justifyContent:'center',
-    },
-    totalMoneyTxt:{
-
-    },
-    confirmBtnRow:{
-        flexDirection:'row',
-        justifyContent:'space-around',
+    totalMoneyTxt: {},
+    confirmBtnRow: {
+        flexDirection: 'row',
+        justifyContent: 'space-around',
     },
 });
