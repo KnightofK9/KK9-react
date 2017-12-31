@@ -25,12 +25,14 @@ import FoodMenu from '../component/FoodMenu'
 import DummyData from '../utilities/DummyData'
 import CommonStyles from '../share/CommonStyles'
 import CommonComponent from '../share/CommonComponent'
+import PropertyDispatcher from '../share/PropertyDispatcher'
 
 export default class Menu extends Component {
     constructor(props) {
         super(props);
         this.state = {};
         this.dummy();
+        this.dispatcher = this.createDispatcher();
     }
 
     dummy = () => {
@@ -50,7 +52,7 @@ export default class Menu extends Component {
     };
     openConfirmOrder = () =>{
         this.props.navigation.navigate('ConfirmCreateOrder',{
-            mainNavigation:this.props.navigation.state.params.mainNavigation
+            foodList:this.state.foodList
         });
     };
     createConfirmOrderButton = () =>{
@@ -60,6 +62,25 @@ export default class Menu extends Component {
         }}>
             <Icon name='ios-add-outline'/>
         </Button>
+    };
+    createDispatcher = ()=>{
+        let handler = (oldFoodList, updatedProperty, type) =>{
+            let foodId = updatedProperty.foodId;
+            let quantities = updatedProperty.quantities;
+            switch (type){
+                case "update":
+                    for(let value of oldFoodList){
+                        if(value.foodId === foodId){
+                            value.quantities = quantities;
+                            break;
+                        }
+                    }
+            }
+            return oldFoodList;
+        };
+        let propertyDispatcher = new PropertyDispatcher(this.state);
+        propertyDispatcher.connect(handler,"foodList");
+        return propertyDispatcher;
     };
     render() {
         let backButton = this.createLeftBackButton();
@@ -77,7 +98,7 @@ export default class Menu extends Component {
                     <Right>{cancelButton}</Right>
                 </Header>
                 <ScrollView style={styles.foodScrView}>
-                    <FoodMenu categorizeName={this.state.categorizeName} isCreateOrder={this.isCreateOrder()}
+                    <FoodMenu dispatcher={this.dispatcher} categorizeName={this.state.categorizeName} isCreateOrder={this.isCreateOrder()}
                               foodList={this.state.foodList}/>
                 </ScrollView>
                 {confirmOrderButton}

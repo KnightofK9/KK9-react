@@ -17,7 +17,8 @@ export default class FoodBox extends Component {
         let foodId = props.foodId;
         let foodName = props.foodName;
         let foodImage = props.foodImage;
-        let quantities = 0;
+        let quantities = props.quantities;
+        this.dispatcher = props.dispatcher;
         this.state = {
             foodId,
             foodName,
@@ -33,6 +34,10 @@ export default class FoodBox extends Component {
         this.setState(prev => {
             let updatedQuantities = prev.quantities + addValue;
             if(updatedQuantities < 0) updatedQuantities = 0;
+            this.dispatcher.dispatch({
+                foodId:this.state.foodId,
+                quantities:updatedQuantities,
+            },"update");
             return { quantities:updatedQuantities}
         })
     };

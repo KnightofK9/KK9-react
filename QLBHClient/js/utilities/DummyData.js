@@ -38,7 +38,8 @@ class DummyData{
         return{
             foodId,
             foodName,
-            foodImage
+            foodImage,
+            quantities:0
         }
     }
     static dummyConfirmOrderList(){

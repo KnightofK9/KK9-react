@@ -16,8 +16,12 @@ import CommonComponent from '../share/CommonComponent'
 export default class XacNhanOrder extends Component {
     constructor(props) {
         super(props);
-        this.state = {};
-        this.dummy();
+        let foodList = props.navigation.state.params.foodList;
+        this.state = {
+            confirmOrderList:foodList,
+            totalMoney:10000,
+        };
+        // this.dummy();
     }
 
     dummy = () => {
@@ -49,6 +53,8 @@ export default class XacNhanOrder extends Component {
     };
     render() {
         let arg = this.state.confirmOrderList.map((e,i)=>{
+
+            if(e.quantities === 0) return null;
             return <ConfirmOrderRow key={e.foodId}
                                     index = {i}
                                     foodId={e.foodId}
