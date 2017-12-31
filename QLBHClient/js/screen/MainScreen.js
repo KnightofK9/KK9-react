@@ -22,13 +22,13 @@ import {
     Icon,
     Badge,
 } from 'native-base';
-
+import { StackNavigator } from 'react-navigation';
 import Menu from './Menu'
 import DanhSachOrder from './DanhSachOrder'
 import PrepareFood from './PrepareFood'
 import TaiKhoan from './TaiKhoan'
 
-export default class MainScreen extends Component {
+class MainScreen extends Component {
     constructor(props) {
         super(props);
         this.state = {
@@ -59,7 +59,7 @@ export default class MainScreen extends Component {
         return (
             <Container>
                 <Content>
-                    <AppComponent/>
+                    <AppComponent mainNavigation={this.props.navigation}/>
                 </Content>
                 <Footer>
                     <FooterTab>
@@ -90,3 +90,15 @@ export default class MainScreen extends Component {
 const styles = StyleSheet.create({
     container: {},
 });
+const RootNavigator = StackNavigator({
+    Main:{
+        screen:MainScreen,
+    },
+    MenuForCreateOrder:{
+        screen:Menu,
+    },
+},{
+    headerMode:'none'
+});
+
+export default RootNavigator;

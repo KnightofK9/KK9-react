@@ -9,7 +9,7 @@ import {Container, Body, Title, Label, Button, Icon, Header, Content, Form, Item
 import OrderRow from '../component/OrderRow'
 import DummyData from '../utilities/DummyData'
 
-export default class DanhSachOrder extends Component {
+class DanhSachOrder extends Component {
     constructor(props) {
         super(props);
         this.state = {};
@@ -21,10 +21,15 @@ export default class DanhSachOrder extends Component {
             orderRowList: DummyData.dummyOrderRowList()
         }
     };
-
+    openMenuForCreateOrder = () =>{
+        let mainNavigation = this.props.mainNavigation;
+        mainNavigation.navigate("MenuForCreateOrder",{
+            isCreateOrder:true
+        })
+    };
     render() {
-        let orderArg = this.state.orderRowList.map((e,i)=>{
-           return <OrderRow key={e.orderId} orderId={e.orderId} tableId={e.tableId}/>
+        let orderArg = this.state.orderRowList.map((e, i) => {
+            return <OrderRow key={e.orderId} orderId={e.orderId} tableId={e.tableId}/>
         });
         return (
             <Container>
@@ -38,8 +43,10 @@ export default class DanhSachOrder extends Component {
                 <View style={styles.container}>
                     {orderArg}
                 </View>
-                <Button  style={styles.createOrderBtn} rounded primary>
-                    <Icon name='ios-add-outline' />
+                <Button style={styles.createOrderBtn}  rounded primary onPress={()=>{
+                    this.openMenuForCreateOrder();
+                }}>
+                    <Icon name='ios-add-outline'/>
                 </Button>
             </Container>
         )
@@ -48,11 +55,12 @@ export default class DanhSachOrder extends Component {
 
 const styles = StyleSheet.create({
     container: {
-        flexDirection:'column'
+        flexDirection: 'column'
     },
     createOrderBtn: {
         position: 'absolute',
         right: 10,
-        bottom: 10
+        bottom: 70
     }
 });
+export default DanhSachOrder;
