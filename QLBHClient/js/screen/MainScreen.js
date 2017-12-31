@@ -27,6 +27,7 @@ import Menu from './Menu'
 import DanhSachOrder from './DanhSachOrder'
 import PrepareFood from './PrepareFood'
 import TaiKhoan from './TaiKhoan'
+import XacNhanOrder from './XacNhanOrder'
 
 class MainScreen extends Component {
     constructor(props) {
@@ -58,9 +59,7 @@ class MainScreen extends Component {
         let AppComponent = this.getComponentByIndex(this.state.index);
         return (
             <Container>
-                <Content>
-                    <AppComponent mainNavigation={this.props.navigation}/>
-                </Content>
+                <AppComponent mainNavigation={this.props.navigation}/>
                 <Footer>
                     <FooterTab>
                         <Button onPress={() =>{this.switchScreen(0)}} vertical>
@@ -97,6 +96,9 @@ const RootNavigator = StackNavigator({
     MenuForCreateOrder:{
         screen:Menu,
     },
+    ConfirmCreateOrder:{
+        screen:XacNhanOrder,
+    }
 },{
     headerMode:'none'
 });

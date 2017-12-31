@@ -3,10 +3,12 @@ import {
     Platform,
     StyleSheet,
     Text,
-    View
+    View,
+    ScrollView,
 } from 'react-native';
 import {Container, Body, Title, Label, Button, Icon, Header, Content, Form, Item, Input} from 'native-base';
 import OrderRow from '../component/OrderRow'
+import CommonStyles from '../share/CommonStyles'
 import DummyData from '../utilities/DummyData'
 
 class DanhSachOrder extends Component {
@@ -24,7 +26,8 @@ class DanhSachOrder extends Component {
     openMenuForCreateOrder = () =>{
         let mainNavigation = this.props.mainNavigation;
         mainNavigation.navigate("MenuForCreateOrder",{
-            isCreateOrder:true
+            isCreateOrder:true,
+            mainNavigation:mainNavigation,
         })
     };
     render() {
@@ -40,10 +43,10 @@ class DanhSachOrder extends Component {
                     </Title>
                     </Body>
                 </Header>
-                <View style={styles.container}>
+                <ScrollView style={styles.container}>
                     {orderArg}
-                </View>
-                <Button style={styles.createOrderBtn}  rounded primary onPress={()=>{
+                </ScrollView>
+                <Button style={CommonStyles.fabOrderBtn}  rounded primary onPress={()=>{
                     this.openMenuForCreateOrder();
                 }}>
                     <Icon name='ios-add-outline'/>
@@ -57,10 +60,5 @@ const styles = StyleSheet.create({
     container: {
         flexDirection: 'column'
     },
-    createOrderBtn: {
-        position: 'absolute',
-        right: 10,
-        bottom: 70
-    }
 });
 export default DanhSachOrder;

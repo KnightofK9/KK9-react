@@ -6,10 +6,12 @@ import {
     ScrollView,
     View
 } from 'react-native';
-import {Container, Body, Title, Label, Button, Icon, Header, Content, Form, Item, Input} from 'native-base';
+import { NavigationActions } from 'react-navigation'
+import {Container, Body,Left, Title,Right, Label, Button, Icon, Header, Content, Form, Item, Input} from 'native-base';
 import DummyData from '../utilities/DummyData'
 import ConfirmOrderRow from '../component/ConfirmOrderRow'
 import CommonStyles from '../share/CommonStyles'
+import CommonComponent from '../share/CommonComponent'
 
 export default class XacNhanOrder extends Component {
     constructor(props) {
@@ -25,6 +27,26 @@ export default class XacNhanOrder extends Component {
         }
     };
 
+    goBackToMenuOrder = () => {
+        this.props.navigation.goBack();
+    };
+    cancelCreateOrder = () =>{
+        const resetAction = NavigationActions.reset({
+            index: 0,
+            actions: [
+                NavigationActions.navigate({ routeName: 'Main'})
+            ]
+        });
+        this.props.navigation.dispatch(resetAction);
+        // let mainScreenKey = this.props.navigation.state.params.mainNavigation.state.key;
+        // this.props.navigation.goBack(mainScreenKey);
+    };
+    createLeftBackButton = () => {
+        return CommonComponent.createBackButton(this.goBackToMenuOrder);
+    };
+    createCancelButton = () => {
+        return CommonComponent.createCancelButton(this.cancelCreateOrder);
+    };
     render() {
         let arg = this.state.confirmOrderList.map((e,i)=>{
             return <ConfirmOrderRow key={e.foodId}
@@ -33,14 +55,22 @@ export default class XacNhanOrder extends Component {
                                     foodName={e.foodName}
                                     quantities={e.quantities}/>
         });
+        let backButton = this.createLeftBackButton();
+        let cancelButton = this.createCancelButton();
         return (
             <Container>
                 <Header>
+                    <Left>
+                        {backButton}
+                    </Left>
                     <Body>
                     <Title>
-                        Xác nhận Order
+                        Xác nhận
                     </Title>
                     </Body>
+                    <Right>
+                        {cancelButton}
+                    </Right>
                 </Header>
                 <ScrollView style={styles.confirmOrderListScrV}>
                     {arg}

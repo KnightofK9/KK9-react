@@ -11,5 +11,10 @@ module.exports = StyleSheet.create({
     flexRow:{
        flexDirection:'row'
     },
+    fabOrderBtn:{
+       position:'absolute',
+        right:10,
+        bottom:10,
+    }
 
 });

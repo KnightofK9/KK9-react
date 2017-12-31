@@ -3,11 +3,28 @@ import {
     Platform,
     StyleSheet,
     Text,
-    View
+    View,
+    ScrollView,
 } from 'react-native';
-import {Container,Icon, Body,Left,Right, Title, Label, Button, Header, Content, Form, Item, Input} from 'native-base';
+import {
+    Container,
+    Icon,
+    Body,
+    Left,
+    Right,
+    Title,
+    Label,
+    Button,
+    Header,
+    Content,
+    Form,
+    Item,
+    Input
+} from 'native-base';
 import FoodMenu from '../component/FoodMenu'
 import DummyData from '../utilities/DummyData'
+import CommonStyles from '../share/CommonStyles'
+import CommonComponent from '../share/CommonComponent'
 
 export default class Menu extends Component {
     constructor(props) {
@@ -26,24 +43,28 @@ export default class Menu extends Component {
         this.props.navigation.goBack();
     };
     createLeftBackButton = () => {
-        if(!this.isCreateOrder()) return null;
-        return <Button transparent onPress={() => {
-            this.goBackToCreateOrder();
-        }}>
-            <Icon name="arrow-back"/>
-        </Button>
+        return CommonComponent.createBackButton(this.goBackToCreateOrder,this.isCreateOrder);
     };
-    createCancelButton = ()=>{
+    createCancelButton = () => {
+        return CommonComponent.createCancelButton(this.goBackToCreateOrder, this.isCreateOrder);
+    };
+    openConfirmOrder = () =>{
+        this.props.navigation.navigate('ConfirmCreateOrder',{
+            mainNavigation:this.props.navigation.state.params.mainNavigation
+        });
+    };
+    createConfirmOrderButton = () =>{
         if(!this.isCreateOrder()) return null;
-        return <Button transparent onPress={() => {
-            this.goBackToCreateOrder();
+        return <Button style={styles.confirmBtn} rounded primary onPress={() => {
+            this.openConfirmOrder();
         }}>
-            <Icon name="md-close"/>
+            <Icon name='ios-add-outline'/>
         </Button>
     };
     render() {
         let backButton = this.createLeftBackButton();
         let cancelButton = this.createCancelButton();
+        let confirmOrderButton = this.createConfirmOrderButton();
         return (
             <Container>
                 <Header>
@@ -55,9 +76,11 @@ export default class Menu extends Component {
                     </Body>
                     <Right>{cancelButton}</Right>
                 </Header>
-                <Content>
-                    <FoodMenu categorizeName={this.state.categorizeName} isCreateOrder={this.isCreateOrder()} foodList={this.state.foodList}/>
-                </Content>
+                <ScrollView style={styles.foodScrView}>
+                    <FoodMenu categorizeName={this.state.categorizeName} isCreateOrder={this.isCreateOrder()}
+                              foodList={this.state.foodList}/>
+                </ScrollView>
+                {confirmOrderButton}
             </Container>
         )
     }
@@ -65,4 +88,12 @@ export default class Menu extends Component {
 
 const styles = StyleSheet.create({
     container: {},
+    foodScrView: {
+        flex: 1
+    },
+    confirmBtn:{
+        position:'absolute',
+        right:10,
+        bottom:70
+    }
 });

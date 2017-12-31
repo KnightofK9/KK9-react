@@ -4,7 +4,7 @@ import {
     StyleSheet,
     Text,
     View,
-    Dimensions
+    Dimensions,
 } from 'react-native';
 
 import {Container, Label, Button, Header, Content, Form, Item, Input} from 'native-base';
@@ -33,7 +33,6 @@ export default class FoodMenu extends Component {
                 <View style={styles.foodListContainer}>
                     {foodListArr}
                 </View>
-
             </View>
         )
     }
@@ -45,6 +44,6 @@ const styles = StyleSheet.create({
     },
     foodListContainer:{
         flexDirection:'row',
-        flexWrap:'wrap'
+        flexWrap:'wrap',
     }
 });
