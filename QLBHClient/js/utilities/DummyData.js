@@ -25,20 +25,31 @@ class DummyData{
         let categorizeName = "Món tráng miệng";
         let foodList = [];
         let dummyUrl = "http://quanlybanhangapi.azurewebsites.net/api/image/9";
-        foodList.push(DummyData.createFood(1,"Thịt bò kho",dummyUrl));
-        foodList.push(DummyData.createFood(2,"Thịt bò thăn",dummyUrl));
-        foodList.push(DummyData.createFood(3,"Thịt bò mềm",dummyUrl));
-        foodList.push(DummyData.createFood(4,"Thịt bò ướp",dummyUrl));
-        foodList.push(DummyData.createFood(5,"Thịt bò xào",dummyUrl));
+        foodList.push(DummyData.createFood(1,"Thịt bò kho",20000,dummyUrl));
+        foodList.push(DummyData.createFood(2,"Thịt bò thăn",25000,dummyUrl));
+        foodList.push(DummyData.createFood(3,"Thịt bò mềm",20000,dummyUrl));
+        foodList.push(DummyData.createFood(4,"Thịt bò ướp",15000,dummyUrl));
+        foodList.push(DummyData.createFood(5,"Thịt bò xào",12000,dummyUrl));
+        foodList.push(DummyData.createFood(6,"Thịt bò xào",12000,dummyUrl));
+        foodList.push(DummyData.createFood(7,"Thịt bò xào",13000,dummyUrl));
+        foodList.push(DummyData.createFood(8,"Thịt bò xào",14000,dummyUrl));
+        foodList.push(DummyData.createFood(9,"Thịt bò xào",15000,dummyUrl));
+        foodList.push(DummyData.createFood(10,"Thịt bò xào",16000,dummyUrl));
+        foodList.push(DummyData.createFood(11,"Thịt bò xào",17000,dummyUrl));
+        foodList.push(DummyData.createFood(12,"Thịt bò xào",18000,dummyUrl));
+        foodList.push(DummyData.createFood(13,"Thịt bò xào",19000,dummyUrl));
+        foodList.push(DummyData.createFood(14,"Thịt bò xào",20000,dummyUrl));
+        foodList.push(DummyData.createFood(15,"Thịt bò xào",21000,dummyUrl));
         return {
             categorizeName,foodList
         };
     }
-    static createFood(foodId, foodName,foodImage){
+    static createFood(foodId, foodName,foodPrice,foodImage){
         return{
             foodId,
             foodName,
             foodImage,
+            foodPrice,
             quantities:0
         }
     }

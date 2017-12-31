@@ -26,18 +26,23 @@ import DummyData from '../utilities/DummyData'
 import ConfirmOrderRow from '../component/ConfirmOrderRow'
 import CommonStyles from '../share/CommonStyles'
 import CommonComponent from '../share/CommonComponent'
+import Helper from '../share/Helper'
+import PropertyDispatcher from '../share/PropertyDispatcher'
+import EventDispatcher from '../share/EventDispatcher'
 
 export default class XacNhanOrder extends Component {
     constructor(props) {
         super(props);
         let foodList = props.navigation.state.params.foodList;
         this.state = {
-            confirmOrderList: foodList,
-            totalMoney: 10000,
+            confirmOrderList: foodList.filter(f => f.quantities !== 0),
+            totalMoney: Helper.calTotalMoney(foodList),
         };
         this.dispatcher = this.props.navigation.state.params.dispatcher;
         this.dispatcherDict = this.props.navigation.state.params.dispatcherDict;
+        // this.totalMoneyDispatcher = this.createTotalMoneyDispatcher();
         // this.dummy();
+        this.eventDispatcher = this.createEventDispatcher();
     }
 
     dummy = () => {
@@ -45,6 +50,29 @@ export default class XacNhanOrder extends Component {
             confirmOrderList: DummyData.dummyConfirmOrderList(),
             totalMoney: 10000
         }
+    };
+    createTotalMoneyDispatcher = () => {
+        let handle = (oldTotalMoney, money, type) => {
+            switch (type) {
+                case "add":
+                    return oldTotalMoney + money;
+                case "update":
+                    return money;
+            }
+            return oldTotalMoney;
+        };
+        let totalMoneyDispatcher = new PropertyDispatcher(this.state,this);
+        totalMoneyDispatcher.connect(handle,"totalMoney");
+        return totalMoneyDispatcher;
+    };
+    createEventDispatcher = () =>{
+        let handle = (value,callObject) =>{
+            this.forceUpdate();
+        };
+        let eventDispatcher = new EventDispatcher();
+        eventDispatcher.registerEvent("refresh",handle);
+        return eventDispatcher;
+
     };
 
     goBackToMenuOrder = () => {
@@ -69,19 +97,23 @@ export default class XacNhanOrder extends Component {
     };
 
     render() {
+        let count = 1;
         let arg = this.state.confirmOrderList.map((e, i) => {
 
-            if (e.quantities === 0) return null;
-            return <ConfirmOrderRow key={e.foodId}
-                                    index={i}
+            // if (e.quantities === 0) return null;
+            return <ConfirmOrderRow key={i}
+                                    index={count++}
                                     foodId={e.foodId}
                                     foodName={e.foodName}
+                                    foodPrice={e.foodPrice}
                                     dispatcher={this.dispatcher}
                                     dispatcherDict={this.dispatcherDict}
+                                    eventDispatcher={this.eventDispatcher}
                                     quantities={e.quantities}/>
         });
         let backButton = this.createLeftBackButton();
         let cancelButton = this.createCancelButton();
+        this.state.totalMoney = Helper.calTotalMoney(this.state.confirmOrderList);
         return (
             <Container>
                 <Header>
@@ -104,16 +136,6 @@ export default class XacNhanOrder extends Component {
                     <Text style={styles.totalMoneyTxt}>Tổng tiền:{this.state.totalMoney.format()} VNĐ </Text>
                 </View>
                 <View style={styles.confirmBtnRow}>
-                    <Button style={CommonStyles.txtBtn} danger>
-                        <Text>
-                            Xóa
-                        </Text>
-                    </Button>
-                    <Button style={CommonStyles.txtBtn} primary>
-                        <Text>
-                            Thay đổi
-                        </Text>
-                    </Button>
                     <Button style={CommonStyles.txtBtn} success>
                         <Text>
                             Đặt món

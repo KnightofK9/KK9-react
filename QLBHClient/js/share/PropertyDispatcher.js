@@ -12,8 +12,11 @@ export default class PropertyDispatcher {
         let updatedProperty = this.handler(this.property[key],value, type);
         if(this.self !== undefined){
             this.self.setState((prevState)=>{
-                prevState[key] = updatedProperty;
-                return prevState;
+                let updatedState = {};
+                updatedState[key] = updatedProperty;
+                return updatedState;
+                // prevState[key] = updatedProperty;
+                // return prevState;
             });
         }
         else this.property[key] = updatedProperty;
