@@ -7,24 +7,41 @@ import {
 } from 'react-native';
 
 import {Container, Label, Button, Header, Content, Form, Item, Input} from 'native-base';
+import SessionManager from '../share/SessionManager'
+import {NavigationActions} from 'react-navigation'
 
 export default class LoginBox extends Component {
-    constructor(props){
+    constructor(props) {
         super(props);
-        this.state= {
+        this.state = {
             username: '',
             password: ''
         }
     }
-    helloWorld = () => {
-        console.log(this.state);
+
+    login = () => {
+        let session = SessionManager.getSession();
+        session.setUserProfile({
+            username: this.state.username,
+            accessToken: 'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1bmlxdWVfbmFtZSI6InRlc3QiLCJuYmYiOjE1MTIxNTMzNjQsImV4cCI6MTU0MzY4OTM2NCwiaWF0IjoxNTEyMTUzMzY0fQ.1Iya30pFQBMTaL65fbObUBNg0v9ZtnLia4IGX7W78ug'
+        });
+        this.goToMainScreen();
+    };
+    goToMainScreen = () => {
+        const resetAction = NavigationActions.reset({
+            index: 0,
+            actions: [
+                NavigationActions.navigate({routeName: 'Main'})
+            ]
+        });
+        this.props.navigation.dispatch(resetAction);
     };
 
     render() {
         return (
             <Container>
-                <Header />
-                <Content  contentContainerStyle={{
+                <Header/>
+                <Content contentContainerStyle={{
                     flex: 1,
                     flexDirection: 'column',
                     justifyContent: 'center'
@@ -32,23 +49,27 @@ export default class LoginBox extends Component {
                     <Form>
                         <Item floatingLabel>
                             <Label>Username</Label>
-                            <Input onChangeText={(text)=>{this.setState({
-                                username:text
-                            })}} />
+                            <Input onChangeText={(text) => {
+                                this.setState({
+                                    username: text
+                                })
+                            }}/>
                         </Item>
                         <Item floatingLabel last>
                             <Label>Password</Label>
-                            <Input  onChangeText={(text)=>{this.setState({
-                                password:text
-                            })}}/>
+                            <Input secureTextEntry={true} onChangeText={(text) => {
+                                this.setState({
+                                    password: text
+                                })
+                            }}/>
                         </Item>
                     </Form>
                     <Button rounded style={{
-                        alignSelf:'center',
+                        alignSelf: 'center',
                         justifyContent: 'center',
-                        width:100,
-                    }} onPress={this.helloWorld}>
-                        <Text>Click Me! </Text>
+                        width: 100,
+                    }} onPress={this.login}>
+                        <Text>Login</Text>
                     </Button>
                 </Content>
             </Container>

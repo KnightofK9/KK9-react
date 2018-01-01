@@ -22,12 +22,13 @@ import {
     Icon,
     Badge,
 } from 'native-base';
-import { StackNavigator } from 'react-navigation';
+import {StackNavigator} from 'react-navigation';
 import Menu from './Menu'
 import DanhSachOrder from './DanhSachOrder'
 import PrepareFood from './PrepareFood'
 import TaiKhoan from './TaiKhoan'
 import XacNhanOrder from './XacNhanOrder'
+import Login from './login'
 
 class MainScreen extends Component {
     constructor(props) {
@@ -41,8 +42,8 @@ class MainScreen extends Component {
         this.setState({index})
     };
 
-    getComponentByIndex = (index) =>{
-        switch (index){
+    getComponentByIndex = (index) => {
+        switch (index) {
             case 0:
                 return DanhSachOrder;
             case 1:
@@ -62,11 +63,15 @@ class MainScreen extends Component {
                 <AppComponent mainNavigation={this.props.navigation}/>
                 <Footer>
                     <FooterTab>
-                        <Button onPress={() =>{this.switchScreen(0)}} vertical>
+                        <Button onPress={() => {
+                            this.switchScreen(0)
+                        }} vertical>
                             <Icon name="clipboard"/>
                             <Text>Đặt order</Text>
                         </Button>
-                        <Button onPress={() =>{this.switchScreen(1)}} vertical>
+                        <Button onPress={() => {
+                            this.switchScreen(1)
+                        }} vertical>
                             <Icon name="pizza"/>
                             <Text>Xem Menu</Text>
                         </Button>
@@ -75,7 +80,9 @@ class MainScreen extends Component {
                             <Icon name="list-box"/>
                             <Text>Món chờ</Text>
                         </Button>
-                        <Button onPress={() =>{this.switchScreen(3)}} vertical>
+                        <Button onPress={() => {
+                            this.switchScreen(3)
+                        }} vertical>
                             <Icon name="build"/>
                             <Text>Tài khoản</Text>
                         </Button>
@@ -90,17 +97,22 @@ const styles = StyleSheet.create({
     container: {},
 });
 const RootNavigator = StackNavigator({
-    Main:{
-        screen:MainScreen,
-    },
-    MenuForCreateOrder:{
-        screen:Menu,
-    },
-    ConfirmCreateOrder:{
-        screen:XacNhanOrder,
+        Main: {
+            screen: MainScreen,
+        },
+        MenuForCreateOrder: {
+            screen: Menu,
+        },
+        ConfirmCreateOrder: {
+            screen: XacNhanOrder,
+        },
+        Login: {
+            screen: Login,
+        }
+    }, {
+        headerMode: 'none',
+        initialRouteName: 'Main',
     }
-},{
-    headerMode:'none'
-});
+);
 
 export default RootNavigator;
