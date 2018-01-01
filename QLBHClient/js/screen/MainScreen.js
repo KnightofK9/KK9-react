@@ -70,8 +70,8 @@ class MainScreen extends Component {
                             <Icon name="pizza"/>
                             <Text>Xem Menu</Text>
                         </Button>
-                        <Button onPress={() =>{this.switchScreen(2)}} vertical badge>
-                            <Badge><Text>10</Text></Badge>
+                        <Button onPress={() =>{this.switchScreen(2)}} badge vertical>
+                            <Badge><Text>20</Text></Badge>
                             <Icon name="list-box"/>
                             <Text>Món chờ</Text>
                         </Button>

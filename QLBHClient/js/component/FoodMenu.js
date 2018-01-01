@@ -32,7 +32,9 @@ export default class FoodMenu extends Component {
         });
         return (
             <View style={styles.container}>
-                <Text>{this.state.categorizeName}</Text>
+                <View style={styles.foodCategoryHeaderView}>
+                    <Text style={styles.foodCategoryHeaderTitle}>{this.state.categorizeName}</Text>
+                </View>
                 <View style={styles.foodListContainer}>
                     {foodListArr}
                 </View>
@@ -43,6 +45,16 @@ export default class FoodMenu extends Component {
 
 const styles = StyleSheet.create({
     container: {},
+    foodCategoryHeaderView: {
+        flexDirection: 'row',
+        height: 50,
+        alignItems: 'center',
+    },
+    foodCategoryHeaderTitle: {
+        fontSize: 20,
+        fontWeight: 'bold',
+        marginLeft : 10,
+    },
     foodListContainer: {
         flexDirection: 'row',
         flexWrap: 'wrap',

@@ -47,14 +47,16 @@ export default class FoodBox extends Component {
         let foodText = this.createFoodText();
         return (
             <View style={styles.container}>
-                <TouchableOpacity onPress={this.onFoodPress}>
-                    <CachedImage style={styles.imageButton} mutable
-                                 source={{uri: this.state.food.foodImage}}
-                    />
-                </TouchableOpacity>
-                <Text onPress={this.onDropFoodPress} style={styles.foodNameTxt}>
-                    {foodText}
-                </Text>
+                <View style={styles.content}>
+                    <TouchableOpacity onPress={this.onFoodPress}>
+                        <CachedImage style={styles.imageButton} mutable
+                                     source={{uri: this.state.food.foodImage}}
+                        />
+                    </TouchableOpacity>
+                    <Text onPress={this.onDropFoodPress} style={styles.foodNameTxt}>
+                        {foodText}
+                    </Text>
+                </View>
             </View>
         )
     }
@@ -62,11 +64,30 @@ export default class FoodBox extends Component {
 
 const styles = StyleSheet.create({
     container: {
-        width: '33.3%',
+        width: '50%',
+        height: 200,
+        alignItems: 'center',
+    },
+    content: {
+        flexDirection: 'row',
+        width: '90%',
+        height: 190,
+        shadowColor: '#000',
+        shadowOffset: { width: 1, height: 2 },
+        shadowOpacity: 0.4,
+        shadowRadius: 2,
+        borderRadius: 10,
+        alignItems: 'center',
+        backgroundColor: 'white',
     },
     imageButton: {
-        width: 128,
-        height: 128,
+        flexDirection: 'column',
+        height: 70,
+        width: 70,
+        alignSelf: 'center',
     },
-    foodNameTxt: {},
+    foodNameTxt: {
+        alignSelf: 'flex-end',
+        fontWeight: 'bold',
+    },
 });

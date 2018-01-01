@@ -58,7 +58,7 @@ class DanhSachOrder extends Component {
 
 const styles = StyleSheet.create({
     container: {
-        flexDirection: 'column'
+        flexDirection: 'column',
     },
 });
 export default DanhSachOrder;
