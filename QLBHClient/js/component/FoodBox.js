@@ -15,52 +15,31 @@ import PropertyDispatcher from '../share/PropertyDispatcher'
 export default class FoodBox extends Component {
     constructor(props) {
         super(props);
-        let foodId = props.foodId;
-        let foodName = props.foodName;
-        let foodImage = props.foodImage;
-        let quantities = props.quantities;
+        let food = props.food;
         this.dispatcher = props.dispatcher;
         this.state = {
-            foodId,
-            foodName,
-            foodImage,
-            quantities,
+            food
         };
-        let handler = (oldQuantities,newQuantities,type)=>{
-            switch (type){
-                case "update":
-                    return newQuantities;
-            }
-            return oldQuantities;
-        };
-        let foodBoxDispatcher = new PropertyDispatcher(this.state,this);
-        foodBoxDispatcher.connect(handler,"quantities");
-        props.dispatcherDict.registerDispatcher(foodId.toString(),foodBoxDispatcher);
     }
 
     onFoodPress = () => {
         this.setFoodQuantities(1);
     };
-    setFoodQuantities = (addValue) =>{
-        this.setState(prev => {
-            let updatedQuantities = prev.quantities + addValue;
-            if(updatedQuantities < 0) updatedQuantities = 0;
-            this.dispatcher.dispatch({
-                foodId:this.state.foodId,
-                quantities:updatedQuantities,
-            },"update");
-            return { quantities:updatedQuantities}
-        })
+    setFoodQuantities = (addValue) => {
+        let updatedQuantities = this.state.food.quantities + addValue;
+        if (updatedQuantities < 0) updatedQuantities = 0;
+        this.state.food.quantities = updatedQuantities;
+        this.dispatcher.dispatch("refresh");
     };
-    onDropFoodPress = () =>{
+    onDropFoodPress = () => {
         this.setFoodQuantities(-1);
     };
     isCreateOrder = () => {
         return this.props.isCreateOrder;
     };
     createFoodText = () => {
-        let foodText = this.state.foodName;
-        if (this.isCreateOrder()) foodText += ":" + this.state.quantities;
+        let foodText = this.state.food.foodName;
+        if (this.isCreateOrder()) foodText += ":" + this.state.food.quantities;
         return foodText;
     };
 
@@ -70,7 +49,7 @@ export default class FoodBox extends Component {
             <View style={styles.container}>
                 <TouchableOpacity onPress={this.onFoodPress}>
                     <CachedImage style={styles.imageButton} mutable
-                                 source={{uri: this.state.foodImage}}
+                                 source={{uri: this.state.food.foodImage}}
                     />
                 </TouchableOpacity>
                 <Text onPress={this.onDropFoodPress} style={styles.foodNameTxt}>

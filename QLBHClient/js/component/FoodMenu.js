@@ -11,12 +11,12 @@ import {Container, Label, Button, Header, Content, Form, Item, Input} from 'nati
 import FoodBox from './FoodBox'
 
 export default class FoodMenu extends Component {
-    constructor(props){
+    constructor(props) {
         super(props);
         let categorizeName = props.categorizeName;
         let foodList = props.foodList;
         let isCreateOrder = props.isCreateOrder;
-        this.state= {
+        this.state = {
             categorizeName,
             foodList,
             isCreateOrder,
@@ -24,8 +24,11 @@ export default class FoodMenu extends Component {
     }
 
     render() {
-        let foodListArr = this.state.foodList.map((e,i)=>{
-            return <FoodBox dispatcherDict={this.props.dispatcherDict} dispatcher={this.props.dispatcher} key={e.foodId} quantities={e.quantities} isCreateOrder={this.state.isCreateOrder} foodId={e.foodId} foodName={e.foodName} foodImage={e.foodImage} />
+        let foodListArr = this.state.foodList.map((e, i) => {
+            return <FoodBox dispatcher={this.props.dispatcher}
+                            key={e.foodId}
+                            isCreateOrder={this.state.isCreateOrder}
+                            food = {e}/>
         });
         return (
             <View style={styles.container}>
@@ -39,11 +42,9 @@ export default class FoodMenu extends Component {
 }
 
 const styles = StyleSheet.create({
-    container: {
-
-    },
-    foodListContainer:{
-        flexDirection:'row',
-        flexWrap:'wrap',
+    container: {},
+    foodListContainer: {
+        flexDirection: 'row',
+        flexWrap: 'wrap',
     }
 });

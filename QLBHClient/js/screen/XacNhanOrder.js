@@ -39,9 +39,6 @@ export default class XacNhanOrder extends Component {
             totalMoney: Helper.calTotalMoney(foodList),
         };
         this.dispatcher = this.props.navigation.state.params.dispatcher;
-        this.dispatcherDict = this.props.navigation.state.params.dispatcherDict;
-        // this.totalMoneyDispatcher = this.createTotalMoneyDispatcher();
-        // this.dummy();
         this.eventDispatcher = this.createEventDispatcher();
     }
 
@@ -50,20 +47,6 @@ export default class XacNhanOrder extends Component {
             confirmOrderList: DummyData.dummyConfirmOrderList(),
             totalMoney: 10000
         }
-    };
-    createTotalMoneyDispatcher = () => {
-        let handle = (oldTotalMoney, money, type) => {
-            switch (type) {
-                case "add":
-                    return oldTotalMoney + money;
-                case "update":
-                    return money;
-            }
-            return oldTotalMoney;
-        };
-        let totalMoneyDispatcher = new PropertyDispatcher(this.state,this);
-        totalMoneyDispatcher.connect(handle,"totalMoney");
-        return totalMoneyDispatcher;
     };
     createEventDispatcher = () =>{
         let handle = (value,callObject) =>{
@@ -76,6 +59,7 @@ export default class XacNhanOrder extends Component {
     };
 
     goBackToMenuOrder = () => {
+        this.dispatcher.dispatch("refresh");
         this.props.navigation.goBack();
     };
     cancelCreateOrder = () => {
@@ -103,13 +87,9 @@ export default class XacNhanOrder extends Component {
             // if (e.quantities === 0) return null;
             return <ConfirmOrderRow key={i}
                                     index={count++}
-                                    foodId={e.foodId}
-                                    foodName={e.foodName}
-                                    foodPrice={e.foodPrice}
+                                    food={e}
                                     dispatcher={this.dispatcher}
-                                    dispatcherDict={this.dispatcherDict}
-                                    eventDispatcher={this.eventDispatcher}
-                                    quantities={e.quantities}/>
+                                    eventDispatcher={this.eventDispatcher}/>
         });
         let backButton = this.createLeftBackButton();
         let cancelButton = this.createCancelButton();

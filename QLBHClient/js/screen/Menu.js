@@ -27,14 +27,14 @@ import CommonStyles from '../share/CommonStyles'
 import CommonComponent from '../share/CommonComponent'
 import PropertyDispatcher from '../share/PropertyDispatcher'
 import PropertyDispatcherDict from '../share/PropertyDispatcherDict'
+import EventDispatcher from '../share/EventDispatcher'
 
 export default class Menu extends Component {
     constructor(props) {
         super(props);
         this.state = {};
         this.dummy();
-        this.dispatcher = this.createDispatcher();
-        this.dispatcherDict = this.createDispatcherDict();
+        this.dispatcher = this.createEventDispatcher();
     }
 
     dummy = () => {
@@ -56,7 +56,6 @@ export default class Menu extends Component {
         this.props.navigation.navigate('ConfirmCreateOrder',{
             foodList:this.state.foodList,
             dispatcher:this.dispatcher,
-            dispatcherDict:this.dispatcherDict,
     });
     };
     createConfirmOrderButton = () =>{
@@ -67,27 +66,13 @@ export default class Menu extends Component {
             <Icon name='ios-add-outline'/>
         </Button>
     };
-    createDispatcher = ()=>{
-        let handler = (oldFoodList, updatedProperty, type) =>{
-            let foodId = updatedProperty.foodId;
-            let quantities = updatedProperty.quantities;
-            switch (type){
-                case "update":
-                    for(let value of oldFoodList){
-                        if(value.foodId === foodId){
-                            value.quantities = quantities;
-                            break;
-                        }
-                    }
-            }
-            return oldFoodList;
+    createEventDispatcher = ()=>{
+        let handler = (value,callObject) =>{
+            this.forceUpdate();
         };
-        let propertyDispatcher = new PropertyDispatcher(this.state);
-        propertyDispatcher.connect(handler,"foodList");
-        return propertyDispatcher;
-    };
-    createDispatcherDict = () =>{
-        return new PropertyDispatcherDict();
+        let eventDispatcher = new EventDispatcher();
+        eventDispatcher.registerEvent("refresh",handler);
+        return eventDispatcher;
     };
     render() {
         let backButton = this.createLeftBackButton();
@@ -105,7 +90,7 @@ export default class Menu extends Component {
                     <Right>{cancelButton}</Right>
                 </Header>
                 <ScrollView style={styles.foodScrView}>
-                    <FoodMenu dispatcherDict={this.dispatcherDict} dispatcher={this.dispatcher} categorizeName={this.state.categorizeName} isCreateOrder={this.isCreateOrder()}
+                    <FoodMenu dispatcher={this.dispatcher} categorizeName={this.state.categorizeName} isCreateOrder={this.isCreateOrder()}
                               foodList={this.state.foodList}/>
                 </ScrollView>
                 {confirmOrderButton}
