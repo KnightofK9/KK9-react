@@ -1,111 +1,130 @@
-import RequestGroup from './RequestGroup'
-class Network{
-    constructor(){
-        this.DOMAIN =  "quanlybanhangapi.azurewebsites.net/";
+import {fetch} from "react-native";
+import Helper from './Helper'
+
+class Network {
+    constructor() {
+        this.DOMAIN = "quanlybanhangapi.azurewebsites.net/";
         this.BASE_PATH = this.DOMAIN + 'api/';
-        this.createUnitRequest();
-        this.createIngredientRequest();
-        this.createFoodRequest();
-        this.createFoodCategorizeRequest();
-        this.createTableRequest();
-        this.createUserRequest();
-        this.createOrderRequest();
-        this.createPrepareFoodRequest();
-        this.createImportIngredientRequest();
-        this.createImageRequest();
-        this.createBaseRequest();
     }
-    createUnitRequest = ()=>{
-        let requestGroup = new RequestGroup(this.BASE_PATH + 'unit/');
-        requestGroup.createRequest("getAll","GET");
-        requestGroup.createRequest("create","POST");
-        requestGroup.createRequest("updateById","PUT");
-        requestGroup.createRequest("deleteById","DELETE");
-        this.Unit = requestGroup;
-    };
-    createIngredientRequest = ()=>{
-        let requestGroup = new RequestGroup(this.BASE_PATH + 'ingredient/');
-        requestGroup.createRequest("getAll","GET");
-        requestGroup.createRequest("getById","GET");
-        requestGroup.createRequest("create","POST");
-        requestGroup.createRequest("updateById","PUT");
-        requestGroup.createRequest("deleteById","DELETE");
-        this.Ingredient = requestGroup;
-    };
-    createFoodRequest = ()=>{
-        let requestGroup = new RequestGroup(this.BASE_PATH + 'food/');
-        requestGroup.createRequest("getAll","GET");
-        requestGroup.createRequest("getById","GET");
-        requestGroup.createRequest("create","POST");
-        requestGroup.createRequest("updateById","PUT");
-        requestGroup.createRequest("updateFoodIngById","PUT","ingredient/");
-        requestGroup.createRequest("deleteById","DELETE");
-        this.Food = requestGroup;
-    };
-    createFoodCategorizeRequest = ()=>{
-        let requestGroup = new RequestGroup(this.BASE_PATH + 'foodcategory/');
-        requestGroup.createRequest("getAll","GET");
-        requestGroup.createRequest("create","POST");
-        requestGroup.createRequest("updateById","PUT");
-        requestGroup.createRequest("deleteById","DELETE");
-        this.FoodCategorize = requestGroup;
-    };
-    createTableRequest = ()=>{
-        let requestGroup = new RequestGroup(this.BASE_PATH + 'table/');
-        requestGroup.createRequest("getAll","GET");
-        requestGroup.createRequest("create","POST");
-        requestGroup.createRequest("updateById","PUT");
-        requestGroup.createRequest("deleteById","DELETE");
-        this.Table = requestGroup;
-    };
-    createUserRequest = ()=>{
-        let requestGroup = new RequestGroup(this.BASE_PATH + 'user/');
-        requestGroup.createRequest("getAll","GET");
-        requestGroup.createRequest("create","POST");
-        requestGroup.createRequest("getByUsername","GET");
-        requestGroup.createRequest("changePassword","POST","changepassword/");
-        this.User = requestGroup;
-    };
-    createOrderRequest = ()=>{
-        let requestGroup = new RequestGroup(this.BASE_PATH + 'order/');
-        requestGroup.createRequest("getAll","GET");
-        requestGroup.createRequest("createOrderWithTableId","POST");
-        requestGroup.createRequest("updateOrderFoodByFoodId","PUT","updatefood/");
-        requestGroup.createRequest("getById","GET");
-        requestGroup.createRequest("payById","POST","pay/");
-        requestGroup.createRequest("cancelById","POST","cancel/");
-        this.Order = requestGroup;
+
+    getAllUnpayOrder = (callback) => {
+        //TODO Làm thêm hàm get all unpay order
+        let request = this.createRequest("GET", "order/");
+        request(null, null, null, callback);
     };
 
-    createPrepareFoodRequest = ()=>{
-        let requestGroup = new RequestGroup(this.BASE_PATH + 'preparefood/');
-        requestGroup.createRequest("getAllPrepare","GET","prepare/");
-        requestGroup.createRequest("getAllUndone","GET","undone/");
-        requestGroup.createRequest("setCookingById","POST","cooking/");
-        requestGroup.createRequest("setServedById","POST","served/");
-        requestGroup.createRequest("setCookedById","POST","cooked/");
-        requestGroup.createRequest("deleteAll","DEL");
-        this.PrepareFood = requestGroup;
+    getOrderById = (orderId, callback) => {
+        let request = this.createRequest("GET", "order/");
+        request(orderId, null, null, callback);
     };
 
-    createImportIngredientRequest = ()=>{
-        let requestGroup = new RequestGroup(this.BASE_PATH + 'importingredient/');
-        requestGroup.createRequest("getAll","GET");
-        requestGroup.createRequest("getById","GET");
-        requestGroup.createRequest("create","POST");
-        requestGroup.createRequest("deleteById","DEL");
-        this.ImportIngredient = requestGroup;
+    createOrder = (tableId, foodList, callback) => {
+        let request = this.createRequest("POST", "order/new");
+        let FoodWithOrder = foodList.map((e, i) => {
+            return {
+                FoodId: e.foodId,
+                Quantities: e.quantities
+            }
+        });
+        let queryParams = {
+            tableid: tableId
+        };
+        let body = {
+            FoodWithOrder
+        };
+        request(null, queryParams, body, callback);
     };
-    createImageRequest = ()=>{
-        let requestGroup = new RequestGroup(this.BASE_PATH + 'image/');
-        requestGroup.createRequest("getById","GET");
-        this.Image = requestGroup;
+
+    updateOrder = (orderId, foodList, callback) => {
+        let request = this.createRequest("PUT", "order/updatefood/");
+        let FoodWithOrder = foodList.map((e, i) => {
+            return {
+                FoodId: e.foodId,
+                Quantities: e.quantities
+            }
+        });
+        let body = {
+            FoodWithOrder
+        };
+        request(orderId, null, body, callback);
     };
-    createBaseRequest = ()=>{
-        let requestGroup = new RequestGroup(this.BASE_PATH);
-        requestGroup.createRequest("getAccessToken","POST");
-        this.Base = requestGroup;
+
+    cancelOrder = (orderId, callback) => {
+        let request = this.createRequest("POST", "order/cancel/");
+        request(orderId, null, null, callback);
     };
+
+    getAllCategoryWithFood = (callback) => {
+        //TODO Làm thêm hàm get category with food, food phải kèm foodPrice
+        let request = this.createRequest("POST", "order/cancel/");
+
+    };
+
+    getAllCookedPrepareFood = (callback) => {
+        //TODO làm thêm hàm lấy prepare food cho staff
+    };
+
+    getAllQueueAndCookingPrepareFood = (callback) => {
+        //TODO làm thêm hàm lấy các prepare food cho đầu bếp
+    };
+
+    setQueueFoodToCooking = (prepareFoodId, callback) => {
+        let request = this.createRequest("POST", "preparefood/cooking/");
+        request(prepareFoodId, null, null, callback);
+    };
+    setCookingFoodToCooked = (prepareFoodId, callback) => {
+        let request = this.createRequest("POST", "preparefood/cooked/");
+        request(prepareFoodId, null, null, callback);
+    };
+    setCookedFoodToServed = (prepareFoodId, callback) => {
+        let request = this.createRequest("POST", "preparefood/served/");
+        request(prepareFoodId, null, null, callback);
+    };
+    cancelPrepareFood = (prepareFoodId, reason, callback) => {
+        //TODO Xóa prepare food
+    };
+
+
+    createRequest = (method, path = "", useAuthorization = true, isContentJson = true) => {
+        let headers = {
+            Accept: 'application/json'
+        };
+        if (isContentJson) headers['Content-Type'] = 'application/json';
+        let requestInfo = {
+            method: method,
+            headers: headers,
+        };
+        let api = this.BASE_PATH + path;
+        return (id, params, body, callback) => {
+
+            if (id !== null) api += id.toString() + "/";
+            if (useAuthorization) {
+                headers['Authorization'] = SessionManager.getSession().getUserProfile().getAccessToken();
+            }
+            if (method === "GET") {
+                if (params !== null) {
+                    api += Helper.jsonToQueryString(params);
+                }
+            } else {
+                if (body !== null) {
+                    requestInfo.body = JSON.stringify(body);
+                }
+            }
+
+            fetch(api, requestInfo).then((response) => response.json())
+                .then(responseJson => {
+                    if (responseJson.Successful) {
+                        callback(null, responseJson.Data, responseJson);
+                    } else {
+                        callback(true, null, responseJson);
+                    }
+                })
+                .catch((error) => {
+                    callback(error, null, null);
+                })
+        }
+    }
+
 
 }
 
