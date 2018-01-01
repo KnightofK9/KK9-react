@@ -47,15 +47,17 @@ export default class FoodBox extends Component {
         let foodText = this.createFoodText();
         return (
             <View style={styles.container}>
-                <View style={styles.content}>
-                    <TouchableOpacity onPress={this.onFoodPress}>
-                        <CachedImage style={styles.imageButton} mutable
-                                     source={{uri: this.state.food.foodImage}}
-                        />
-                    </TouchableOpacity>
-                    <Text onPress={this.onDropFoodPress} style={styles.foodNameTxt}>
-                        {foodText}
-                    </Text>
+                <View style={styles.contentShadow}>
+                    <View style={styles.content}>
+                        <TouchableOpacity style={styles.imageContainer} onPress={this.onFoodPress}>
+                            <CachedImage style={styles.imageButton} mutable
+                                         source={{uri: this.state.food.foodImage}}
+                            />
+                        </TouchableOpacity>
+                        <Text onPress={this.onDropFoodPress} style={styles.foodNameTxt}>
+                            {foodText}
+                        </Text>
+                    </View>
                 </View>
             </View>
         )
@@ -68,8 +70,7 @@ const styles = StyleSheet.create({
         height: 200,
         alignItems: 'center',
     },
-    content: {
-        flexDirection: 'row',
+    contentShadow: {
         width: '90%',
         height: 190,
         shadowColor: '#000',
@@ -77,17 +78,29 @@ const styles = StyleSheet.create({
         shadowOpacity: 0.4,
         shadowRadius: 2,
         borderRadius: 10,
-        alignItems: 'center',
         backgroundColor: 'white',
+    },
+    content: {
+        width: '100%',
+        height: '100%',
+        borderRadius: 10,
+        flexDirection: 'column',
+        backgroundColor: 'white',
+        overflow: 'hidden',
     },
     imageButton: {
         flexDirection: 'column',
-        height: 70,
-        width: 70,
-        alignSelf: 'center',
+        height: '95%',
+        width: '100%',
     },
     foodNameTxt: {
-        alignSelf: 'flex-end',
+        alignSelf: 'center',
         fontWeight: 'bold',
+        marginBottom: 10,
+        marginTop: 0,
+    },
+    imageContainer:{
+        flex:1,
+        // clip: '',
     },
 });
