@@ -14,5 +14,13 @@ export default class Helper {
     };
     static calTotalMoneyOnFood = (food)=>{
         return food.quantities * food.foodPrice;
+    };
+    static jsonToQueryString = (json) => {
+        return '?' +
+            Object.keys(json).map(function(key) {
+                return encodeURIComponent(key) + '=' +
+                    encodeURIComponent(json[key]);
+            }).join('&');
     }
+
 }

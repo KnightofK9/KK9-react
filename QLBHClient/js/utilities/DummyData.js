@@ -1,15 +1,23 @@
 import randomcolor from 'randomcolor'
+import * as Constant from '../share/Constant'
 class DummyData{
     static dummyPrepareFoodList(){
         let prepareFoodRows = [];
         let dummyUrl = "http://quanlybanhangapi.azurewebsites.net/api/image/9";
-        prepareFoodRows.push(DummyData.createPrepareFoodRow(1,dummyUrl,"Thịt bò",1));
-        prepareFoodRows.push(DummyData.createPrepareFoodRow(2,dummyUrl,"Thịt bò",1));
-        prepareFoodRows.push(DummyData.createPrepareFoodRow(3,dummyUrl,"Thịt bò",1));
-        prepareFoodRows.push(DummyData.createPrepareFoodRow(4,dummyUrl,"Thịt bò",1));
-        prepareFoodRows.push(DummyData.createPrepareFoodRow(5,dummyUrl,"Thịt bò",1));
-        prepareFoodRows.push(DummyData.createPrepareFoodRow(6,dummyUrl,"Thịt bò",1));
-        prepareFoodRows.push(DummyData.createPrepareFoodRow(7,dummyUrl,"Thịt bò",1));
+        prepareFoodRows.push(DummyData.createPrepareFoodRow(1,dummyUrl,"Thịt bò",Constant.PREPARE_STATE.QUEUE));
+        prepareFoodRows.push(DummyData.createPrepareFoodRow(2,dummyUrl,"Thịt bò",Constant.PREPARE_STATE.CANCEL));
+        prepareFoodRows.push(DummyData.createPrepareFoodRow(3,dummyUrl,"Thịt bò",Constant.PREPARE_STATE.COOKED));
+        prepareFoodRows.push(DummyData.createPrepareFoodRow(4,dummyUrl,"Thịt bò",Constant.PREPARE_STATE.COOKED));
+        prepareFoodRows.push(DummyData.createPrepareFoodRow(5,dummyUrl,"Thịt bò",Constant.PREPARE_STATE.COOKED));
+        prepareFoodRows.push(DummyData.createPrepareFoodRow(6,dummyUrl,"Thịt bò",Constant.PREPARE_STATE.SERVED));
+        prepareFoodRows.push(DummyData.createPrepareFoodRow(7,dummyUrl,"Thịt bò",Constant.PREPARE_STATE.SERVED));
+        prepareFoodRows.push(DummyData.createPrepareFoodRow(8,dummyUrl,"Thịt bò",Constant.PREPARE_STATE.SERVED));
+        prepareFoodRows.push(DummyData.createPrepareFoodRow(9,dummyUrl,"Thịt bò",Constant.PREPARE_STATE.COOKING));
+        prepareFoodRows.push(DummyData.createPrepareFoodRow(10,dummyUrl,"Thịt bò",Constant.PREPARE_STATE.COOKING));
+        prepareFoodRows.push(DummyData.createPrepareFoodRow(11,dummyUrl,"Thịt bò",Constant.PREPARE_STATE.QUEUE));
+        prepareFoodRows.push(DummyData.createPrepareFoodRow(12,dummyUrl,"Thịt bò",Constant.PREPARE_STATE.QUEUE));
+        prepareFoodRows.push(DummyData.createPrepareFoodRow(13,dummyUrl,"Thịt bò",Constant.PREPARE_STATE.QUEUE));
+        prepareFoodRows.push(DummyData.createPrepareFoodRow(14,dummyUrl,"Thịt bò",Constant.PREPARE_STATE.QUEUE));
         return prepareFoodRows;
     }
     static createPrepareFoodRow(prepareFoodId,foodImage,foodName,prepareState){
