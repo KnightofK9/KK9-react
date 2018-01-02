@@ -8,6 +8,7 @@ import {
 } from 'react-native';
 import Network from "../share/Network"
 import {Container, Icon, Label, Button, Header, Content, Form, Item, Input} from 'native-base';
+import Popup from '../share/Popup'
 
 export default class OrderRow extends Component {
     constructor(props) {
@@ -15,7 +16,8 @@ export default class OrderRow extends Component {
         let order = props.order;
         this.state = {
             order
-        }
+        };
+        this.prevDispatcher = props.dispatcher;
     }
 
     goToOrder = () => {
@@ -26,7 +28,17 @@ export default class OrderRow extends Component {
             })
         });
     };
+    onCancelOrderClick = () =>{
+        let orderId = this.state.order.OrderId;
+        Popup.showConfirm("Xác nhận","Bạn có muốn xóa order "+orderId,()=>{
+            Network.cancelOrder(orderId,(err,data,response) =>{
+                if(!err) Popup.showSuccess(()=>{
+                    this.prevDispatcher.dispatch("remove",orderId);
+                })
+            })
+        });
 
+    };
     render() {
         return (
             <TouchableOpacity onPress={this.goToOrder} style={[styles.container]}>
@@ -38,7 +50,7 @@ export default class OrderRow extends Component {
                         Table {this.state.order.TableId}
                     </Text>
                 </View>
-                <Button style={styles.button} transparent dark>
+                <Button onPress={this.onCancelOrderClick} style={styles.button} transparent dark>
                     <Icon name='ios-trash'/>
                 </Button>
             </TouchableOpacity>

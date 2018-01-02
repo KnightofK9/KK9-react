@@ -13,6 +13,7 @@ import CommonStyles from '../share/CommonStyles'
 import DummyData from '../utilities/DummyData'
 import Network from '../share/Network'
 import Helper from '../share/Helper'
+import EventDispatcher from '../share/EventDispatcher'
 
 class DanhSachOrder extends BaseScreen {
     constructor(props) {
@@ -21,17 +22,31 @@ class DanhSachOrder extends BaseScreen {
             orderRowList:[]
         };
         this.getAndParseUnpayOrder();
+        this.dispatcher = this.createEventDispatcher();
         // this.dummy();
     }
+    createEventDispatcher = () =>{
+        let reloadHandle = (value,callObject) =>{
+            this.getAndParseUnpayOrder();
+        };
+        let refreshHandle = (value,callObject) =>{
+            this.forceUpdate();
+        };
+        let removeHandle = (orderId,callObject) =>{
+            this.setState({orderRowList:this.state.orderRowList.filter(k=> k.OrderId !== orderId)});
+        };
+        let dispatcher = new EventDispatcher();
+        dispatcher.registerEvent("reload",reloadHandle);
+        dispatcher.registerEvent("refresh",refreshHandle);
+        dispatcher.registerEvent("remove",removeHandle);
+        return dispatcher;
+    };
     getAndParseUnpayOrder = () =>{
         Network.getAllUnpayOrder((err,data,result)=>{
-            if(err) {
-                console.log(err);
-                return;
-            }
-            this.setState({
+            if(!err) this.setState({
                 orderRowList: data,
             })
+
         });
     };
     dummy = () => {
@@ -49,7 +64,7 @@ class DanhSachOrder extends BaseScreen {
     };
     render() {
         let orderArg = this.state.orderRowList.map((e, i) => {
-            return <OrderRow navigation={this.props.navigation} key={e.OrderId} order={e}/>
+            return <OrderRow dispatcher={this.dispatcher} navigation={this.props.navigation} key={e.OrderId} order={e}/>
         });
         return (
             <Container>
