@@ -2,10 +2,11 @@
 import Helper from './Helper'
 import SessionManager from './SessionManager'
 import * as Constant from './Constant'
+import Popup from './Popup'
 
 class Network {
     constructor() {
-        this.DOMAIN = "quanlybanhangapi.azurewebsites.net/";
+        this.DOMAIN = "http://quanlybanhangapi.azurewebsites.net/";
         this.BASE_PATH = this.DOMAIN + 'api/mobile/';
     }
 
@@ -149,7 +150,11 @@ class Network {
           };
           return request(body,callback)
     };
-
+    handleError = (err,response,callback) =>{
+        Popup.showAlert("Lỗi",JSON.stringify(err),()=>{
+            callback(err,null,response);
+        });
+    };
     createRequest = (path = "", method = "GET", useAuthorization = true, isContentJson = true) => {
         let headers = {
             Accept: 'application/json'
@@ -181,11 +186,11 @@ class Network {
                     if (responseJson.Successful) {
                         callback(null, responseJson.Data, responseJson);
                     } else {
-                        callback(true, null, responseJson);
+                       this.handleError(responseJson,responseJson,callback);
                     }
                 })
                 .catch((error) => {
-                    callback(error, null, null);
+                    this.handleError(error,null,callback);
                 })
         }
     }

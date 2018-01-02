@@ -4,6 +4,6 @@ export default class UserProfile{
         this.token = apiUserProfile.token;
     }
     getAccessToken = () =>{
-        return this.token.type + " " + this.token.accessToken;
+        return this.token.type + " " + this.token.token;
     }
 }

@@ -29,13 +29,14 @@ import PrepareFood from './PrepareFood'
 import TaiKhoan from './TaiKhoan'
 import XacNhanOrder from './XacNhanOrder'
 import Login from './login'
+import BaseScreen from './BaseScreen'
 
-class MainScreen extends Component {
+class MainScreen extends BaseScreen {
     constructor(props) {
         super(props);
         this.state = {
             index: 0
-        }
+        };
     }
 
     switchScreen = (index) => {
@@ -60,7 +61,7 @@ class MainScreen extends Component {
         let AppComponent = this.getComponentByIndex(this.state.index);
         return (
             <Container>
-                <AppComponent mainNavigation={this.props.navigation}/>
+                <AppComponent navigation={this.props.navigation}/>
                 <Footer>
                     <FooterTab>
                         <Button onPress={() => {
@@ -111,8 +112,8 @@ const RootNavigator = StackNavigator({
         }
     }, {
         headerMode: 'none',
-        initialRouteName: 'Login',
-        // initialRouteName: 'Main',
+        // initialRouteName: 'Login',
+        initialRouteName: 'Main',
     }
 );
 

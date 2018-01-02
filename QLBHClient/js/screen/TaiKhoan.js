@@ -8,11 +8,12 @@ import {
 
 import {Container,Body,Title, Label, Button, Header, Content, Form, Item, Input} from 'native-base';
 
-export default class TaiKhoan extends Component {
+import BaseScreen from './BaseScreen'
+export default class TaiKhoan extends BaseScreen {
     constructor(props){
         super(props);
         this.state= {
-        }
+        };
     }
 
     render() {

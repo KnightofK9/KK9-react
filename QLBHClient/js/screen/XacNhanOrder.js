@@ -29,14 +29,16 @@ import CommonComponent from '../share/CommonComponent'
 import Helper from '../share/Helper'
 import PropertyDispatcher from '../share/PropertyDispatcher'
 import EventDispatcher from '../share/EventDispatcher'
+import Popup from '../share/Popup'
 
-export default class XacNhanOrder extends Component {
+import BaseScreen from './BaseScreen'
+export default class XacNhanOrder extends BaseScreen {
     constructor(props) {
         super(props);
-        let foodList = props.navigation.state.params.foodList;
+        let order = props.navigation.state.params.order;
+        Helper.orderSetDefaultFoodModifyQuantities(order);
         this.state = {
-            confirmOrderList: foodList.filter(f => f.quantities !== 0),
-            totalMoney: Helper.calTotalMoney(foodList),
+            order,
         };
         this.dispatcher = this.props.navigation.state.params.dispatcher;
         this.eventDispatcher = this.createEventDispatcher();
@@ -59,7 +61,7 @@ export default class XacNhanOrder extends Component {
     };
 
     goBackToMenuOrder = () => {
-        this.dispatcher.dispatch("refresh");
+        if(this.dispatcher !== undefined) this.dispatcher.dispatch("refresh");
         this.props.navigation.goBack();
     };
     cancelCreateOrder = () => {
@@ -79,10 +81,31 @@ export default class XacNhanOrder extends Component {
     createCancelButton = () => {
         return CommonComponent.createCancelButton(this.cancelCreateOrder);
     };
+    updateOrder = () =>{
+        let modifyFoodList = Helper.getModifyFoodList(this.state.order);
+        Popup.showConfirm("Xác nhận","Bạn sẽ cập nhật lại các món sau vào order:" + JSON.stringify(modifyFoodList),
+            ()=>{
+
+            });
+    };
+    openOrderMenu = () =>{
+        let navigation = this.props.navigation;
+        navigation.navigate("MenuForCreateOrder",{
+            isCreateOrder:true,
+            order:this.state.order,
+        })
+    };
+    createMenuOrderButton = () =>{
+        return <Button style={styles.confirmBtn} rounded primary onPress={() => {
+            this.openOrderMenu();
+        }}>
+            <Icon name='ios-add-outline'/>
+        </Button>
+    };
 
     render() {
         let count = 1;
-        let arg = this.state.confirmOrderList.map((e, i) => {
+        let arg = this.state.order.FoodWithOrders.map((e, i) => {
 
             // if (e.quantities === 0) return null;
             return <ConfirmOrderRow key={i}
@@ -93,7 +116,8 @@ export default class XacNhanOrder extends Component {
         });
         let backButton = this.createLeftBackButton();
         let cancelButton = this.createCancelButton();
-        this.state.totalMoney = Helper.calTotalMoney(this.state.confirmOrderList);
+        let addFoodOrderMenuBtn = this.createMenuOrderButton();
+        this.state.totalMoney = Helper.calTotalMoneyToOrder(this.state.order);
         return (
             <Container>
                 <Header>
@@ -113,15 +137,16 @@ export default class XacNhanOrder extends Component {
                     {arg}
                 </ScrollView>
                 <View style={styles.totalMoneyView}>
-                    <Text style={styles.totalMoneyTxt}>Tổng tiền:{this.state.totalMoney.format()} VNĐ </Text>
+                    <Text style={styles.totalMoneyTxt}>Tổng tiền:{this.state.order.BillMoney.format()} VNĐ </Text>
                 </View>
                 <View style={styles.confirmBtnRow}>
-                    <Button style={CommonStyles.txtBtn} success>
+                    <Button style={CommonStyles.txtBtn} onPress={this.updateOrder} success>
                         <Text>
-                            Đặt món
+                            Cập nhật order
                         </Text>
                     </Button>
                 </View>
+                {addFoodOrderMenuBtn}
             </Container>
         )
     }
@@ -141,4 +166,9 @@ const styles = StyleSheet.create({
         flexDirection: 'row',
         justifyContent: 'space-around',
     },
+    confirmBtn:{
+        position:'absolute',
+        right:10,
+        bottom:70
+    }
 });

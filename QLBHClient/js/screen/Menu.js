@@ -28,20 +28,35 @@ import CommonComponent from '../share/CommonComponent'
 import PropertyDispatcher from '../share/PropertyDispatcher'
 import PropertyDispatcherDict from '../share/PropertyDispatcherDict'
 import EventDispatcher from '../share/EventDispatcher'
+import BaseScreen from './BaseScreen'
+import Network from '../share/Network'
 
-export default class Menu extends Component {
+export default class Menu extends BaseScreen {
     constructor(props) {
         super(props);
-        this.state = {};
-        this.dummy();
+        let order = props.order === undefined ? props.order : null;
+        this.state = {
+            order,
+            foodCategorizes:[]
+        };
+
+        this.loadAndParseFoodCategorize()
+        // this.dummy();
         this.dispatcher = this.createEventDispatcher();
     }
-
+    loadAndParseFoodCategorize = () =>{
+        let foodCategorizes = null;
+        Network.getAllCategoryWithFood((err,result,response)=>{
+            this.setState({
+                foodCategorizes:result
+            })
+        });
+    };
     dummy = () => {
         this.state = {...DummyData.dummyFoodList()}
     };
     isCreateOrder = () => {
-        return (this.props.navigation && this.props.navigation.state.params.isCreateOrder);
+        return (this.state.order !== null);
     };
     goBackToCreateOrder = () => {
         this.props.navigation.goBack();

@@ -6,33 +6,48 @@ import {
     View,
     ScrollView,
 } from 'react-native';
+import BaseScreen from './BaseScreen'
 import {Container, Body, Title, Label, Button, Icon, Header, Content, Form, Item, Input} from 'native-base';
 import OrderRow from '../component/OrderRow'
 import CommonStyles from '../share/CommonStyles'
 import DummyData from '../utilities/DummyData'
+import Network from '../share/Network'
 
-class DanhSachOrder extends Component {
+class DanhSachOrder extends BaseScreen {
     constructor(props) {
         super(props);
-        this.state = {};
-        this.dummy();
+        this.state = {
+            orderRowList:[]
+        };
+        this.getAndParseUnpayOrder();
+        // this.dummy();
     }
-
+    getAndParseUnpayOrder = () =>{
+        Network.getAllUnpayOrder((err,data,result)=>{
+            if(err) {
+                console.log(err);
+                return;
+            }
+            this.setState({
+                orderRowList: data,
+            })
+        });
+    };
     dummy = () => {
         this.state = {
             orderRowList: DummyData.dummyOrderRowList()
         }
     };
     openMenuForCreateOrder = () =>{
-        let mainNavigation = this.props.mainNavigation;
-        mainNavigation.navigate("MenuForCreateOrder",{
+        let navigation = this.props.navigation;
+        navigation.navigate("MenuForCreateOrder",{
             isCreateOrder:true,
-            mainNavigation:mainNavigation,
+            navigation:navigation,
         })
     };
     render() {
         let orderArg = this.state.orderRowList.map((e, i) => {
-            return <OrderRow key={e.orderId} orderId={e.orderId} tableId={e.tableId}/>
+            return <OrderRow navigation={this.props.navigation} key={e.OrderId} order={e}/>
         });
         return (
             <Container>

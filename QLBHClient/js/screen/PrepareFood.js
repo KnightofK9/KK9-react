@@ -11,7 +11,8 @@ import {Container, Body, Title, Label, Button, Header, Content, Form, Item, Inpu
 import PrepareFoodRow from '../component/PrepareFoodRow';
 import DummyData from '../utilities/DummyData'
 import * as Constant from '../share/Constant'
-export default class PrepareFood extends Component {
+import BaseScreen from './BaseScreen'
+export default class PrepareFood extends BaseScreen {
     constructor(props) {
         super(props);
         this.state = {

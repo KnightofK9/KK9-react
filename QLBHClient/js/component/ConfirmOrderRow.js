@@ -23,12 +23,13 @@ export default class ConfirmOrderRow extends Component {
     }
 
     addValueToQuantities = (addValue) => {
-        let oldQuantities = this.state.food.quantities;
+        let oldQuantities = this.state.food.Quantities + this.state.food.ModifyQuantities;
         let updatedQuantities = oldQuantities + addValue;
         if (updatedQuantities < 0) updatedQuantities = 0;
         let different = updatedQuantities - oldQuantities;
         if (different !== 0) {
-            this.state.food.quantities = updatedQuantities;
+            // this.state.food.Quantities = updatedQuantities;
+            this.state.food.ModifyQuantities += different;
             this.eventDispatcher.dispatch("refresh");
             // this.dispatcher.dispatch("refresh");
         }
@@ -38,15 +39,15 @@ export default class ConfirmOrderRow extends Component {
         return (
             <View style={styles.container}>
                 <Text style={styles.indexTxt}>{this.state.index}</Text>
-                <Text style={styles.foodNameTxt}>{this.state.food.foodName}</Text>
-                <Text>{this.state.food.foodPrice.format()} đ</Text>
+                <Text style={styles.foodNameTxt}>{this.state.food.Food.Name}</Text>
+                <Text>{this.state.food.Food.Price.format()} đ</Text>
                 <Button transparent onPress={() => {
                     this.addValueToQuantities(-1);
                 }}>
                     <Icon name='ios-arrow-dropdown'/>
                 </Button>
                 <Text>
-                    {this.state.food.quantities}
+                    {this.state.food.Quantities + this.state.food.ModifyQuantities}
                 </Text>
                 <Button transparent onPress={() => {
                     this.addValueToQuantities(1);
