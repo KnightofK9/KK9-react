@@ -1,91 +1,156 @@
-import {fetch} from "react-native";
+
 import Helper from './Helper'
+import SessionManager from './SessionManager'
+import * as Constant from './Constant'
 
 class Network {
     constructor() {
         this.DOMAIN = "quanlybanhangapi.azurewebsites.net/";
-        this.BASE_PATH = this.DOMAIN + 'api/';
+        this.BASE_PATH = this.DOMAIN + 'api/mobile/';
     }
 
     getAllUnpayOrder = (callback) => {
-        //TODO Làm thêm hàm get all unpay order
-        let request = this.createRequest("GET", "order/");
-        request(null, null, null, callback);
+        let request = this.createRequest("GetAllUnPayOrders");
+        return request(null, callback);
     };
 
     getOrderById = (orderId, callback) => {
-        let request = this.createRequest("GET", "order/");
-        request(orderId, null, null, callback);
+        let request = this.createRequest("GetOrderById", "POST");
+        let body = {
+            orderId
+        };
+        return request(body, callback);
     };
 
     createOrder = (tableId, foodList, callback) => {
-        let request = this.createRequest("POST", "order/new");
-        let FoodWithOrder = foodList.map((e, i) => {
+        let request = this.createRequest("CreateOrder", "POST");
+        let foodWithOrder = foodList.map((e, i) => {
             return {
                 FoodId: e.foodId,
-                Quantities: e.quantities
+                Quantities: e.quantities,
             }
         });
-        let queryParams = {
-            tableid: tableId
-        };
         let body = {
-            FoodWithOrder
+            tableId,
+            foodWithOrder
         };
-        request(null, queryParams, body, callback);
+        return request(body, callback);
     };
 
     updateOrder = (orderId, foodList, callback) => {
-        let request = this.createRequest("PUT", "order/updatefood/");
-        let FoodWithOrder = foodList.map((e, i) => {
+        let request = this.createRequest("UpdateOrder", "POST");
+        let foodWithOrder = foodList.map((e, i) => {
             return {
                 FoodId: e.foodId,
-                Quantities: e.quantities
+                Quantities: e.quantities,
             }
         });
         let body = {
-            FoodWithOrder
+            orderId,
+            foodWithOrder
         };
-        request(orderId, null, body, callback);
+        return request(body, callback);
     };
 
     cancelOrder = (orderId, callback) => {
-        let request = this.createRequest("POST", "order/cancel/");
-        request(orderId, null, null, callback);
+        let request = this.createRequest("CancelOrder", "POST");
+        let body = {
+            orderId,
+        };
+        return request(body, callback);
     };
 
     getAllCategoryWithFood = (callback) => {
-        //TODO Làm thêm hàm get category with food, food phải kèm foodPrice
-        let request = this.createRequest("POST", "order/cancel/");
-
+        let request = this.createRequest("GetAllCategorizesWithFood");
+        return request(null, callback);
     };
 
     getAllCookedPrepareFood = (callback) => {
-        //TODO làm thêm hàm lấy prepare food cho staff
+        let request = this.createRequest("GetAllPrepareFoodByState", "POST");
+        let prepareState = [
+            Constant.PREPARE_STATE.COOKED
+        ];
+        let body = {
+            prepareState
+        };
+        return request(body, callback);
+    };
+    getAllPrepareFood = (callback) =>{
+        let request = this.createRequest("GetAllPrepareFoodByState", "POST");
+        let prepareState = [
+            Constant.PREPARE_STATE.CANCEL,
+            Constant.PREPARE_STATE.QUEUE,
+            Constant.PREPARE_STATE.COOKING,
+            Constant.PREPARE_STATE.COOKED,
+            Constant.PREPARE_STATE.SERVED,
+        ];
+        let body = {
+            prepareState
+        };
+        return request(body, callback);
     };
 
     getAllQueueAndCookingPrepareFood = (callback) => {
-        //TODO làm thêm hàm lấy các prepare food cho đầu bếp
+
+        let request = this.createRequest("GetAllPrepareFoodByState", "POST");
+        let prepareState = [
+            Constant.PREPARE_STATE.QUEUE,
+            Constant.PREPARE_STATE.COOKING,
+        ];
+        let body = {
+            prepareState
+        };
+        return request(body, callback);
     };
 
     setQueueFoodToCooking = (prepareFoodId, callback) => {
-        let request = this.createRequest("POST", "preparefood/cooking/");
-        request(prepareFoodId, null, null, callback);
+        let request = this.createRequest("SetPrepareFoodTo", "POST");
+        let prepareState = Constant.PREPARE_STATE.COOKING;
+        let body = {
+            prepareFoodId,
+            prepareState,
+        };
+        return request(body, callback);
     };
     setCookingFoodToCooked = (prepareFoodId, callback) => {
-        let request = this.createRequest("POST", "preparefood/cooked/");
-        request(prepareFoodId, null, null, callback);
+        let request = this.createRequest("SetPrepareFoodTo", "POST");
+        let prepareState = Constant.PREPARE_STATE.COOKED;
+        let body = {
+            prepareFoodId,
+            prepareState,
+        };
+        return request(body, callback);
     };
     setCookedFoodToServed = (prepareFoodId, callback) => {
-        let request = this.createRequest("POST", "preparefood/served/");
-        request(prepareFoodId, null, null, callback);
+
+        let request = this.createRequest("SetPrepareFoodTo", "POST");
+        let prepareState = Constant.PREPARE_STATE.SERVED;
+        let body = {
+            prepareFoodId,
+            prepareState,
+        };
+        return request(body, callback);
     };
     cancelPrepareFood = (prepareFoodId, reason, callback) => {
-        //TODO Xóa prepare food
+
+        let request = this.createRequest("SetPrepareFoodTo", "POST");
+        let prepareState = Constant.PREPARE_STATE.CANCEL;
+        let body = {
+            prepareFoodId,
+            prepareState,
+        };
+        return request(body, callback);
+    };
+    login = (username,password,callback) =>{
+          let request = this.createRequest("Login","POST",false);
+          let body = {
+              username,
+              password,
+          };
+          return request(body,callback)
     };
 
-
-    createRequest = (method, path = "", useAuthorization = true, isContentJson = true) => {
+    createRequest = (path = "", method = "GET", useAuthorization = true, isContentJson = true) => {
         let headers = {
             Accept: 'application/json'
         };
@@ -95,7 +160,7 @@ class Network {
             headers: headers,
         };
         let api = this.BASE_PATH + path;
-        return (id, params, body, callback) => {
+        return (body, callback, id = null, params = null) => {
 
             if (id !== null) api += id.toString() + "/";
             if (useAuthorization) {
@@ -111,7 +176,7 @@ class Network {
                 }
             }
 
-            fetch(api, requestInfo).then((response) => response.json())
+            return fetch(api, requestInfo).then((response) => response.json())
                 .then(responseJson => {
                     if (responseJson.Successful) {
                         callback(null, responseJson.Data, responseJson);

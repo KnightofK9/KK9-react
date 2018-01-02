@@ -8,24 +8,23 @@ import {
 
 import {Container, Label, Button, Header, Content, Form, Item, Input} from 'native-base';
 import SessionManager from '../share/SessionManager'
+import Network from '../share/Network'
 import {NavigationActions} from 'react-navigation'
 
 export default class LoginBox extends Component {
     constructor(props) {
         super(props);
         this.state = {
-            username: '',
-            password: ''
+            username: 'admin',
+            password: 'admin2'
         }
     }
 
     login = () => {
-        let session = SessionManager.getSession();
-        session.setUserProfile({
-            username: this.state.username,
-            accessToken: 'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1bmlxdWVfbmFtZSI6InRlc3QiLCJuYmYiOjE1MTIxNTMzNjQsImV4cCI6MTU0MzY4OTM2NCwiaWF0IjoxNTEyMTUzMzY0fQ.1Iya30pFQBMTaL65fbObUBNg0v9ZtnLia4IGX7W78ug'
+        Network.login(this.state.username,this.state.password,(err,data,result)=>{
+            SessionManager.createSession(data);
+            this.goToMainScreen();
         });
-        this.goToMainScreen();
     };
     goToMainScreen = () => {
         const resetAction = NavigationActions.reset({
@@ -49,7 +48,7 @@ export default class LoginBox extends Component {
                     <Form>
                         <Item floatingLabel>
                             <Label>Username</Label>
-                            <Input onChangeText={(text) => {
+                            <Input value={this.state.username} onChangeText={(text) => {
                                 this.setState({
                                     username: text
                                 })
@@ -57,7 +56,7 @@ export default class LoginBox extends Component {
                         </Item>
                         <Item floatingLabel last>
                             <Label>Password</Label>
-                            <Input secureTextEntry={true} onChangeText={(text) => {
+                            <Input secureTextEntry={true} value={this.state.password} onChangeText={(text) => {
                                 this.setState({
                                     password: text
                                 })

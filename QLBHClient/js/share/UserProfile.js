@@ -1,9 +1,9 @@
 export default class UserProfile{
     constructor(apiUserProfile){
-        this.username = apiUserProfile.username;
-        this.accessToken = apiUserProfile.accessToken;
+        this.userProfile = apiUserProfile.user;
+        this.token = apiUserProfile.token;
     }
     getAccessToken = () =>{
-        return this.accessToken;
+        return this.token.type + " " + this.token.accessToken;
     }
 }

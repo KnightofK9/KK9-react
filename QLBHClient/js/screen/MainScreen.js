@@ -111,7 +111,8 @@ const RootNavigator = StackNavigator({
         }
     }, {
         headerMode: 'none',
-        initialRouteName: 'Main',
+        initialRouteName: 'Login',
+        // initialRouteName: 'Main',
     }
 );
 
