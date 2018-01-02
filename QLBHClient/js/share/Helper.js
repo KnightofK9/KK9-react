@@ -87,6 +87,16 @@ export default class Helper {
     };
     static createUrlFromImageId = (imageId) =>{
         return "http://quanlybanhangapi.azurewebsites.net/api/image/"+imageId;
+    };
+    static getFoodWithOrderList = (order) =>{
+        let Filter = order.FoodWithOrders.filter( e => !(e.Quantities + e.ModifyQuantities === 0 && e.ModifyQuantities === 0));
+        let FoodWithOrder = Filter.map((e,i)=>{
+            return {
+                FoodId:e.FoodId,
+                Quantities:e.Quantities + e.ModifyQuantities,
+            }
+        });
+        return FoodWithOrder;
     }
 
 }

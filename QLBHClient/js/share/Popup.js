@@ -22,5 +22,13 @@ export default class Popup{
                 onPress: okCallback,
             },
         ])
+    };
+    static showSuccess = (callback)=>{
+
+        AlertIOS.alert("Thành công",null,[
+            {
+                text: 'Đồng ý',
+                onPress: callback,
+            }]);
     }
 }

@@ -30,6 +30,7 @@ import Helper from '../share/Helper'
 import PropertyDispatcher from '../share/PropertyDispatcher'
 import EventDispatcher from '../share/EventDispatcher'
 import Popup from '../share/Popup'
+import Network from '../share/Network'
 
 import BaseScreen from './BaseScreen'
 export default class XacNhanOrder extends BaseScreen {
@@ -66,7 +67,7 @@ export default class XacNhanOrder extends BaseScreen {
         if(this.prevDispathcer !== undefined) this.prevDispathcer.dispatch("refresh");
         this.props.navigation.goBack();
     };
-    cancelCreateOrder = () => {
+    goBackToMain = () => {
         const resetAction = NavigationActions.reset({
             index: 0,
             actions: [
@@ -80,21 +81,43 @@ export default class XacNhanOrder extends BaseScreen {
     };
     createLeftBackButton = () => {
         let f = this.goBackToMenuOrder;
-        // if(this.isFromCreatedOrder()) f= this.cancelCreateOrder;
         return CommonComponent.createBackButton(f);
     };
     createCancelButton = () => {
 
-        let f = this.cancelCreateOrder;
-        if(this.isFromCreatedOrder()) f= this.goBackToMenuOrder;
+        let f = this.goBackToMain;
+        if(!this.isFromCreatedOrder()) f= this.goBackToMenuOrder;
         return CommonComponent.createCancelButton(f);
     };
     updateOrder = () =>{
         let modifyFoodList = Helper.getModifyFoodList(this.state.order);
         Popup.showConfirm("Xác nhận","Bạn sẽ cập nhật lại các món sau vào order:" + JSON.stringify(modifyFoodList),
             ()=>{
-
+                if(this.isFromCreatedOrder()) {
+                    this.doCreateOrder();
+                }else{
+                    this.doUpdateOrder();
+                }
             });
+    };
+    doCreateOrder = () =>{
+        let foodWithOrderList = Helper.getFoodWithOrderList(this.state.order);
+        let tableId = 1;
+        //TODO dummy table Id
+        Network.createOrder(tableId,foodWithOrderList,(err,data,response)=>{
+            if(!err) Popup.showSuccess(()=>{
+                this.goBackToMain();
+            });
+        });
+    };
+    doUpdateOrder = () =>{
+        let foodWithOrderList = Helper.getFoodWithOrderList(this.state.order);
+        let orderId = this.state.order.OrderId;
+        Network.updateOrder(orderId,foodWithOrderList,(err,data,response)=>{
+            if(!err) Popup.showSuccess(()=>{
+                this.goBackToMain();
+            });
+        });
     };
     openOrderMenu = () =>{
         let navigation = this.props.navigation;

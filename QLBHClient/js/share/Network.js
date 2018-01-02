@@ -26,32 +26,20 @@ class Network {
         return request(body, callback);
     };
 
-    createOrder = (tableId, foodList, callback) => {
+    createOrder = (tableId, FoodWithOrderList, callback) => {
         let request = this.createRequest("CreateOrder", "POST");
-        let foodWithOrder = foodList.map((e, i) => {
-            return {
-                FoodId: e.foodId,
-                Quantities: e.quantities,
-            }
-        });
         let body = {
             tableId,
-            foodWithOrder
+            foodWithOrder:FoodWithOrderList
         };
         return request(body, callback);
     };
 
-    updateOrder = (orderId, foodList, callback) => {
+    updateOrder = (orderId, FoodWithOrderList, callback) => {
         let request = this.createRequest("UpdateOrder", "POST");
-        let foodWithOrder = foodList.map((e, i) => {
-            return {
-                FoodId: e.foodId,
-                Quantities: e.quantities,
-            }
-        });
         let body = {
             orderId,
-            foodWithOrder
+            foodWithOrder:FoodWithOrderList
         };
         return request(body, callback);
     };
