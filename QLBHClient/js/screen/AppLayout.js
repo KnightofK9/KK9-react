@@ -35,7 +35,7 @@ export default class AppLayout extends Component {
 
     createSpinner = () => {
         if (this.state.renderSpinner) return ( <View style={styles.onTop}>
-            <Spinner color='blue'/>
+            <Spinner color='white'/>
         </View>);
         return null;
     };
