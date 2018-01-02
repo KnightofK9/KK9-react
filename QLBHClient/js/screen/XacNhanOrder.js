@@ -75,11 +75,19 @@ export default class XacNhanOrder extends BaseScreen {
         // let mainScreenKey = this.props.navigation.state.params.mainNavigation.state.key;
         // this.props.navigation.goBack(mainScreenKey);
     };
+    isFromCreatedOrder = () =>{
+        return this.state.order.OrderId !== null;
+    };
     createLeftBackButton = () => {
-        return CommonComponent.createBackButton(this.goBackToMenuOrder);
+        let f = this.goBackToMenuOrder;
+        // if(this.isFromCreatedOrder()) f= this.cancelCreateOrder;
+        return CommonComponent.createBackButton(f);
     };
     createCancelButton = () => {
-        return CommonComponent.createCancelButton(this.cancelCreateOrder);
+
+        let f = this.cancelCreateOrder;
+        if(this.isFromCreatedOrder()) f= this.goBackToMenuOrder;
+        return CommonComponent.createCancelButton(f);
     };
     updateOrder = () =>{
         let modifyFoodList = Helper.getModifyFoodList(this.state.order);
