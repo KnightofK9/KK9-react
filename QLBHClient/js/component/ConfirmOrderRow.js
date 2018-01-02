@@ -38,8 +38,8 @@ export default class ConfirmOrderRow extends Component {
             <View style={styles.container}>
                 <Text style={styles.indexTxt}>{this.state.index}</Text>
                 <Text style={styles.foodNameTxt}>{this.state.food.Food.Name}</Text>
-                <Text>{this.state.food.Food.Price.format()} đ</Text>
-                <Button transparent onPress={() => {
+                <Text style={{color: 'rgb(255,160,0)', fontWeight: 'bold'}}>{this.state.food.Food.Price.format()} đ</Text>
+                <Button style={{marginLeft: 10}} transparent onPress={() => {
                     this.addValueToQuantities(-1);
                 }}>
                     <Icon name='ios-arrow-dropdown'/>
@@ -47,13 +47,13 @@ export default class ConfirmOrderRow extends Component {
                 <Text>
                     {this.state.food.Quantities + this.state.food.ModifyQuantities}
                 </Text>
-                <Button transparent onPress={() => {
+                <Button style={{marginRight: -10}} transparent onPress={() => {
                     this.addValueToQuantities(1);
                 }}>
                     <Icon name='ios-arrow-dropup'/>
                 </Button>
                 {/*<Button dange>*/}
-                    {/*<Icon name='ios-trash'/>*/}
+                {/*<Icon name='ios-trash'/>*/}
                 {/*</Button>*/}
             </View>
         )
@@ -61,13 +61,39 @@ export default class ConfirmOrderRow extends Component {
 }
 
 const styles = StyleSheet.create({
-    container: {
-        flexDirection: 'row'
-    },
     indexTxt: {
-        width: 20
+        width: 20,
     },
     foodNameTxt: {
-        flex: 1
+        flex: 1,
+        fontWeight: 'bold',
+    },
+    container: {
+        flexDirection: 'row',
+        borderRadius: 10,
+        marginLeft: 10,
+        marginRight: 10,
+        marginTop: 12,
+        height: 70,
+        shadowColor: '#000',
+        shadowOffset: {width: 1, height: 2},
+        shadowOpacity: 0.4,
+        shadowRadius: 2,
+        backgroundColor: 'white',
+        padding: 10,
+        alignItems: 'center',
+    },
+    orderTxtBox: {
+        flex: 1,
+        fontWeight: 'bold',
+    },
+    tableTxtBox: {
+        flex: 2,
+        marginTop: 10,
+    },
+    button: {
+        height: 70,
+        width: 50,
+        opacity: 0.5,
     }
 });

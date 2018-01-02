@@ -169,12 +169,13 @@ export default class XacNhanOrder extends BaseScreen {
                     {arg}
                 </ScrollView>
                 <View style={styles.totalMoneyView}>
-                    <Text style={styles.totalMoneyTxt}>Tổng tiền:{this.state.order.BillMoney.format()} VNĐ </Text>
+                    <Text style={styles.totalMoneyTitle}>Tổng tiền: </Text>
+                    <Text style={styles.totalMoneyTxt}>{this.state.order.BillMoney.format()} đ </Text>
                 </View>
                 <View style={styles.confirmBtnRow}>
-                    <Button style={CommonStyles.txtBtn} onPress={this.updateOrder} success>
-                        <Text>
-                            Cập nhật order
+                    <Button style={[CommonStyles.txtBtn, {backgroundColor: 'rgb(0,111,255)'}]} onPress={this.updateOrder} success>
+                        <Text style={{fontWeight: 'bold', color:'white'}}>
+                            CẬP NHẬT
                         </Text>
                     </Button>
                 </View>
@@ -192,15 +193,24 @@ const styles = StyleSheet.create({
     totalMoneyView: {
         flexDirection: 'row',
         justifyContent: 'center',
+        marginBottom: 10,
     },
-    totalMoneyTxt: {},
+    totalMoneyTitle: {
+        fontWeight: 'bold',
+    },
+    totalMoneyTxt: {
+        fontWeight: 'bold',
+        color: 'rgb(255,160,0)',
+    },
     confirmBtnRow: {
+        marginBottom: 10,
         flexDirection: 'row',
         justifyContent: 'space-around',
     },
     confirmBtn:{
         position:'absolute',
         right:10,
-        bottom:70
-    }
+        bottom:70,
+    },
+
 });

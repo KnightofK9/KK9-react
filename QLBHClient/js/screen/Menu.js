@@ -147,7 +147,7 @@ export default class Menu extends BaseScreen {
 const styles = StyleSheet.create({
     container: {},
     foodScrView: {
-        flex: 1
+        flex: 1,
     },
     confirmBtn:{
         position:'absolute',
