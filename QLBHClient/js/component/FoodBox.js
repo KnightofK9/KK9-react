@@ -11,12 +11,19 @@ import {CachedImage} from "react-native-img-cache";
 import {Container, Thumbnail, Label, Button, Header, Content, Form, Item, Input} from 'native-base';
 import DummyData from '../utilities/DummyData'
 import PropertyDispatcher from '../share/PropertyDispatcher'
+import Helper from '../share/Helper'
 
 export default class FoodBox extends Component {
     constructor(props) {
         super(props);
         let food = props.food;
-        this.dispatcher = props.dispatcher;
+        let foodInfo = props.foodInfo;
+        let order = props.order;
+        if (food === null || food === undefined) {
+            food = Helper.createEmptyFoodWithOrder(foodInfo);
+            if (order !== undefined) order.FoodWithOrders.push(food);
+        }
+        this.prevDispatcher = props.dispatcher;
         this.state = {
             food
         };
@@ -26,32 +33,42 @@ export default class FoodBox extends Component {
         this.setFoodQuantities(1);
     };
     setFoodQuantities = (addValue) => {
-        let updatedQuantities = this.state.food.quantities + addValue;
+        if (!this.isCreateOrder()) return;
+        let previousQuantities = this.state.food.Quantities + this.state.food.ModifyQuantities;
+        let updatedQuantities = previousQuantities + addValue;
         if (updatedQuantities < 0) updatedQuantities = 0;
-        this.state.food.quantities = updatedQuantities;
-        this.dispatcher.dispatch("refresh");
+        let different = updatedQuantities - previousQuantities;
+        if (different !== 0) {
+            // this.state.food.Quantities = updatedQuantities;
+            this.state.food.ModifyQuantities += different;
+            this.prevDispatcher.dispatch("refresh");
+        }
+
     };
     onDropFoodPress = () => {
         this.setFoodQuantities(-1);
     };
     isCreateOrder = () => {
-        return this.props.isCreateOrder;
+        return this.props.order !==  null && this.props.order !== undefined;
     };
     createFoodText = () => {
-        let foodText = this.state.food.foodName;
-        if (this.isCreateOrder()) foodText += ":" + this.state.food.quantities;
+        let foodText = this.state.food.Food.Name;
+        if (this.isCreateOrder()) foodText += ":" + (this.state.food.Quantities + this.state.food.ModifyQuantities);
         return foodText;
     };
 
     render() {
         let foodText = this.createFoodText();
+        let imageId = this.state.food.Food.ImageId;
+        let imageUrl = DummyData.dummyImage();
+        if (imageId !== null) imageUrl = Helper.createUrlFromImageId(this.state.food.Food.ImageId);
         return (
             <View style={styles.container}>
                 <View style={styles.contentShadow}>
                     <View style={styles.content}>
                         <TouchableOpacity style={styles.imageContainer} onPress={this.onFoodPress}>
                             <CachedImage style={styles.imageButton} mutable
-                                         source={{uri: this.state.food.foodImage}}
+                                         source={{uri: imageUrl}}
                             />
                         </TouchableOpacity>
                         <Text onPress={this.onDropFoodPress} style={styles.foodNameTxt}>
@@ -74,7 +91,7 @@ const styles = StyleSheet.create({
         width: '90%',
         height: 190,
         shadowColor: '#000',
-        shadowOffset: { width: 1, height: 2 },
+        shadowOffset: {width: 1, height: 2},
         shadowOpacity: 0.4,
         shadowRadius: 2,
         borderRadius: 10,
@@ -99,8 +116,8 @@ const styles = StyleSheet.create({
         marginBottom: 10,
         marginTop: 0,
     },
-    imageContainer:{
-        flex:1,
+    imageContainer: {
+        flex: 1,
         // clip: '',
     },
 });

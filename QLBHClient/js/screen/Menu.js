@@ -6,6 +6,7 @@ import {
     View,
     ScrollView,
 } from 'react-native';
+import {NavigationActions} from 'react-navigation'
 import {
     Container,
     Icon,
@@ -30,20 +31,30 @@ import PropertyDispatcherDict from '../share/PropertyDispatcherDict'
 import EventDispatcher from '../share/EventDispatcher'
 import BaseScreen from './BaseScreen'
 import Network from '../share/Network'
+import Helper from '../share/Helper'
 
 export default class Menu extends BaseScreen {
     constructor(props) {
         super(props);
-        let order = props.order === undefined ? props.order : null;
+        let order = undefined;
+        if(this.props.navigation.state.params !== undefined){
+            let params = this.props.navigation.state.params;
+            this.prevDispathcer = params.dispatcher;
+            order = params.order;
+        }
         this.state = {
             order,
             foodCategorizes:[]
         };
-
-        this.loadAndParseFoodCategorize()
+        // this.initDataForOrder();
+        this.loadAndParseFoodCategorize();
         // this.dummy();
         this.dispatcher = this.createEventDispatcher();
     }
+    initDataForOrder = (order) =>{
+        if(order === undefined) return;
+        Helper.setDefaultFoodWithOrder(order);
+    };
     loadAndParseFoodCategorize = () =>{
         let foodCategorizes = null;
         Network.getAllCategoryWithFood((err,result,response)=>{
@@ -56,25 +67,42 @@ export default class Menu extends BaseScreen {
         this.state = {...DummyData.dummyFoodList()}
     };
     isCreateOrder = () => {
-        return (this.state.order !== null);
+        return (this.state.order !== null && this.state.order !== undefined);
+    };
+    isUpdateOrder = () =>{
+        return (this.isCreateOrder()&& this.state.order.OrderId !== null);
     };
     goBackToCreateOrder = () => {
+        // if(this.isUpdateOrder()) Helper.removeEmptyFoodFromOrder(this.state.order);
+        if(this.prevDispathcer !== undefined) this.prevDispathcer.dispatch("refresh");
         this.props.navigation.goBack();
     };
     createLeftBackButton = () => {
         return CommonComponent.createBackButton(this.goBackToCreateOrder,this.isCreateOrder);
     };
+
+    cancelCreateMenu = () => {
+        const resetAction = NavigationActions.reset({
+            index: 0,
+            actions: [
+                NavigationActions.navigate({routeName: 'Main'})
+            ]
+        });
+        this.props.navigation.dispatch(resetAction);
+    };
     createCancelButton = () => {
-        return CommonComponent.createCancelButton(this.goBackToCreateOrder, this.isCreateOrder);
+        return CommonComponent.createCancelButton(this.goBackToCreateOrder, !this.isUpdateOrder);
     };
     openConfirmOrder = () =>{
+        let order = this.state.order;
+        // Helper.removeEmptyFoodFromOrder(order);
         this.props.navigation.navigate('ConfirmCreateOrder',{
-            foodList:this.state.foodList,
+            order:order,
             dispatcher:this.dispatcher,
     });
     };
     createConfirmOrderButton = () =>{
-        if(!this.isCreateOrder()) return null;
+        if(!(this.isCreateOrder() && !this.isUpdateOrder())) return null;
         return <Button style={styles.confirmBtn} rounded primary onPress={() => {
             this.openConfirmOrder();
         }}>
@@ -93,6 +121,9 @@ export default class Menu extends BaseScreen {
         let backButton = this.createLeftBackButton();
         let cancelButton = this.createCancelButton();
         let confirmOrderButton = this.createConfirmOrderButton();
+        let arg = this.state.foodCategorizes.map((e,i)=>{
+            return <FoodMenu key={e.FoodCategorizeId} dispatcher={this.dispatcher} order={this.state.order} foodCategorize={e}/>
+        });
         return (
             <Container>
                 <Header>
@@ -105,8 +136,7 @@ export default class Menu extends BaseScreen {
                     <Right>{cancelButton}</Right>
                 </Header>
                 <ScrollView style={styles.foodScrView}>
-                    <FoodMenu dispatcher={this.dispatcher} categorizeName={this.state.categorizeName} isCreateOrder={this.isCreateOrder()}
-                              foodList={this.state.foodList}/>
+                    {arg}
                 </ScrollView>
                 {confirmOrderButton}
             </Container>

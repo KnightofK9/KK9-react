@@ -40,8 +40,10 @@ export default class XacNhanOrder extends BaseScreen {
         this.state = {
             order,
         };
-        this.dispatcher = this.props.navigation.state.params.dispatcher;
-        this.eventDispatcher = this.createEventDispatcher();
+        if(this.props.navigation.state.params !== undefined){
+            this.prevDispathcer = this.props.navigation.state.params.dispatcher;
+        }
+        this.dispatcher = this.createEventDispatcher();
     }
 
     dummy = () => {
@@ -61,7 +63,7 @@ export default class XacNhanOrder extends BaseScreen {
     };
 
     goBackToMenuOrder = () => {
-        if(this.dispatcher !== undefined) this.dispatcher.dispatch("refresh");
+        if(this.prevDispathcer !== undefined) this.prevDispathcer.dispatch("refresh");
         this.props.navigation.goBack();
     };
     cancelCreateOrder = () => {
@@ -72,11 +74,9 @@ export default class XacNhanOrder extends BaseScreen {
             ]
         });
         this.props.navigation.dispatch(resetAction);
-        // let mainScreenKey = this.props.navigation.state.params.mainNavigation.state.key;
-        // this.props.navigation.goBack(mainScreenKey);
     };
     isFromCreatedOrder = () =>{
-        return this.state.order.OrderId !== null;
+        return this.state.order.OrderId === null;
     };
     createLeftBackButton = () => {
         let f = this.goBackToMenuOrder;
@@ -99,11 +99,12 @@ export default class XacNhanOrder extends BaseScreen {
     openOrderMenu = () =>{
         let navigation = this.props.navigation;
         navigation.navigate("MenuForCreateOrder",{
-            isCreateOrder:true,
+            dispatcher:this.dispatcher,
             order:this.state.order,
         })
     };
     createMenuOrderButton = () =>{
+        if(this.isFromCreatedOrder()) return null;
         return <Button style={styles.confirmBtn} rounded primary onPress={() => {
             this.openOrderMenu();
         }}>
@@ -115,12 +116,12 @@ export default class XacNhanOrder extends BaseScreen {
         let count = 1;
         let arg = this.state.order.FoodWithOrders.map((e, i) => {
 
-            // if (e.quantities === 0) return null;
+            if (e.Quantities + e.ModifyQuantities === 0 && e.ModifyQuantities === 0) return null;
             return <ConfirmOrderRow key={i}
                                     index={count++}
                                     food={e}
                                     dispatcher={this.dispatcher}
-                                    eventDispatcher={this.eventDispatcher}/>
+            />
         });
         let backButton = this.createLeftBackButton();
         let cancelButton = this.createCancelButton();

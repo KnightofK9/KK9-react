@@ -12,6 +12,7 @@ import OrderRow from '../component/OrderRow'
 import CommonStyles from '../share/CommonStyles'
 import DummyData from '../utilities/DummyData'
 import Network from '../share/Network'
+import Helper from '../share/Helper'
 
 class DanhSachOrder extends BaseScreen {
     constructor(props) {
@@ -40,8 +41,9 @@ class DanhSachOrder extends BaseScreen {
     };
     openMenuForCreateOrder = () =>{
         let navigation = this.props.navigation;
+        let order = Helper.createEmptyOrder();
         navigation.navigate("MenuForCreateOrder",{
-            isCreateOrder:true,
+            order:order,
             navigation:navigation,
         })
     };

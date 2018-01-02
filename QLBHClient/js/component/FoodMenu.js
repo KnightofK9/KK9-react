@@ -13,27 +13,30 @@ import FoodBox from './FoodBox'
 export default class FoodMenu extends Component {
     constructor(props) {
         super(props);
-        let categorizeName = props.categorizeName;
-        let foodList = props.foodList;
-        let isCreateOrder = props.isCreateOrder;
+        let foodCategorize = props.foodCategorize;
+        let order = props.order;
         this.state = {
-            categorizeName,
-            foodList,
-            isCreateOrder,
+            foodCategorize,
+            order,
         }
     }
-
+    isCreateOrder = () =>{
+        return this.state.order !== undefined && this.state.order !== null;
+    };
     render() {
-        let foodListArr = this.state.foodList.map((e, i) => {
+        let foodListArr = this.state.foodCategorize.Foods.map((e, i) => {
+            let orderFood = null;
+            if(this.isCreateOrder()) orderFood = this.state.order.FoodWithOrders.find(k => k.FoodId === e.FoodId);
             return <FoodBox dispatcher={this.props.dispatcher}
-                            key={e.foodId}
-                            isCreateOrder={this.state.isCreateOrder}
-                            food = {e}/>
+                            key={e.FoodId}
+                            foodInfo = {e}
+                            order = {this.state.order}
+                            food = {orderFood}/>
         });
         return (
             <View style={styles.container}>
                 <View style={styles.foodCategoryHeaderView}>
-                    <Text style={styles.foodCategoryHeaderTitle}>{this.state.categorizeName}</Text>
+                    <Text style={styles.foodCategoryHeaderTitle}>{this.state.foodCategorize.Name}</Text>
                 </View>
                 <View style={styles.foodListContainer}>
                     {foodListArr}

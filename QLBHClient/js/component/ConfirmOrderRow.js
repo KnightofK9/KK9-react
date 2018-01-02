@@ -18,8 +18,7 @@ export default class ConfirmOrderRow extends Component {
             food,
             index,
         };
-        this.dispatcher = props.dispatcher;
-        this.eventDispatcher = props.eventDispatcher;
+        this.prevDispatcher = props.dispatcher;
     }
 
     addValueToQuantities = (addValue) => {
@@ -30,8 +29,7 @@ export default class ConfirmOrderRow extends Component {
         if (different !== 0) {
             // this.state.food.Quantities = updatedQuantities;
             this.state.food.ModifyQuantities += different;
-            this.eventDispatcher.dispatch("refresh");
-            // this.dispatcher.dispatch("refresh");
+            this.prevDispatcher.dispatch("refresh");
         }
     };
 

@@ -48,7 +48,7 @@ export default class Helper {
     };
     static orderSetDefaultFoodModifyQuantities = (order)=>{
         for(let food of order.FoodWithOrders){
-            food.ModifyQuantities = 0;
+            if(food.ModifyQuantities === undefined) food.ModifyQuantities = 0;
         }
     };
     static getModifyFoodList = (order) =>{
@@ -62,6 +62,31 @@ export default class Helper {
             }
         }
         return modifyFoodList;
+    };
+    static createEmptyFoodWithOrder = (Food)=>{
+        return {
+            FoodWithOrderId:null,
+            OrderId:null,
+            FoodId:Food.FoodId,
+            Food:Food,
+            Quantities:0,
+            ModifyQuantities:0,
+            Note:null,
+        }
+    };
+    static setDefaultFoodWithOrder = (order,foodCategorizes) =>{
+        order.FoodWithOrders = [];
+        for(let foodCategorize of foodCategorizes){
+            for(let foodInfo of foodCategorize.Foods){
+                order.FoodWithOrders.push(Helper.createEmptyFoodWithOrder(foodInfo));
+            }
+        }
+    };
+    static removeEmptyFoodFromOrder = (order) =>{
+        order.FoodWithOrders = order.FoodWithOrders.filter( e => e.Quantities + e.ModifyQuantities !== 0);
+    };
+    static createUrlFromImageId = (imageId) =>{
+        return "http://quanlybanhangapi.azurewebsites.net/api/image/"+imageId;
     }
 
 }
