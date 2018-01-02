@@ -61,7 +61,8 @@ class MainScreen extends BaseScreen {
         let AppComponent = this.getComponentByIndex(this.state.index);
         return (
             <Container>
-                <AppComponent navigation={this.props.navigation}/>
+                <AppComponent topEventDispatcher={this.props.topEventDispatcher}
+                              navigation={this.props.navigation}/>
                 <Footer>
                     <FooterTab>
                         <Button onPress={() => {

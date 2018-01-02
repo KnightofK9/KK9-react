@@ -8,8 +8,11 @@ class Network {
     constructor() {
         this.DOMAIN = "http://quanlybanhangapi.azurewebsites.net/";
         this.BASE_PATH = this.DOMAIN + 'api/mobile/';
+        this.topEventDispatcher = null;
     }
-
+    setTopEventDispatcher = (topEventDispatcher) =>{
+        this.topEventDispatcher = topEventDispatcher;
+    };
     getAllUnpayOrder = (callback) => {
         let request = this.createRequest("GetAllUnPayOrders");
         return request(null, callback);
@@ -155,6 +158,9 @@ class Network {
             callback(err,null,response);
         });
     };
+    setSpinner = (isActive) =>{
+        if(this.topEventDispatcher !== null) this.topEventDispatcher.dispatch("spinner",isActive);
+    };
     createRequest = (path = "", method = "GET", useAuthorization = true, isContentJson = true) => {
         let headers = {
             Accept: 'application/json'
@@ -181,8 +187,11 @@ class Network {
                 }
             }
 
+            this.handleStartRequest();
+
             return fetch(api, requestInfo).then((response) => response.json())
                 .then(responseJson => {
+                    this.handleFinishRequest();
                     if (responseJson.Successful) {
                         callback(null, responseJson.Data, responseJson);
                     } else {
@@ -190,10 +199,17 @@ class Network {
                     }
                 })
                 .catch((error) => {
+                    this.handleFinishRequest();
                     this.handleError(error,null,callback);
                 })
         }
-    }
+    };
+    handleStartRequest = () =>{
+        this.setSpinner(true);
+    };
+    handleFinishRequest = () =>{
+        this.setSpinner(false);
+    };
 
 
 }

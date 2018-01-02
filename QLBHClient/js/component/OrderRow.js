@@ -6,7 +6,7 @@ import {
     View,
     TouchableOpacity
 } from 'react-native';
-
+import Network from "../share/Network"
 import {Container, Icon, Label, Button, Header, Content, Form, Item, Input} from 'native-base';
 
 export default class OrderRow extends Component {
@@ -19,9 +19,12 @@ export default class OrderRow extends Component {
     }
 
     goToOrder = () => {
-        this.props.navigation.navigate("ConfirmCreateOrder",{
-            order:this.state.order
-        })
+        Network.getOrderById(this.state.order.OrderId,(err,data,resonse)=>{
+            if(err) return;
+            this.props.navigation.navigate("ConfirmCreateOrder",{
+                order: data,
+            })
+        });
     };
 
     render() {
