@@ -1,8 +1,8 @@
-
 import Helper from './Helper'
 import SessionManager from './SessionManager'
 import * as Constant from './Constant'
 import Popup from './Popup'
+import Logger from '../share/Logger'
 
 class Network {
     constructor() {
@@ -10,8 +10,13 @@ class Network {
         this.BASE_PATH = this.DOMAIN + 'api/mobile/';
         this.topEventDispatcher = null;
     }
-    setTopEventDispatcher = (topEventDispatcher) =>{
+
+    setTopEventDispatcher = (topEventDispatcher) => {
         this.topEventDispatcher = topEventDispatcher;
+    };
+    getScheduleInfo = (callback) => {
+        let request = this.createRequest("GetAllScheduleInfo", "GET", true, true, false);
+        return request(null, callback);
     };
     getAllUnpayOrder = (callback) => {
         let request = this.createRequest("GetAllUnPayOrders");
@@ -30,7 +35,7 @@ class Network {
         let request = this.createRequest("CreateOrder", "POST");
         let body = {
             tableId,
-            foodWithOrder:FoodWithOrderList
+            foodWithOrder: FoodWithOrderList
         };
         return request(body, callback);
     };
@@ -39,7 +44,7 @@ class Network {
         let request = this.createRequest("UpdateOrder", "POST");
         let body = {
             orderId,
-            foodWithOrder:FoodWithOrderList
+            foodWithOrder: FoodWithOrderList
         };
         return request(body, callback);
     };
@@ -67,7 +72,7 @@ class Network {
         };
         return request(body, callback);
     };
-    getAllPrepareFood = (callback) =>{
+    getAllPrepareFood = (callback) => {
         let request = this.createRequest("GetAllPrepareFoodByState", "POST");
         let prepareState = [
             Constant.PREPARE_STATE.CANCEL,
@@ -133,23 +138,23 @@ class Network {
         };
         return request(body, callback);
     };
-    login = (username,password,callback) =>{
-          let request = this.createRequest("Login","POST",false);
-          let body = {
-              username,
-              password,
-          };
-          return request(body,callback)
+    login = (username, password, callback) => {
+        let request = this.createRequest("Login", "POST", false);
+        let body = {
+            username,
+            password,
+        };
+        return request(body, callback)
     };
-    handleError = (err,response,callback) =>{
-        Popup.showAlert("Lỗi",JSON.stringify(err),()=>{
-            callback(err,null,response);
+    handleError = (err, response, callback) => {
+        Popup.showAlert("Lỗi", JSON.stringify(err), () => {
+            callback(err, null, response);
         });
     };
-    setSpinner = (isActive) =>{
-        if(this.topEventDispatcher !== null) this.topEventDispatcher.dispatch("spinner",isActive);
+    setSpinner = (isActive) => {
+        if (this.topEventDispatcher !== null) this.topEventDispatcher.dispatch("spinner", isActive);
     };
-    createRequest = (path = "", method = "GET", useAuthorization = true, isContentJson = true) => {
+    createRequest = (path = "", method = "GET", useAuthorization = true, isContentJson = true, isUseLoadingAnimation = true) => {
         let headers = {
             Accept: 'application/json'
         };
@@ -175,28 +180,34 @@ class Network {
                 }
             }
 
-            this.handleStartRequest();
-
+            this.handleStartRequest(isUseLoadingAnimation);
+            Logger.log.trace("Requesting " + api, requestInfo);
             return fetch(api, requestInfo).then((response) => response.json())
                 .then(responseJson => {
-                    this.handleFinishRequest();
+                    this.handleFinishRequest(isUseLoadingAnimation);
                     if (responseJson.Successful) {
+
+                        Logger.log.trace("Success " + api, responseJson);
                         callback(null, responseJson.Data, responseJson);
                     } else {
-                       this.handleError(responseJson,responseJson,callback);
+
+                        Logger.log.error("Error " + api, responseJson);
+                        this.handleError(responseJson, responseJson, callback);
                     }
                 })
                 .catch((error) => {
-                    this.handleFinishRequest();
-                    this.handleError(error,null,callback);
+
+                    Logger.log.error("Error " + api, error);
+                    this.handleFinishRequest(isUseLoadingAnimation);
+                    this.handleError(error, null, callback);
                 })
         }
     };
-    handleStartRequest = () =>{
-        this.setSpinner(true);
+    handleStartRequest = (isUseLoadingAnimation) => {
+        if (isUseLoadingAnimation) this.setSpinner(true);
     };
-    handleFinishRequest = () =>{
-        this.setSpinner(false);
+    handleFinishRequest = (isUseLoadingAnimation) => {
+        if (isUseLoadingAnimation) this.setSpinner(false);
     };
 
 

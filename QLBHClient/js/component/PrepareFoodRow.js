@@ -10,6 +10,7 @@ import {Container,Thumbnail, Icon, Label, Button, Header, Content, Form, Item, I
 import CommonStyles from '../share/CommonStyles';
 import * as Constant from '../share/Constant'
 import {CachedImage} from "react-native-img-cache";
+import Helper from '../share/Helper'
 export default class PrepareFoodRow extends Component {
     constructor(props) {
         super(props);
@@ -36,18 +37,19 @@ export default class PrepareFoodRow extends Component {
     };
 
     render() {
+        let foodUrl = Helper.createUrlFromImageId(this.state.prepareFood.FoodId);
         return (
             <View style={styles.container}>
                 <View style={styles.content}>
                     <CachedImage style={styles.foodImage} mutable
-                                 source={{uri: this.state.prepareFood.foodImage}}
+                                 source={{uri: foodUrl}}
                     />
                     <View style={styles.infoGrid}>
                         <Text style={styles.foodNameTxt}>
-                            {this.state.prepareFood.foodName}
+                            {this.state.prepareFood.Food.Name}
                         </Text>
                         <Text>
-                            Bàn số:{this.state.prepareFood.tableId}
+                            Bàn số:{this.state.prepareFood.TableId}
                         </Text>
                         <View style={styles.btnGrid}>
                             <View style={styles.flexRow}>
@@ -55,7 +57,7 @@ export default class PrepareFoodRow extends Component {
                                 <Button success style={styles.button}>
                                     <View style={{position: 'absolute', top: 0, left: 0, right: 0, bottom: 0, justifyContent: 'center', alignItems: 'center'}}>
                                         <Text style={styles.buttonLabel}>
-                                            {this.getPrepText(this.state.prepareFood.prepareState)}
+                                            {this.getPrepText(this.state.prepareFood.PrepareStateId)}
                                         </Text>
                                     </View>
                                 </Button>

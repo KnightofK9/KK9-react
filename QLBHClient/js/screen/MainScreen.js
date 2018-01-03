@@ -30,15 +30,26 @@ import TaiKhoan from './TaiKhoan'
 import XacNhanOrder from './XacNhanOrder'
 import Login from './login'
 import BaseScreen from './BaseScreen'
+import BackgroundService from '../share/BackgroundService'
 
 class MainScreen extends BaseScreen {
     constructor(props) {
         super(props);
         this.state = {
-            index: 0
+            index: 0,
+            prepareFoodCount: 0,
         };
+        this.setUpBackgroundServiceHandle();
     }
 
+    setUpBackgroundServiceHandle = () => {
+        let handle = (value) => {
+            let prepareFoodCount = value.prepareFoods.length;
+            // this.state.prepareFoodCount = prepareFoodCount;
+            this.setState({prepareFoodCount});
+        };
+        BackgroundService.addHandle(handle);
+    };
     switchScreen = (index) => {
         this.setState({index})
     };
@@ -56,38 +67,38 @@ class MainScreen extends BaseScreen {
         }
         return 0;
     };
+    createPrepareFoodBadge = () => {
+        let badge = null;
+        if (this.state.prepareFoodCount !== 0) badge = <Badge><Text>{this.state.prepareFoodCount}</Text></Badge>;
+        return badge;
+    };
+    createButton = (screen, iconName, buttonText, isActive = false, badge = null) => {
+        return <Button onPress={() => {
+            this.switchScreen(screen)
+        }} active={isActive} badge={badge !== null} vertical>
+            {badge}
+            <Icon name={iconName}/>
+            <Text>{buttonText}</Text>
+        </Button>
+    };
 
     render() {
         let AppComponent = this.getComponentByIndex(this.state.index);
+        let prepareFoodBadge = this.createPrepareFoodBadge();
+        let orderListButton = this.createButton(0, "clipboard", "Đặt order");
+        let menuButton = this.createButton(1, "pizza", "Xem Menu");
+        let prepareFoodButton = this.createButton(2, "list-box", "Món chờ",false,prepareFoodBadge);
+        let accountButton = this.createButton(3, "build", "Tài khoản");
         return (
             <Container>
                 <AppComponent topEventDispatcher={this.props.topEventDispatcher}
                               navigation={this.props.navigation}/>
                 <Footer>
                     <FooterTab>
-                        <Button onPress={() => {
-                            this.switchScreen(0)
-                        }} vertical>
-                            <Icon name="clipboard"/>
-                            <Text>Đặt order</Text>
-                        </Button>
-                        <Button onPress={() => {
-                            this.switchScreen(1)
-                        }} vertical>
-                            <Icon name="pizza"/>
-                            <Text>Xem Menu</Text>
-                        </Button>
-                        <Button onPress={() =>{this.switchScreen(2)}} badge vertical>
-                            <Badge><Text>20</Text></Badge>
-                            <Icon name="list-box"/>
-                            <Text>Món chờ</Text>
-                        </Button>
-                        <Button onPress={() => {
-                            this.switchScreen(3)
-                        }} vertical>
-                            <Icon name="build"/>
-                            <Text>Tài khoản</Text>
-                        </Button>
+                        {orderListButton}
+                        {menuButton}
+                        {prepareFoodButton}
+                        {accountButton}
                     </FooterTab>
                 </Footer>
             </Container>

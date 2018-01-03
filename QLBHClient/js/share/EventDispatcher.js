@@ -3,11 +3,14 @@ export default class EventDispatcher{
         this.eventDict = {};
     }
     registerEvent = (id,handle) => {
-        this.eventDict[id] = handle;
+        if(!this.eventDict.hasOwnProperty(id)) this.eventDict[id] = [];
+        this.eventDict[id].push(handle);
     };
     dispatch = (id,value,callObject)=>{
         if(this.eventDict.hasOwnProperty(id)){
-            this.eventDict[id](value,callObject);
+            for(let handle of this.eventDict[id]){
+                handle(value,callObject);
+            }
         }
     };
 }

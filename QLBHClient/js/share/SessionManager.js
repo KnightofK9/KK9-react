@@ -1,4 +1,5 @@
 import Session from './Session'
+import Logger from '../share/Logger'
 class SessionManager{
     constructor(){
         this.session = null;
@@ -13,7 +14,7 @@ class SessionManager{
             "            \"Role\": null\n" +
             "        },\n" +
             "        \"token\": {\n" +
-            "            \"token\": \"eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1bmlxdWVfbmFtZSI6ImFkbWluIiwibmJmIjoxNTE0ODYzNjYyLCJleHAiOjE1NDYzOTk2NjIsImlhdCI6MTUxNDg2MzY2Mn0.og5Iv6bplxKYbg1C8EjS4zeUum8TxR0wU93fwPEdY6Q\",\n" +
+            "            \"token\": \"eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1bmlxdWVfbmFtZSI6ImFkbWluIiwibmJmIjoxNTE0OTU1Mjc2LCJleHAiOjE1NDY0OTEyNzYsImlhdCI6MTUxNDk1NTI3Nn0.MMFcy3HD4SSfY3vnE_GDZBfHL8gLv8_sZoQ3ojylk7U\",\n" +
             "            \"type\": \"Bearer\",\n" +
             "            \"expiredTime\": 525600\n" +
             "        }\n" +
@@ -21,11 +22,26 @@ class SessionManager{
         this.createSession(userData);
     };
     createSession = (userData) =>{
+        if(this.session !== null){
+            this.clearSession();
+        }
+
         this.session = new Session();
         this.session.setUserProfile(userData);
+        this.session.onBeginSession();
+        Logger.log.debug("New session init!",this.session);
+
     };
     getSession = ()=>{
         return this.session;
+    };
+    clearSession  = () =>{
+        if(this.session !== null){
+            this.session.onClearSession();
+            Logger.log.debug("Clearing session!",this.session);
+            this.session = null;
+        }
+
     };
 
 }

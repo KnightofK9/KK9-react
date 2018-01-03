@@ -60,8 +60,7 @@ export default class FoodBox extends Component {
     render() {
         let foodText = this.createFoodText();
         let imageId = this.state.food.Food.ImageId;
-        let imageUrl = DummyData.dummyImage();
-        if (imageId !== null) imageUrl = Helper.createUrlFromImageId(this.state.food.Food.ImageId);
+        let imageUrl = Helper.createUrlFromImageId(this.state.food.Food.ImageId);
         return (
             <View style={styles.container}>
                 <View style={styles.contentShadow}>
