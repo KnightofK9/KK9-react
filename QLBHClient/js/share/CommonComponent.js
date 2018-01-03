@@ -40,4 +40,12 @@ export default class CommonComponent {
             <Icon name="md-close"/>
         </Button>
     };
+    static createFunctionIcon = (iconName) =>{
+        return (arg) =>{
+            let focused = arg.focused;
+            let tintColor = arg.tintColor;
+            return <Icon active={focused} style={{color:tintColor}} name={iconName}/>
+        };
+
+    }
 }

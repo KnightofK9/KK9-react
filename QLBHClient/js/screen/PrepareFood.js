@@ -16,7 +16,8 @@ import BackgroundService from "../share/BackgroundService";
 export default class PrepareFood extends BaseScreen {
     constructor(props) {
         super(props);
-        let prepareFoodList = SessionManager.getSession().getPrepareFoods();
+        // let prepareFoodList = SessionManager.getSession().getPrepareFoods();
+        let prepareFoodList = []
         this.state = {
             prepareFoodList:prepareFoodList
         };

@@ -31,6 +31,7 @@ import XacNhanOrder from './XacNhanOrder'
 import Login from './login'
 import BaseScreen from './BaseScreen'
 import BackgroundService from '../share/BackgroundService'
+import TabNavigationScreen from './TabNavigationScreen'
 
 class MainScreen extends BaseScreen {
     constructor(props) {
@@ -39,7 +40,7 @@ class MainScreen extends BaseScreen {
             index: 0,
             prepareFoodCount: 0,
         };
-        this.setUpBackgroundServiceHandle();
+        // this.setUpBackgroundServiceHandle();
     }
 
     setUpBackgroundServiceHandle = () => {
@@ -83,24 +84,25 @@ class MainScreen extends BaseScreen {
     };
 
     render() {
-        let AppComponent = this.getComponentByIndex(this.state.index);
-        let prepareFoodBadge = this.createPrepareFoodBadge();
-        let orderListButton = this.createButton(0, "clipboard", "Đặt order");
-        let menuButton = this.createButton(1, "pizza", "Xem Menu");
-        let prepareFoodButton = this.createButton(2, "list-box", "Món chờ",false,prepareFoodBadge);
-        let accountButton = this.createButton(3, "build", "Tài khoản");
+        // let AppComponent = this.getComponentByIndex(this.state.index);
+        // let prepareFoodBadge = this.createPrepareFoodBadge();
+        // let orderListButton = this.createButton(0, "clipboard", "Đặt order");
+        // let menuButton = this.createButton(1, "pizza", "Xem Menu");
+        // let prepareFoodButton = this.createButton(2, "list-box", "Món chờ",false,prepareFoodBadge);
+        // let accountButton = this.createButton(3, "build", "Tài khoản");
         return (
             <Container>
-                <AppComponent topEventDispatcher={this.props.topEventDispatcher}
-                              navigation={this.props.navigation}/>
-                <Footer>
-                    <FooterTab>
-                        {orderListButton}
-                        {menuButton}
-                        {prepareFoodButton}
-                        {accountButton}
-                    </FooterTab>
-                </Footer>
+                {/*<AppComponent topEventDispatcher={this.props.topEventDispatcher}*/}
+                              {/*navigation={this.props.navigation}/>*/}
+                <TabNavigationScreen/>
+                {/*<Footer>*/}
+                    {/*<FooterTab>*/}
+                        {/*{orderListButton}*/}
+                        {/*{menuButton}*/}
+                        {/*{prepareFoodButton}*/}
+                        {/*{accountButton}*/}
+                    {/*</FooterTab>*/}
+                {/*</Footer>*/}
             </Container>
         )
     }

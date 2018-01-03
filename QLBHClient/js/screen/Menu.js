@@ -47,7 +47,7 @@ export default class Menu extends BaseScreen {
             foodCategorizes:[]
         };
         // this.initDataForOrder();
-        this.loadAndParseFoodCategorize();
+        // this.loadAndParseFoodCategorize();
         // this.dummy();
         this.dispatcher = this.createEventDispatcher();
     }

@@ -21,7 +21,7 @@ class DanhSachOrder extends BaseScreen {
         this.state = {
             orderRowList:[]
         };
-        this.getAndParseUnpayOrder();
+        // this.getAndParseUnpayOrder();
         this.dispatcher = this.createEventDispatcher();
         // this.dummy();
     }
