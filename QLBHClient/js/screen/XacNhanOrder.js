@@ -4,7 +4,8 @@ import {
     StyleSheet,
     Text,
     ScrollView,
-    View
+    View,
+    PickerIOS,
 } from 'react-native';
 import {NavigationActions} from 'react-navigation'
 import {
@@ -31,6 +32,7 @@ import PropertyDispatcher from '../share/PropertyDispatcher'
 import EventDispatcher from '../share/EventDispatcher'
 import Popup from '../share/Popup'
 import Network from '../share/Network'
+import SessionManager from '../share/SessionManager'
 
 import BaseScreen from './BaseScreen'
 export default class XacNhanOrder extends BaseScreen {
@@ -102,7 +104,7 @@ export default class XacNhanOrder extends BaseScreen {
     };
     doCreateOrder = () =>{
         let foodWithOrderList = Helper.getFoodWithOrderList(this.state.order);
-        let tableId = 1;
+        let tableId = this.state.order.TableId;
         //TODO dummy table Id
         Network.createOrder(tableId,foodWithOrderList,(err,data,response)=>{
             if(!err) Popup.showSuccess(()=>{
@@ -134,6 +136,21 @@ export default class XacNhanOrder extends BaseScreen {
             <Icon name='ios-add-outline'/>
         </Button>
     };
+    createTablePicker = () =>{
+        let tableList = SessionManager.getSession().getTables();
+        let tableArg = tableList.map((e,i)=>{
+           return <PickerIOS.Item key={e.TableId} label={e.TableId.toString()} value={e.TableId} />
+        });
+
+        return <PickerIOS selectedValue={this.state.order.TableId} style={styles.tablePicker} onValueChange={(tableId)=>{
+            let order = Object.assign({},this.state.order,{TableId:tableId});
+            this.setState({
+                order
+            })}
+        }>
+            {tableArg}
+        </PickerIOS>
+    };
 
     render() {
         let count = 1;
@@ -149,6 +166,7 @@ export default class XacNhanOrder extends BaseScreen {
         let backButton = this.createLeftBackButton();
         let cancelButton = this.createCancelButton();
         let addFoodOrderMenuBtn = this.createMenuOrderButton();
+        let tablePicker = this.createTablePicker();
         this.state.totalMoney = Helper.calTotalMoneyToOrder(this.state.order);
         return (
             <Container>
@@ -168,6 +186,7 @@ export default class XacNhanOrder extends BaseScreen {
                 <ScrollView style={styles.confirmOrderListScrV}>
                     {arg}
                 </ScrollView>
+                {tablePicker}
                 <View style={styles.totalMoneyView}>
                     <Text style={styles.totalMoneyTitle}>Tổng tiền: </Text>
                     <Text style={styles.totalMoneyTxt}>{this.state.order.BillMoney.format()} đ </Text>
@@ -211,6 +230,8 @@ const styles = StyleSheet.create({
         position:'absolute',
         right:10,
         bottom:70,
+    },
+    tablePicker:{
     },
 
 });
