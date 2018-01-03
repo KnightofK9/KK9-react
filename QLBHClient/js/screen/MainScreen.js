@@ -94,7 +94,7 @@ class MainScreen extends BaseScreen {
             <Container>
                 {/*<AppComponent topEventDispatcher={this.props.topEventDispatcher}*/}
                               {/*navigation={this.props.navigation}/>*/}
-                <TabNavigationScreen/>
+                <TabNavigationScreen screenProps={{mainNavigation:this.props.navigation}} />
                 {/*<Footer>*/}
                     {/*<FooterTab>*/}
                         {/*{orderListButton}*/}

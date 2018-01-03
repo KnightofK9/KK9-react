@@ -26,6 +26,14 @@ export default class Session{
         if(this.scheduleData === null) return [];
         return this.scheduleData.prepareFoods;
     };
+    getFoodCategorizes = () =>{
+        if(this.scheduleData === null) return [];
+        return this.scheduleData.foodCategorizes;
+    };
+    getUnpayOrders = () =>{
+        if(this.scheduleData === null) return [];
+        return this.scheduleData.orders;
+    };
     onClearSession = () =>{
         BackgroundService.stop();
     };

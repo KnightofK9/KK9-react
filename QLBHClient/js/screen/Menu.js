@@ -32,35 +32,53 @@ import EventDispatcher from '../share/EventDispatcher'
 import BaseScreen from './BaseScreen'
 import Network from '../share/Network'
 import Helper from '../share/Helper'
+import SessionManager from '../share/SessionManager'
+import BackgroundService from '../share/BackgroundService'
 
 export default class Menu extends BaseScreen {
     constructor(props) {
         super(props);
         let order = undefined;
-        if(this.props.navigation.state.params !== undefined){
-            let params = this.props.navigation.state.params;
+        this.navigation = props.screenProps !== undefined ? props.screenProps.mainNavigation : props.navigation;
+        if (this.navigation.state.params !== undefined) {
+            let params = this.navigation.state.params;
             this.prevDispathcer = params.dispatcher;
             order = params.order;
         }
+        let foodCategorizes = SessionManager.getSession().getFoodCategorizes();
         this.state = {
             order,
-            foodCategorizes:[]
+            foodCategorizes
         };
+        this.loadScheduleHandle();
         // this.initDataForOrder();
         // this.loadAndParseFoodCategorize();
         // this.dummy();
         this.dispatcher = this.createEventDispatcher();
     }
-    initDataForOrder = (order) =>{
-        if(order === undefined) return;
+
+    loadScheduleHandle = () => {
+        if (this.isCreateOrder()) return;
+        let handle = (data) =>{
+            this.setState({
+                foodCategorizes:data.foodCategorizes
+            });
+        };
+
+        BackgroundService.addHandle(handle);
+
+    };
+
+    initDataForOrder = (order) => {
+        if (order === undefined) return;
         Helper.setDefaultFoodWithOrder(order);
     };
-    loadAndParseFoodCategorize = () =>{
+    loadAndParseFoodCategorize = () => {
         let foodCategorizes = null;
-        Network.getAllCategoryWithFood((err,result,response)=>{
+        Network.getAllCategoryWithFood((err, result, response) => {
             this.setState({
-                foodCategorizes:result
-            })
+                foodCategorizes: result
+            });
         });
     };
     dummy = () => {
@@ -69,16 +87,16 @@ export default class Menu extends BaseScreen {
     isCreateOrder = () => {
         return (this.state.order !== null && this.state.order !== undefined);
     };
-    isUpdateOrder = () =>{
-        return (this.isCreateOrder()&& this.state.order.OrderId !== null);
+    isUpdateOrder = () => {
+        return (this.isCreateOrder() && this.state.order.OrderId !== null);
     };
     goBackToCreateOrder = () => {
         // if(this.isUpdateOrder()) Helper.removeEmptyFoodFromOrder(this.state.order);
-        if(this.prevDispathcer !== undefined) this.prevDispathcer.dispatch("refresh");
-        this.props.navigation.goBack();
+        if (this.prevDispathcer !== undefined) this.prevDispathcer.dispatch("refresh");
+        this.navigation.goBack();
     };
     createLeftBackButton = () => {
-        return CommonComponent.createBackButton(this.goBackToCreateOrder,this.isCreateOrder);
+        return CommonComponent.createBackButton(this.goBackToCreateOrder, this.isCreateOrder);
     };
 
     cancelCreateMenu = () => {
@@ -88,41 +106,43 @@ export default class Menu extends BaseScreen {
                 NavigationActions.navigate({routeName: 'Main'})
             ]
         });
-        this.props.navigation.dispatch(resetAction);
+        this.navigation.dispatch(resetAction);
     };
     createCancelButton = () => {
         return CommonComponent.createCancelButton(this.goBackToCreateOrder, !this.isUpdateOrder);
     };
-    openConfirmOrder = () =>{
+    openConfirmOrder = () => {
         let order = this.state.order;
         // Helper.removeEmptyFoodFromOrder(order);
-        this.props.navigation.navigate('ConfirmCreateOrder',{
-            order:order,
-            dispatcher:this.dispatcher,
-    });
+        this.navigation.navigate('ConfirmCreateOrder', {
+            order: order,
+            dispatcher: this.dispatcher,
+        });
     };
-    createConfirmOrderButton = () =>{
-        if(!(this.isCreateOrder() && !this.isUpdateOrder())) return null;
+    createConfirmOrderButton = () => {
+        if (!(this.isCreateOrder() && !this.isUpdateOrder())) return null;
         return <Button style={styles.confirmBtn} rounded primary onPress={() => {
             this.openConfirmOrder();
         }}>
             <Icon name='ios-add-outline'/>
         </Button>
     };
-    createEventDispatcher = ()=>{
-        let handler = (value,callObject) =>{
+    createEventDispatcher = () => {
+        let handler = (value, callObject) => {
             this.forceUpdate();
         };
         let eventDispatcher = new EventDispatcher();
-        eventDispatcher.registerEvent("refresh",handler);
+        eventDispatcher.registerEvent("refresh", handler);
         return eventDispatcher;
     };
+
     render() {
         let backButton = this.createLeftBackButton();
         let cancelButton = this.createCancelButton();
         let confirmOrderButton = this.createConfirmOrderButton();
-        let arg = this.state.foodCategorizes.map((e,i)=>{
-            return <FoodMenu key={e.FoodCategorizeId} dispatcher={this.dispatcher} order={this.state.order} foodCategorize={e}/>
+        let arg = this.state.foodCategorizes.map((e, i) => {
+            return <FoodMenu key={e.FoodCategorizeId} dispatcher={this.dispatcher} order={this.state.order}
+                             foodCategorize={e}/>
         });
         return (
             <Container>
@@ -149,9 +169,9 @@ const styles = StyleSheet.create({
     foodScrView: {
         flex: 1,
     },
-    confirmBtn:{
-        position:'absolute',
-        right:10,
-        bottom:70
+    confirmBtn: {
+        position: 'absolute',
+        right: 10,
+        bottom: 70
     }
 });

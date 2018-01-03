@@ -14,17 +14,32 @@ import DummyData from '../utilities/DummyData'
 import Network from '../share/Network'
 import Helper from '../share/Helper'
 import EventDispatcher from '../share/EventDispatcher'
+import SessionManager from '../share/SessionManager'
+import BackgroundService from '../share/BackgroundService'
 
 class DanhSachOrder extends BaseScreen {
     constructor(props) {
         super(props);
+        let unpayOrderList = SessionManager.getSession().getUnpayOrders();
         this.state = {
-            orderRowList:[]
+            orderRowList:unpayOrderList
         };
         // this.getAndParseUnpayOrder();
         this.dispatcher = this.createEventDispatcher();
+        this.navigation = props.screenProps !== undefined ? props.screenProps.mainNavigation : props.navigation;
+        this.loadScheduleHandle();
         // this.dummy();
     }
+    loadScheduleHandle = () => {
+        let handle = (data) =>{
+            this.setState({
+                orderRowList:data.orders
+            });
+        };
+
+        BackgroundService.addHandle(handle);
+
+    };
     createEventDispatcher = () =>{
         let reloadHandle = (value,callObject) =>{
             this.getAndParseUnpayOrder();
@@ -55,7 +70,7 @@ class DanhSachOrder extends BaseScreen {
         }
     };
     openMenuForCreateOrder = () =>{
-        let navigation = this.props.navigation;
+        let navigation = this.navigation;
         let order = Helper.createEmptyOrder();
         navigation.navigate("MenuForCreateOrder",{
             order:order,
@@ -64,7 +79,7 @@ class DanhSachOrder extends BaseScreen {
     };
     render() {
         let orderArg = this.state.orderRowList.map((e, i) => {
-            return <OrderRow dispatcher={this.dispatcher} navigation={this.props.navigation} key={e.OrderId} order={e}/>
+            return <OrderRow dispatcher={this.dispatcher} navigation={this.navigation} key={e.OrderId} order={e}/>
         });
         return (
             <Container>

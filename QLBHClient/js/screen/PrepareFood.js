@@ -16,16 +16,27 @@ import BackgroundService from "../share/BackgroundService";
 export default class PrepareFood extends BaseScreen {
     constructor(props) {
         super(props);
-        // let prepareFoodList = SessionManager.getSession().getPrepareFoods();
-        let prepareFoodList = []
+        let prepareFoodList = SessionManager.getSession().getPrepareFoods();
         this.state = {
             prepareFoodList:prepareFoodList
         };
+        this.navigation = props.screenProps !== undefined ? props.screenProps.mainNavigation : props.navigation;
+        this.loadScheduleHandle();
         // this.dummy();
     }
     reloadPrepareFoodManually = () =>{
         BackgroundService.runServiceManually();
         this.refreshPrepareFood();
+    };
+    loadScheduleHandle = () => {
+        let handle = (data) =>{
+            this.setState({
+                prepareFoodList:data.prepareFoods
+            });
+        };
+
+        BackgroundService.addHandle(handle);
+
     };
     refreshPrepareFood = () =>{
         this.setState({

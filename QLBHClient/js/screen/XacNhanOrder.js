@@ -38,13 +38,14 @@ import BaseScreen from './BaseScreen'
 export default class XacNhanOrder extends BaseScreen {
     constructor(props) {
         super(props);
-        let order = props.navigation.state.params.order;
+        this.navigation = props.navigation;
+        let order = this.navigation.state.params.order;
         Helper.orderSetDefaultFoodModifyQuantities(order);
         this.state = {
             order,
         };
-        if(this.props.navigation.state.params !== undefined){
-            this.prevDispathcer = this.props.navigation.state.params.dispatcher;
+        if(this.navigation.state.params !== undefined){
+            this.prevDispathcer = this.navigation.state.params.dispatcher;
         }
         this.dispatcher = this.createEventDispatcher();
     }
@@ -67,7 +68,7 @@ export default class XacNhanOrder extends BaseScreen {
 
     goBackToMenuOrder = () => {
         if(this.prevDispathcer !== undefined) this.prevDispathcer.dispatch("refresh");
-        this.props.navigation.goBack();
+        this.navigation.goBack();
     };
     goBackToMain = () => {
         const resetAction = NavigationActions.reset({
@@ -76,7 +77,7 @@ export default class XacNhanOrder extends BaseScreen {
                 NavigationActions.navigate({routeName: 'Main'})
             ]
         });
-        this.props.navigation.dispatch(resetAction);
+        this.navigation.dispatch(resetAction);
     };
     isFromCreatedOrder = () =>{
         return this.state.order.OrderId === null;
@@ -122,7 +123,7 @@ export default class XacNhanOrder extends BaseScreen {
         });
     };
     openOrderMenu = () =>{
-        let navigation = this.props.navigation;
+        let navigation = this.navigation;
         navigation.navigate("MenuForCreateOrder",{
             dispatcher:this.dispatcher,
             order:this.state.order,
@@ -141,8 +142,8 @@ export default class XacNhanOrder extends BaseScreen {
         let tableArg = tableList.map((e,i)=>{
            return <PickerIOS.Item key={e.TableId} label={e.TableId.toString()} value={e.TableId} />
         });
-
-        return <PickerIOS selectedValue={this.state.order.TableId} style={styles.tablePicker} onValueChange={(tableId)=>{
+        let defaultTableId = this.state.order.TableId !== null ? this.state.order.TableId : tableList[0].TableId;
+        return <PickerIOS selectedValue={defaultTableId} style={styles.tablePicker} onValueChange={(tableId)=>{
             let order = Object.assign({},this.state.order,{TableId:tableId});
             this.setState({
                 order
