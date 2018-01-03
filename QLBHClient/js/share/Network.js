@@ -100,41 +100,12 @@ class Network {
         return request(body, callback);
     };
 
-    setQueueFoodToCooking = (prepareFoodId, callback) => {
-        let request = this.createRequest("SetPrepareFoodTo", "POST");
-        let prepareState = Constant.PREPARE_STATE.COOKING;
-        let body = {
-            prepareFoodId,
-            prepareState,
-        };
-        return request(body, callback);
-    };
-    setCookingFoodToCooked = (prepareFoodId, callback) => {
-        let request = this.createRequest("SetPrepareFoodTo", "POST");
-        let prepareState = Constant.PREPARE_STATE.COOKED;
-        let body = {
-            prepareFoodId,
-            prepareState,
-        };
-        return request(body, callback);
-    };
-    setCookedFoodToServed = (prepareFoodId, callback) => {
+    setPrepareFoodStateTo = (prepareFoodId, prepareStateId, callback) => {
 
         let request = this.createRequest("SetPrepareFoodTo", "POST");
-        let prepareState = Constant.PREPARE_STATE.SERVED;
         let body = {
             prepareFoodId,
-            prepareState,
-        };
-        return request(body, callback);
-    };
-    cancelPrepareFood = (prepareFoodId, reason, callback) => {
-
-        let request = this.createRequest("SetPrepareFoodTo", "POST");
-        let prepareState = Constant.PREPARE_STATE.CANCEL;
-        let body = {
-            prepareFoodId,
-            prepareState,
+            prepareStateId,
         };
         return request(body, callback);
     };

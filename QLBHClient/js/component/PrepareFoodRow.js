@@ -6,22 +6,25 @@ import {
     View
 } from 'react-native';
 
-import {Container,Thumbnail, Icon, Label, Button, Header, Content, Form, Item, Input} from 'native-base';
+import {Container, Thumbnail, Icon, Label, Button, Header, Content, Form, Item, Input} from 'native-base';
 import CommonStyles from '../share/CommonStyles';
 import * as Constant from '../share/Constant'
 import {CachedImage} from "react-native-img-cache";
 import Helper from '../share/Helper'
+import Network from '../share/Network'
+
 export default class PrepareFoodRow extends Component {
     constructor(props) {
         super(props);
         let prepareFood = props.prepareFood;
         this.state = {
             prepareFood
-        }
+        };
+        this.prevDispatcher = props.dispatcher;
     }
 
-    getPrepText = (prepareState)=>{
-        switch(prepareState){
+    getPrepText = (prepareState) => {
+        switch (prepareState) {
             case Constant.PREPARE_STATE.CANCEL:
                 return "ĐÃ HUỶ";
             case Constant.PREPARE_STATE.QUEUE:
@@ -35,7 +38,33 @@ export default class PrepareFoodRow extends Component {
         }
         return "Lỗi";
     };
+    getNextPrepareState = (prepareState) => {
+        switch (prepareState) {
+            case Constant.PREPARE_STATE.QUEUE:
+                return Constant.PREPARE_STATE.COOKING;
+            case Constant.PREPARE_STATE.COOKING:
+                return Constant.PREPARE_STATE.COOKED;
+            case Constant.PREPARE_STATE.COOKED:
+                return Constant.PREPARE_STATE.SERVED;
+            case Constant.PREPARE_STATE.SERVED:
+            case Constant.PREPARE_STATE.CANCEL:
+                return null;
+        }
+    };
+    onCancelClick = () => {
 
+    };
+    onProcessClick = () => {
+        let nextPrepareState = this.getNextPrepareState(this.state.prepareFood.PrepareStateId);
+        Network.setPrepareFoodStateTo(this.state.prepareFood.PrepareFoodId,nextPrepareState,(err,data,result)=>{
+            if(err) return;
+            this.state.prepareFood.PrepareStateId = nextPrepareState;
+            this.refreshUi();
+        })
+    };
+    refreshUi = () =>{
+        this.prevDispatcher.dispatch("refresh");
+    };
     render() {
         let foodUrl = Helper.createUrlFromImageId(this.state.prepareFood.FoodId);
         return (
@@ -54,15 +83,31 @@ export default class PrepareFoodRow extends Component {
                         <View style={styles.btnGrid}>
                             <View style={styles.flexRow}>
 
-                                <Button success style={styles.button}>
-                                    <View style={{position: 'absolute', top: 0, left: 0, right: 0, bottom: 0, justifyContent: 'center', alignItems: 'center'}}>
+                                <Button onPress={this.onProcessClick} success style={styles.button}>
+                                    <View style={{
+                                        position: 'absolute',
+                                        top: 0,
+                                        left: 0,
+                                        right: 0,
+                                        bottom: 0,
+                                        justifyContent: 'center',
+                                        alignItems: 'center'
+                                    }}>
                                         <Text style={styles.buttonLabel}>
                                             {this.getPrepText(this.state.prepareFood.PrepareStateId)}
                                         </Text>
                                     </View>
                                 </Button>
-                                <Button danger style={styles.cancelButton}>
-                                    <View style={{position: 'absolute', top: 0, left: 0, right: 0, bottom: 0, justifyContent: 'center', alignItems: 'center'}}>
+                                <Button onPress={this.onCancelClick} danger style={styles.cancelButton}>
+                                    <View style={{
+                                        position: 'absolute',
+                                        top: 0,
+                                        left: 0,
+                                        right: 0,
+                                        bottom: 0,
+                                        justifyContent: 'center',
+                                        alignItems: 'center'
+                                    }}>
                                         <Text style={styles.buttonLabel}>
                                             HUỶ
                                         </Text>
@@ -80,7 +125,7 @@ export default class PrepareFoodRow extends Component {
 
 const styles = StyleSheet.create({
     container: {
-        flexDirection:'row',
+        flexDirection: 'row',
         marginLeft: 10,
         marginRight: 10,
         marginTop: 12,
@@ -91,13 +136,13 @@ const styles = StyleSheet.create({
         shadowOpacity: 0.4,
         shadowRadius: 2,
     },
-    foodImage:{
-        width:128,
-        height:128,
+    foodImage: {
+        width: 128,
+        height: 128,
     },
     content: {
         borderRadius: 10,
-        flexDirection:'row',
+        flexDirection: 'row',
         overflow: 'hidden',
     },
     infoGrid: {
@@ -113,21 +158,21 @@ const styles = StyleSheet.create({
         alignSelf: 'flex-end',
         flex: 1,
     },
-    flexRow:{
-        flexDirection:'row',
+    flexRow: {
+        flexDirection: 'row',
         alignSelf: 'flex-end',
     },
-    button:{
+    button: {
         marginRight: 10,
         width: 90,
         height: 35,
     },
-    cancelButton:{
+    cancelButton: {
         marginRight: 10,
         width: 60,
         height: 35,
     },
-    buttonLabel:{
+    buttonLabel: {
         color: 'white',
         fontWeight: 'bold',
         fontSize: 12,

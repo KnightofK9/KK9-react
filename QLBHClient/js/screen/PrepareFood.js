@@ -13,6 +13,7 @@ import * as Constant from '../share/Constant'
 import BaseScreen from './BaseScreen'
 import SessionManager from '../share/SessionManager'
 import BackgroundService from "../share/BackgroundService";
+import EventDispatcher from "../share/EventDispatcher";
 export default class PrepareFood extends BaseScreen {
     constructor(props) {
         super(props);
@@ -22,8 +23,18 @@ export default class PrepareFood extends BaseScreen {
         };
         this.navigation = props.screenProps !== undefined ? props.screenProps.mainNavigation : props.navigation;
         this.loadScheduleHandle();
+        this.createEventDispatcher();
         // this.dummy();
     }
+    createEventDispatcher = () =>{
+        let handle = (value)=>{
+            // let prepareFoodList = SessionManager.getSession().getPrepareFoods();
+            // this.setState({prepareFoodList});
+            this.forceUpdate();
+        };
+        this.dispatcher =  new EventDispatcher();
+        this.dispatcher.registerEvent("refresh",handle);
+    };
     reloadPrepareFoodManually = () =>{
         BackgroundService.runServiceManually();
         this.refreshPrepareFood();
@@ -51,8 +62,9 @@ export default class PrepareFood extends BaseScreen {
 
     render() {
         let arg = this.state.prepareFoodList.map((e,i)=>{
-           return <PrepareFoodRow key={e.PrepareFoodId}
+           return <PrepareFoodRow  key={e.PrepareFoodId}
                                   prepareFood = {e}
+                                   dispatcher={this.dispatcher}
            />
         });
         return (
