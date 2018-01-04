@@ -144,9 +144,11 @@ const styles = StyleSheet.create({
         borderRadius: 10,
         flexDirection: 'row',
         overflow: 'hidden',
+        flex:1,
     },
     infoGrid: {
         margin: 10,
+        flex:1,
         flexDirection: 'column',
     },
     foodNameTxt: {
