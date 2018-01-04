@@ -14,8 +14,8 @@ class Network {
     setTopEventDispatcher = (topEventDispatcher) => {
         this.topEventDispatcher = topEventDispatcher;
     };
-    getScheduleInfo = (callback) => {
-        let request = this.createRequest("GetAllScheduleInfo", "GET", true, true, false);
+    getScheduleInfo = (callback, useLoadingAnimation = false) => {
+        let request = this.createRequest("GetAllScheduleInfo", "GET", true, true, useLoadingAnimation);
         return request(null, callback);
     };
 
@@ -64,8 +64,8 @@ class Network {
         };
         return request(body, callback);
     };
-    login = (username, password, callback) => {
-        let request = this.createRequest("Login", "POST", false);
+    login = (username, password,isAutoTurnOffAnimation, callback) => {
+        let request = this.createRequest("Login", "POST", false,true,true,isAutoTurnOffAnimation);
         let body = {
             username,
             password,
@@ -80,7 +80,7 @@ class Network {
     setSpinner = (isActive) => {
         if (this.topEventDispatcher !== null) this.topEventDispatcher.dispatch("spinner", isActive);
     };
-    createRequest = (path = "", method = "GET", useAuthorization = true, isContentJson = true, isUseLoadingAnimation = true) => {
+    createRequest = (path = "", method = "GET", useAuthorization = true, isContentJson = true, isUseLoadingAnimation = true, isAutoTurnOffAnimation = true) => {
         let headers = {
             Accept: 'application/json'
         };
@@ -110,7 +110,7 @@ class Network {
             Logger.log.trace("Requesting " + api, requestInfo);
             return fetch(api, requestInfo).then((response) => response.json())
                 .then(responseJson => {
-                    this.handleFinishRequest(isUseLoadingAnimation);
+                    this.handleFinishRequest(isUseLoadingAnimation,isAutoTurnOffAnimation);
                     if (responseJson.Successful) {
 
                         Logger.log.trace("Success " + api, responseJson);
@@ -124,7 +124,7 @@ class Network {
                 .catch((error) => {
 
                     Logger.log.error("Error " + api, error);
-                    this.handleFinishRequest(isUseLoadingAnimation);
+                    this.handleFinishRequest(isUseLoadingAnimation,isAutoTurnOffAnimation);
                     this.handleError(error, null, callback);
                 })
         }
@@ -132,8 +132,8 @@ class Network {
     handleStartRequest = (isUseLoadingAnimation) => {
         if (isUseLoadingAnimation) this.setSpinner(true);
     };
-    handleFinishRequest = (isUseLoadingAnimation) => {
-        if (isUseLoadingAnimation) this.setSpinner(false);
+    handleFinishRequest = (isUseLoadingAnimation,isAutoTurnOffAnimation) => {
+        if (isUseLoadingAnimation && isAutoTurnOffAnimation) this.setSpinner(false);
     };
 
 

@@ -8,9 +8,12 @@ export default class Session{
     }
     setUpEventHandle = () =>{
         let scheduleDataHandle =  (data)=>{
-            this.scheduleData = data;
+            this.setScheduleData(data);
         };
         BackgroundService.addHandle(scheduleDataHandle);
+    };
+    setScheduleData = (data) =>{
+        this.scheduleData = data;
     };
     setUserProfile = (apiUserProfile) =>{
         this.userProfile = new UserProfile(apiUserProfile);
@@ -35,6 +38,7 @@ export default class Session{
         return this.scheduleData.orders;
     };
     onClearSession = () =>{
+        BackgroundService.detachAllHandler();
         BackgroundService.stop();
     };
     onBeginSession = () =>{

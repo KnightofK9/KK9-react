@@ -28,7 +28,9 @@ class BackgroundService {
         Logger.log.debug("Performing background manually!!");
         this.runService();
     };
-
+    detachAllHandler = () =>{
+        this.eventDispatcher.reset();
+    };
     start = (runImmediately = true) =>{
         if(runImmediately){
             this.runServiceManually();

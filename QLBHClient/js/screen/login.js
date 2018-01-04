@@ -21,9 +21,13 @@ export default class LoginBox extends Component {
     }
 
     login = () => {
-        Network.login(this.state.username,this.state.password,(err,data,result)=>{
+        Network.login(this.state.username,this.state.password,false,(err,data,result)=>{
             SessionManager.createSession(data);
-            this.goToMainScreen();
+            Network.getScheduleInfo((err,data,result)=>{
+                if(err) return;
+                SessionManager.getSession().setScheduleData(data);
+                this.goToMainScreen();
+            },true)
         });
     };
     goToMainScreen = () => {
