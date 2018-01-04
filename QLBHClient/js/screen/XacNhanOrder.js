@@ -79,8 +79,11 @@ export default class XacNhanOrder extends BaseScreen {
         });
         this.navigation.dispatch(resetAction);
     };
-    isFromCreatedOrder = () =>{
-        return this.state.order.OrderId === null;
+    isFromUpdateOrder = () =>{
+        return this.state.order.OrderId !== null;
+    };
+    isFromCreateOrder = () =>{
+        return !this.isFromUpdateOrder();
     };
     createLeftBackButton = () => {
         let f = this.goBackToMenuOrder;
@@ -89,19 +92,22 @@ export default class XacNhanOrder extends BaseScreen {
     createCancelButton = () => {
 
         let f = this.goBackToMain;
-        if(!this.isFromCreatedOrder()) f= this.goBackToMenuOrder;
+        if(this.isFromUpdateOrder()) f= this.goBackToMenuOrder;
         return CommonComponent.createCancelButton(f);
     };
     updateOrder = () =>{
-        let modifyFoodList = Helper.getModifyFoodList(this.state.order);
-        Popup.showConfirm("Xác nhận","Bạn sẽ cập nhật lại các món sau vào order:" + JSON.stringify(modifyFoodList),
-            ()=>{
-                if(this.isFromCreatedOrder()) {
-                    this.doCreateOrder();
-                }else{
-                    this.doUpdateOrder();
-                }
-            });
+        let informText = null;
+        let onConfirm = null;
+        if(this.isFromUpdateOrder()) {
+            informText = Helper.getTextForUpdateOrder(this.state.order);
+            onConfirm = this.doUpdateOrder;
+        }
+        else {
+            informText = Helper.getTextForCreateOrder(this.state.order);
+            onConfirm = this.doCreateOrder;
+        }
+        Popup.showConfirm(informText.title,informText.body,
+            onConfirm);
     };
     doCreateOrder = () =>{
         let foodWithOrderList = Helper.getFoodWithOrderList(this.state.order);
@@ -130,7 +136,7 @@ export default class XacNhanOrder extends BaseScreen {
         })
     };
     createMenuOrderButton = () =>{
-        if(this.isFromCreatedOrder()) return null;
+        if(!this.isFromUpdateOrder()) return null;
         return <Button style={styles.confirmBtn} rounded primary onPress={() => {
             this.openOrderMenu();
         }}>
@@ -139,7 +145,7 @@ export default class XacNhanOrder extends BaseScreen {
     };
     createTableText = () =>{
         let tableId = this.state.order.TableId;
-        if(this.isFromCreatedOrder()) return null;
+        if(!this.isFromUpdateOrder()) return null;
         return <View style={{flexDirection:"row",alignSelf:"center"}}>
             <Text style={styles.totalMoneyTitle}>Bàn số </Text>
             <Text >{tableId}</Text>
@@ -161,8 +167,26 @@ export default class XacNhanOrder extends BaseScreen {
         </PickerIOS>
     };
     selectTableIdBox = () =>{
-        if(this.isFromCreatedOrder()) return this.createTablePicker();
+        if(!this.isFromUpdateOrder()) return this.createTablePicker();
         return this.createTableText();
+    };
+    isConfirmAbleToClick = () =>{
+        let modifyFoods = Helper.getModifyFoodList(this.state.order);
+        return modifyFoods.length !== 0;
+    };
+    createConfirmBtn = ()=>{
+        let isAbleToClick = this.isConfirmAbleToClick();
+        return <View style={styles.confirmBtnRow}>
+            <Button style={[CommonStyles.txtBtn]} onPress={this.updateOrder}
+                    primary={isAbleToClick}
+                    light={!isAbleToClick}
+                    disabled={!isAbleToClick}
+            >
+                <Text style={{fontWeight: 'bold', color:'white'}}>
+                    CẬP NHẬT
+                </Text>
+            </Button>
+        </View>
     };
     render() {
         let count = 1;
@@ -179,6 +203,7 @@ export default class XacNhanOrder extends BaseScreen {
         let cancelButton = this.createCancelButton();
         let addFoodOrderMenuBtn = this.createMenuOrderButton();
         let tableBox = this.selectTableIdBox();
+        let confirmBtn = this.createConfirmBtn();
         this.state.totalMoney = Helper.calTotalMoneyToOrder(this.state.order);
         return (
             <Container>
@@ -203,13 +228,7 @@ export default class XacNhanOrder extends BaseScreen {
                     <Text style={styles.totalMoneyTitle}>Tổng tiền: </Text>
                     <Text style={styles.totalMoneyTxt}>{this.state.order.BillMoney.format()} đ </Text>
                 </View>
-                <View style={styles.confirmBtnRow}>
-                    <Button style={[CommonStyles.txtBtn, {backgroundColor: 'rgb(0,111,255)'}]} onPress={this.updateOrder} success>
-                        <Text style={{fontWeight: 'bold', color:'white'}}>
-                            CẬP NHẬT
-                        </Text>
-                    </Button>
-                </View>
+                {confirmBtn}
                 {addFoodOrderMenuBtn}
             </Container>
         )

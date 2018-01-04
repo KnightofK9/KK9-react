@@ -32,10 +32,10 @@ export default class Helper {
         }
         order.BillMoney = totalMoney;
     };
-    static createEmptyOrder = ()=>{
+    static createEmptyOrder = (tableId = null)=>{
         let order = {
             OrderId:null,
-            TableId:null,
+            TableId:tableId,
             Table:null,
             CreatedDate:null,
             FoodWithOrders:[],
@@ -97,6 +97,28 @@ export default class Helper {
             }
         });
         return FoodWithOrder;
+    };
+
+    static getTextForCreateOrder = (order) =>{
+        let modifyFoodList = Helper.getModifyFoodList(order);
+        let modifyFoodListText = Helper.getTextForModifyFoodList(modifyFoodList);
+        let table = order.TableId;
+        let body = `Bạn sẽ tạo order tại bàn số ${table} với danh sách món ăn\n`+
+            modifyFoodListText.join("\n");
+        let title = "Xác nhận";
+        return {title,body};
+    };
+    static getTextForUpdateOrder = (order) =>{
+        let modifyFoodList = Helper.getModifyFoodList(order);
+        let modifyFoodListText = Helper.getTextForModifyFoodList(modifyFoodList);
+        let body = `Bạn sẽ cập nhật order với các món ăn thêm vào sau\n`+
+            modifyFoodListText.join("\n");
+        let title = "Xác nhận";
+        return {title,body};
+    };
+
+    static getTextForModifyFoodList = (modifyFoodList) =>{
+        return modifyFoodList.map((e,i)=>{return `_${e.Name} : ${e.ModifyQuantities} phần`});
     }
 
 }

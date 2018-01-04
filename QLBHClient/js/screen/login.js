@@ -6,7 +6,7 @@ import {
     View
 } from 'react-native';
 
-import {Container, Label, Button, Header, Content, Form, Item, Input} from 'native-base';
+import {Container,Title,Body, Label, Button, Header, Content, Form, Item, Input} from 'native-base';
 import SessionManager from '../share/SessionManager'
 import Network from '../share/Network'
 import {NavigationActions} from 'react-navigation'
@@ -39,7 +39,13 @@ export default class LoginBox extends Component {
     render() {
         return (
             <Container>
-                <Header/>
+                <Header>
+                    <Body>
+                    <Title>
+                        Đăng nhập
+                    </Title>
+                    </Body>
+                </Header>
                 <Content contentContainerStyle={{
                     flex: 1,
                     flexDirection: 'column',
@@ -67,8 +73,9 @@ export default class LoginBox extends Component {
                         alignSelf: 'center',
                         justifyContent: 'center',
                         width: 100,
+                        marginTop:50
                     }} onPress={this.login}>
-                        <Text>Login</Text>
+                        <Text style={{color:"white"}} >Login</Text>
                     </Button>
                 </Content>
             </Container>

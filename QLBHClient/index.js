@@ -16,5 +16,5 @@ Number.prototype.format = function(n, x) {
     let re = '\\d(?=(\\d{' + (x || 3) + '})+' + (n > 0 ? '\\.' : '$') + ')';
     return this.toFixed(Math.max(0, ~~n)).replace(new RegExp(re, 'g'), '$&,');
 };
-console.ignoredYellowBox = ['Warning: setState(...)','Remote debugger'];
+console.ignoredYellowBox = ['Warning: setState(...)'];
 AppRegistry.registerComponent('QLBHClient', () => AppLayout);

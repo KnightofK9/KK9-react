@@ -10,10 +10,11 @@ class BackgroundService {
     createEventDispatcher = () =>{
         this.eventDispatcher = new EventDispatcher();
     };
-    runService = () =>{
+    runService = (callback = null) =>{
 
         Network.getScheduleInfo((err,data,response)=>{
             if(err) return;
+            if(callback!== null) callback(err,data,response);
             this.eventDispatcher.dispatch("scheduleData",data);
         });
     };
@@ -24,14 +25,14 @@ class BackgroundService {
         Logger.log.debug("Performing background task!!");
         this.runService();
     };
-    runServiceManually = () =>{
+    runServiceManually = (callbackInRunManually) =>{
         Logger.log.debug("Performing background manually!!");
-        this.runService();
+        this.runService(callbackInRunManually);
     };
 
-    start = (runImmediately = true) =>{
+    start = (runImmediately = true, callbackInRunManually) =>{
         if(runImmediately){
-            this.runServiceManually();
+            this.runServiceManually(callbackInRunManually);
         }
         Logger.log.debug("Starting background timer!");
         BackgroundTimer.runBackgroundTimer(() => {

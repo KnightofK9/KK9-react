@@ -51,8 +51,53 @@ export default class PrepareFoodRow extends Component {
                 return null;
         }
     };
+    processButtonProperty = (prepareState) =>{
+        let btn ={
+            success:true,
+            light:false,
+            disabled:false,
+        };
+        switch (prepareState) {
+            case Constant.PREPARE_STATE.QUEUE:
+            case Constant.PREPARE_STATE.COOKING:
+            case Constant.PREPARE_STATE.COOKED:
+                break;
+            case Constant.PREPARE_STATE.SERVED:
+            case Constant.PREPARE_STATE.CANCEL:
+                btn.disabled = true;
+                btn.light = true;
+                btn.success = false;
+                break;
+        }
+        return btn;
+    };
+    cancelButtonProperty = (prepareState) =>{
+        let btn ={
+            danger:true,
+            light:false,
+            disabled:false,
+        };
+        switch (prepareState) {
+            case Constant.PREPARE_STATE.QUEUE:
+            case Constant.PREPARE_STATE.COOKING:
+            case Constant.PREPARE_STATE.COOKED:
+            case Constant.PREPARE_STATE.SERVED:
+                break;
+            case Constant.PREPARE_STATE.CANCEL:
+                btn.danger = false;
+                btn.light = true;
+                btn.disabled = true;
+                break;
+        }
+        return btn;
+    };
     onCancelClick = () => {
-
+        let nextPrepareState = Constant.PREPARE_STATE.CANCEL;
+        Network.setPrepareFoodStateTo(this.state.prepareFood.PrepareFoodId,nextPrepareState,(err,data,result)=>{
+            if(err) return;
+            this.state.prepareFood.PrepareStateId = nextPrepareState;
+            this.refreshUi();
+        })
     };
     onProcessClick = () => {
         let nextPrepareState = this.getNextPrepareState(this.state.prepareFood.PrepareStateId);
@@ -67,6 +112,9 @@ export default class PrepareFoodRow extends Component {
     };
     render() {
         let foodUrl = Helper.createUrlFromImageId(this.state.prepareFood.FoodId);
+        let processBtnProperty = this.processButtonProperty(this.state.prepareFood.PrepareStateId);
+        let cancelBtnProperty = this.cancelButtonProperty(this.state.prepareFood.PrepareStateId);
+        let createdTime = (new Date(this.state.prepareFood.CreateDateTime)).toLocaleTimeString();
         return (
             <View style={styles.container}>
                 <View style={styles.content}>
@@ -78,12 +126,17 @@ export default class PrepareFoodRow extends Component {
                             {this.state.prepareFood.Food.Name}
                         </Text>
                         <Text>
-                            Bàn số:{this.state.prepareFood.TableId}
+                            Bàn số {this.state.prepareFood.TableId}
+                        </Text>
+                        <Text>
+                            Tạo lúc {createdTime}
                         </Text>
                         <View style={styles.btnGrid}>
                             <View style={styles.flexRow}>
 
-                                <Button onPress={this.onProcessClick} success style={styles.button}>
+                                <Button onPress={this.onProcessClick}
+                                        {...processBtnProperty}
+                                        style={styles.button}>
                                     <View style={{
                                         position: 'absolute',
                                         top: 0,
@@ -98,7 +151,7 @@ export default class PrepareFoodRow extends Component {
                                         </Text>
                                     </View>
                                 </Button>
-                                <Button onPress={this.onCancelClick} danger style={styles.cancelButton}>
+                                <Button {...cancelBtnProperty} onPress={this.onCancelClick} danger style={styles.cancelButton}>
                                     <View style={{
                                         position: 'absolute',
                                         top: 0,

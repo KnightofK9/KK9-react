@@ -30,5 +30,5 @@ export default class Popup{
                 text: 'Đồng ý',
                 onPress: callback,
             }]);
-    }
+    };
 }
