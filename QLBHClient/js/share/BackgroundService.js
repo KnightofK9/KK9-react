@@ -13,6 +13,7 @@ class BackgroundService {
     runService = () =>{
 
         Network.getScheduleInfo((err,data,response)=>{
+            if(err) return;
             this.eventDispatcher.dispatch("scheduleData",data);
         });
     };

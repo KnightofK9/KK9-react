@@ -137,6 +137,14 @@ export default class XacNhanOrder extends BaseScreen {
             <Icon name='ios-add-outline'/>
         </Button>
     };
+    createTableText = () =>{
+        let tableId = this.state.order.TableId;
+        if(this.isFromCreatedOrder()) return null;
+        return <View style={{flexDirection:"row",alignSelf:"center"}}>
+            <Text style={styles.totalMoneyTitle}>Bàn số </Text>
+            <Text >{tableId}</Text>
+        </View>
+    };
     createTablePicker = () =>{
         let tableList = SessionManager.getSession().getTables();
         let tableArg = tableList.map((e,i)=>{
@@ -152,7 +160,10 @@ export default class XacNhanOrder extends BaseScreen {
             {tableArg}
         </PickerIOS>
     };
-
+    selectTableIdBox = () =>{
+        if(this.isFromCreatedOrder()) return this.createTablePicker();
+        return this.createTableText();
+    };
     render() {
         let count = 1;
         let arg = this.state.order.FoodWithOrders.map((e, i) => {
@@ -167,7 +178,7 @@ export default class XacNhanOrder extends BaseScreen {
         let backButton = this.createLeftBackButton();
         let cancelButton = this.createCancelButton();
         let addFoodOrderMenuBtn = this.createMenuOrderButton();
-        let tablePicker = this.createTablePicker();
+        let tableBox = this.selectTableIdBox();
         this.state.totalMoney = Helper.calTotalMoneyToOrder(this.state.order);
         return (
             <Container>
@@ -187,7 +198,7 @@ export default class XacNhanOrder extends BaseScreen {
                 <ScrollView style={styles.confirmOrderListScrV}>
                     {arg}
                 </ScrollView>
-                {tablePicker}
+                {tableBox}
                 <View style={styles.totalMoneyView}>
                     <Text style={styles.totalMoneyTitle}>Tổng tiền: </Text>
                     <Text style={styles.totalMoneyTxt}>{this.state.order.BillMoney.format()} đ </Text>
@@ -233,6 +244,9 @@ const styles = StyleSheet.create({
         bottom:70,
     },
     tablePicker:{
+    },
+    tableText:{
+        alignSelf:"center"
     },
 
 });

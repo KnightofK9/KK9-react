@@ -1,5 +1,6 @@
 import Session from './Session'
 import Logger from '../share/Logger'
+import Network from "./Network";
 class SessionManager{
     constructor(){
         this.session = null;
@@ -43,6 +44,10 @@ class SessionManager{
         }
 
     };
+    logout = (callback) =>{
+        this.clearSession();
+        callback();
+    }
 
 }
 export default (new SessionManager)

@@ -26,7 +26,7 @@ import {TabNavigator, TabBarBottom} from 'react-navigation';
 import Menu from './Menu'
 import DanhSachOrder from './DanhSachOrder'
 import PrepareFood from './PrepareFood'
-import TaiKhoan from './TaiKhoan'
+import Config from './Config'
 import CommonComponent from '../share/CommonComponent'
 
 const TabNavigationScreen = TabNavigator({
@@ -51,10 +51,10 @@ const TabNavigationScreen = TabNavigator({
                 tabBarIcon: CommonComponent.createFunctionIcon("list-box"),
             }
         },
-        Account: {
-            screen: TaiKhoan,
+    Config: {
+            screen: Config,
             navigationOptions: {
-                title: "Tài khoản",
+                title: "Cài đặt",
                 tabBarIcon: CommonComponent.createFunctionIcon("build"),
             }
         }

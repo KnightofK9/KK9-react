@@ -26,7 +26,6 @@ import {StackNavigator} from 'react-navigation';
 import Menu from './Menu'
 import DanhSachOrder from './DanhSachOrder'
 import PrepareFood from './PrepareFood'
-import TaiKhoan from './TaiKhoan'
 import XacNhanOrder from './XacNhanOrder'
 import Login from './login'
 import BaseScreen from './BaseScreen'
