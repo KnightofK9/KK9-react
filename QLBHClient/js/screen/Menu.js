@@ -52,7 +52,6 @@ export default class Menu extends BaseScreen {
         };
         this.loadScheduleHandle();
         // this.initDataForOrder();
-        // this.loadAndParseFoodCategorize();
         // this.dummy();
         this.dispatcher = this.createEventDispatcher();
     }
@@ -72,14 +71,6 @@ export default class Menu extends BaseScreen {
     initDataForOrder = (order) => {
         if (order === undefined) return;
         Helper.setDefaultFoodWithOrder(order);
-    };
-    loadAndParseFoodCategorize = () => {
-        let foodCategorizes = null;
-        Network.getAllCategoryWithFood((err, result, response) => {
-            this.setState({
-                foodCategorizes: result
-            });
-        });
     };
     dummy = () => {
         this.state = {...DummyData.dummyFoodList()}

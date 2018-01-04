@@ -41,9 +41,6 @@ class DanhSachOrder extends BaseScreen {
 
     };
     createEventDispatcher = () =>{
-        let reloadHandle = (value,callObject) =>{
-            this.getAndParseUnpayOrder();
-        };
         let refreshHandle = (value,callObject) =>{
             this.forceUpdate();
         };
@@ -51,18 +48,9 @@ class DanhSachOrder extends BaseScreen {
             this.setState({orderRowList:this.state.orderRowList.filter(k=> k.OrderId !== orderId)});
         };
         let dispatcher = new EventDispatcher();
-        dispatcher.registerEvent("reload",reloadHandle);
         dispatcher.registerEvent("refresh",refreshHandle);
         dispatcher.registerEvent("remove",removeHandle);
         return dispatcher;
-    };
-    getAndParseUnpayOrder = () =>{
-        Network.getAllUnpayOrder((err,data,result)=>{
-            if(!err) this.setState({
-                orderRowList: data,
-            })
-
-        });
     };
     dummy = () => {
         this.state = {

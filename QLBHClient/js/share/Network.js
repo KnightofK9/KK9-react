@@ -18,10 +18,6 @@ class Network {
         let request = this.createRequest("GetAllScheduleInfo", "GET", true, true, false);
         return request(null, callback);
     };
-    getAllUnpayOrder = (callback) => {
-        let request = this.createRequest("GetAllUnPayOrders");
-        return request(null, callback);
-    };
 
     getOrderById = (orderId, callback) => {
         let request = this.createRequest("GetOrderById", "POST");
@@ -57,48 +53,7 @@ class Network {
         return request(body, callback);
     };
 
-    getAllCategoryWithFood = (callback) => {
-        let request = this.createRequest("GetAllCategorizesWithFood");
-        return request(null, callback);
-    };
 
-    getAllCookedPrepareFood = (callback) => {
-        let request = this.createRequest("GetAllPrepareFoodByState", "POST");
-        let prepareState = [
-            Constant.PREPARE_STATE.COOKED
-        ];
-        let body = {
-            prepareState
-        };
-        return request(body, callback);
-    };
-    getAllPrepareFood = (callback) => {
-        let request = this.createRequest("GetAllPrepareFoodByState", "POST");
-        let prepareState = [
-            Constant.PREPARE_STATE.CANCEL,
-            Constant.PREPARE_STATE.QUEUE,
-            Constant.PREPARE_STATE.COOKING,
-            Constant.PREPARE_STATE.COOKED,
-            Constant.PREPARE_STATE.SERVED,
-        ];
-        let body = {
-            prepareState
-        };
-        return request(body, callback);
-    };
-
-    getAllQueueAndCookingPrepareFood = (callback) => {
-
-        let request = this.createRequest("GetAllPrepareFoodByState", "POST");
-        let prepareState = [
-            Constant.PREPARE_STATE.QUEUE,
-            Constant.PREPARE_STATE.COOKING,
-        ];
-        let body = {
-            prepareState
-        };
-        return request(body, callback);
-    };
 
     setPrepareFoodStateTo = (prepareFoodId, prepareStateId, callback) => {
 

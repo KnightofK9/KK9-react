@@ -38,18 +38,33 @@ export default class Config extends BaseScreen {
                     </Title>
                     </Body>
                 </Header>
-                <Content>
-                    <Button onPress={this.onLogoutPress}>
-                        <Text>
+                <View style={styles.content}>
+                    <Button style={styles.logOutBtn} onPress={this.onLogoutPress}>
+                        <Text style={styles.logoOutBtnText}>
                             Đăng xuất
                         </Text>
                     </Button>
-                </Content>
+                </View>
             </Container>
         )
     }
 }
 
 const styles = StyleSheet.create({
-    container: {},
+    content: {
+        flex:1,
+        flexDirection:"row",
+        justifyContent:"center",
+        alignItems:"center",
+    },
+    logOutBtn:{
+        width:120,
+        alignItems:"center",
+        justifyContent:"center",
+        flexDirection:"row",
+        alignSelf:"center",
+    },
+    logoOutBtnText:{
+        color:"white"
+    }
 });
