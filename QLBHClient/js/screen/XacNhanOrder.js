@@ -20,6 +20,7 @@ import {
     Header,
     Content,
     Form,
+    Picker,
     Item,
     Input
 } from 'native-base';
@@ -154,17 +155,25 @@ export default class XacNhanOrder extends BaseScreen {
     createTablePicker = () =>{
         let tableList = SessionManager.getSession().getTables();
         let tableArg = tableList.map((e,i)=>{
-           return <PickerIOS.Item key={e.TableId} label={e.TableId.toString()} value={e.TableId} />
+           return <Picker.Item key={e.TableId} label={"Bàn số: "+ e.TableId.toString()} value={e.TableId} />
         });
         let defaultTableId = this.state.order.TableId !== null ? this.state.order.TableId : tableList[0].TableId;
-        return <PickerIOS selectedValue={defaultTableId} style={styles.tablePicker} onValueChange={(tableId)=>{
+        return <Picker
+            placeholder="Chọn số bàn"
+            iosHeader="Chọn số bàn"
+            mode="dropdown"
+            headerBackButtonText={"Quay lại"}
+            selectedValue={this.state.order.TableId}
+            style={styles.tablePicker}
+            textStyle={styles.tablePickerItem}
+            onValueChange={(tableId)=>{
             let order = Object.assign({},this.state.order,{TableId:tableId});
             this.setState({
                 order
             })}
         }>
             {tableArg}
-        </PickerIOS>
+        </Picker>
     };
     selectTableIdBox = () =>{
         if(!this.isFromUpdateOrder()) return this.createTablePicker();
@@ -263,9 +272,15 @@ const styles = StyleSheet.create({
         bottom:70,
     },
     tablePicker:{
+        // width:50
+        alignSelf:"center"
     },
     tableText:{
         alignSelf:"center"
     },
+    tablePickerItem:{
+        fontSize:14
+    }
+
 
 });

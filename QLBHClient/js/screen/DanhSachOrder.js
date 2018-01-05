@@ -60,7 +60,7 @@ class DanhSachOrder extends BaseScreen {
     openMenuForCreateOrder = () =>{
         let navigation = this.navigation;
         let tableId = SessionManager.getSession().getTables()[0].TableId;
-        let order = Helper.createEmptyOrder(tableId);
+        let order = Helper.createEmptyOrder(null);
         navigation.navigate("MenuForCreateOrder",{
             order:order,
             navigation:navigation,
