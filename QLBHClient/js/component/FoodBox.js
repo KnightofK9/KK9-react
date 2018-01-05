@@ -87,12 +87,22 @@ export default class FoodBox extends Component {
                                 </Text>
                             </View>
 
-                            <Text style={[styles.foodInfo, {marginTop: 8}]}>
-                                15 phút
-                            </Text>
-                            <Text style={styles.foodInfo}>
-                                200 kcal
-                            </Text>
+                            <View style={{flexDirection: 'row'}}>
+                                <Text style={[styles.foodInfo, {marginTop: 8, fontWeight: 'bold'}]}>
+                                    15
+                                </Text>
+                                <Text style={[styles.foodInfo, {marginTop: 8, marginLeft: 0}]}>
+                                    {" phút"}
+                                </Text>
+                            </View>
+                            <View style={{flexDirection: 'row'}}>
+                                <Text style={[styles.foodInfo, {marginTop: 8, fontWeight: 'bold'}]}>
+                                    200
+                                </Text>
+                                <Text style={[styles.foodInfo, {marginTop: 8, marginLeft: 0}]}>
+                                    {" kcal"}
+                                </Text>
+                            </View>
                         </View>
                     </View>
                 </View>
@@ -189,7 +199,7 @@ const styles = StyleSheet.create({
         borderRadius: 4,
         shadowColor: '#000',
         shadowOffset: {width: 1, height: 2},
-        shadowOpacity: 0.4,
+        shadowOpacity: 0.3,
         shadowRadius: 2,
         justifyContent: 'center',
         alignItems: 'center'

@@ -63,6 +63,15 @@ const TabNavigationScreen = TabNavigator({
         initialRouteName: 'OrderList',
         swipeEnabled: true,
         animationEnabled: true,
+        tabBarOptions: {
+            activeTintColor: "#f9b045",
+            labelStyle: {
+                fontWeight: 'bold',
+            },
+            style: {
+                backgroundColor: '#3c3d41',
+            },
+        }
     }
 );
 
