@@ -51,7 +51,7 @@ const TabNavigationScreen = TabNavigator({
                 tabBarIcon: CommonComponent.createFunctionIcon("list-box"),
             }
         },
-    Config: {
+        Config: {
             screen: Config,
             navigationOptions: {
                 title: "Cài đặt",

@@ -111,7 +111,7 @@ export default class PrepareFoodRow extends Component {
         this.prevDispatcher.dispatch("refresh");
     };
     render() {
-        let foodUrl = Helper.createUrlFromImageId(this.state.prepareFood.FoodId);
+        let foodUrl = Helper.createUrlFromImageId(this.state.prepareFood.Food.ImageId);
         let processBtnProperty = this.processButtonProperty(this.state.prepareFood.PrepareStateId);
         let cancelBtnProperty = this.cancelButtonProperty(this.state.prepareFood.PrepareStateId);
         let createdTime = (new Date(this.state.prepareFood.CreateDateTime)).toLocaleTimeString();
@@ -129,7 +129,7 @@ export default class PrepareFoodRow extends Component {
                             Bàn số {this.state.prepareFood.TableId}
                         </Text>
                         <Text>
-                            Tạo lúc {createdTime}
+                            {createdTime}
                         </Text>
                         <View style={styles.btnGrid}>
                             <View style={styles.flexRow}>

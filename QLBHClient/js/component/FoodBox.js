@@ -12,6 +12,7 @@ import {Container, Thumbnail, Label, Button, Header, Content, Form, Item, Input}
 import DummyData from '../utilities/DummyData'
 import PropertyDispatcher from '../share/PropertyDispatcher'
 import Helper from '../share/Helper'
+import LinearGradient from 'react-native-linear-gradient';
 
 export default class FoodBox extends Component {
     constructor(props) {
@@ -53,29 +54,49 @@ export default class FoodBox extends Component {
     };
     createFoodText = () => {
         let foodText = this.state.food.Food.Name;
-        if (this.isCreateOrder()) foodText += ":" + (this.state.food.Quantities + this.state.food.ModifyQuantities);
+        if (this.isCreateOrder()) foodText += ": " + (this.state.food.Quantities + this.state.food.ModifyQuantities);
+        return foodText;
+    };
+    createFoodPrice = () => {
+        let foodText = this.state.food.Food.Price + " đ";
         return foodText;
     };
 
     render() {
         let foodText = this.createFoodText();
+        let foodPrice = this.createFoodPrice();
         let imageId = this.state.food.Food.ImageId;
         let imageUrl = Helper.createUrlFromImageId(this.state.food.Food.ImageId);
         return (
-            <View style={styles.container}>
+            <TouchableOpacity style={styles.container} onPress={this.onFoodPress}>
                 <View style={styles.contentShadow}>
                     <View style={styles.content}>
-                        <TouchableOpacity style={styles.imageContainer} onPress={this.onFoodPress}>
+
+                        <View style={styles.imageContainer} >
                             <CachedImage style={styles.imageButton} mutable
                                          source={{uri: imageUrl}}
                             />
-                        </TouchableOpacity>
-                        <Text onPress={this.onDropFoodPress} style={styles.foodNameTxt}>
+                        </View>
+                        <Text style={styles.foodNameTxt}>
                             {foodText}
                         </Text>
+                        <View style={styles.foodInfoView}>
+                            <View style={styles.foodPriceView}>
+                                <Text style={styles.foodPrice}>
+                                    {foodPrice}
+                                </Text>
+                            </View>
+
+                            <Text style={[styles.foodInfo, {marginTop: 8}]}>
+                                15 phút
+                            </Text>
+                            <Text style={styles.foodInfo}>
+                                200 kcal
+                            </Text>
+                        </View>
                     </View>
                 </View>
-            </View>
+            </TouchableOpacity>
         )
     }
 }
@@ -93,30 +114,104 @@ const styles = StyleSheet.create({
         shadowOffset: {width: 1, height: 2},
         shadowOpacity: 0.4,
         shadowRadius: 2,
-        borderRadius: 10,
+        borderRadius: 16,
         backgroundColor: 'white',
     },
     content: {
         width: '100%',
         height: '100%',
-        borderRadius: 10,
+        borderRadius: 16,
         flexDirection: 'column',
         backgroundColor: 'white',
-        overflow: 'hidden',
+        // overflow: 'hidden',
     },
     imageButton: {
         flexDirection: 'column',
-        height: '95%',
+        top: '37.5%',
+        height: '57.5%',
         width: '100%',
+        marginLeft:'30%',
+        resizeMode: 'contain',
     },
     foodNameTxt: {
-        alignSelf: 'center',
+        alignSelf: 'flex-start',
         fontWeight: 'bold',
-        marginBottom: 10,
-        marginTop: 0,
+        // marginBottom: 10,
+        // marginTop: 0,
+        position: 'absolute',
+        top: 8,
+        marginLeft: 8,
+        backgroundColor: 'rgba(0,0,0,0)',
+        fontSize: 17,
+        color: 'black',
+        // textShadowColor: 'black',
+        // textShadowOffset: {width: 1, height: 1},
+        // textShadowRadius: 2,
     },
+    foodInfo: {
+        fontWeight: '100',
+        marginTop: 5,
+        marginLeft: 5,
+        fontSize: 12,
+        backgroundColor: 'rgba(0,0,0,0)',
+        color: 'black',
+    },
+    foodPrice: {
+        fontSize: 16,
+        backgroundColor: 'rgba(0,0,0,0)',
+        color: 'white',
+        // marginLeft: 5,
+        // marginTop: 10,
+    },
+    linearGradient: {
+        opacity: 0.5,
+        width: '100%',
+        height: '70%',
+        position: 'absolute',
+    },
+    foodInfoView: {
+        flexDirection: 'column',
+        width: '100%',
+        top: '15%',
+        height: '75%',
+        position: 'absolute',
+        backgroundColor: 'rgba(0,0,0,0)',
+        // alignItems:'flex-end',
+    },
+    foodPriceView: {
+        flexDirection: 'row',
+        width: '55%',
+        left: -7,
+        marginTop:5,
+        height: 30,
+        // position: 'absolute',
+        backgroundColor: '#f9b045',
+        borderRadius: 4,
+        shadowColor: '#000',
+        shadowOffset: {width: 1, height: 2},
+        shadowOpacity: 0.4,
+        shadowRadius: 2,
+        justifyContent: 'center',
+        alignItems: 'center'
+    },
+    // foodPriceView: {
+    //     flexDirection: 'row',
+    //     width: '55%',
+    //     left: -7,
+    //     top: '15%',
+    //     height: 30,
+    //     position: 'absolute',
+    //     backgroundColor: '#f9b045',
+    //     borderRadius: 4,
+    //     shadowColor: '#000',
+    //     shadowOffset: {width: 1, height: 2},
+    //     shadowOpacity: 0.4,
+    //     shadowRadius: 2,
+    //     justifyContent: 'center',
+    //     alignItems: 'center'
+    // },
     imageContainer: {
         flex: 1,
-        // clip: '',
+        overflow: 'hidden',
     },
 });
