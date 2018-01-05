@@ -118,7 +118,7 @@ export default class Helper {
     };
 
     static getTextForModifyFoodList = (modifyFoodList) =>{
-        return modifyFoodList.map((e,i)=>{return `_${e.Name} : ${e.ModifyQuantities} phần`});
+        return modifyFoodList.map((e,i)=>{return `${e.Name} : ${e.ModifyQuantities} phần`});
     }
 
 }
