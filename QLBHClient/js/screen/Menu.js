@@ -34,6 +34,7 @@ import Network from '../share/Network'
 import Helper from '../share/Helper'
 import SessionManager from '../share/SessionManager'
 import BackgroundService from '../share/BackgroundService'
+import RMHeader from "../component/RMHeader";
 
 export default class Menu extends BaseScreen {
     constructor(props) {
@@ -131,21 +132,23 @@ export default class Menu extends BaseScreen {
         let backButton = this.createLeftBackButton();
         let cancelButton = this.createCancelButton();
         let confirmOrderButton = this.createConfirmOrderButton();
+        let header =  <Header>
+            <Left>{backButton}</Left>
+            <Body>
+            <Title>
+                Menu
+            </Title>
+            </Body>
+            <Right>{cancelButton}</Right>
+        </Header>;
+        if(!this.isCreateOrder()) header = <RMHeader headerTitle={"Thực đơn"}/>;
         let arg = this.state.foodCategorizes.map((e, i) => {
             return <FoodMenu key={e.FoodCategorizeId} dispatcher={this.dispatcher} order={this.state.order}
                              foodCategorize={e}/>
         });
         return (
             <Container>
-                <Header>
-                    <Left>{backButton}</Left>
-                    <Body>
-                    <Title>
-                        Menu
-                    </Title>
-                    </Body>
-                    <Right>{cancelButton}</Right>
-                </Header>
+                {header}
                 <ScrollView style={styles.foodScrView}>
                     {arg}
                 </ScrollView>

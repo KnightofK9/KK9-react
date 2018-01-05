@@ -5,6 +5,7 @@ import {
     Text,
     View,
     ScrollView,
+    Image,
 } from 'react-native';
 import BaseScreen from './BaseScreen'
 import {Container, Body, Title, Label, Button, Icon, Header, Content, Form, Item, Input} from 'native-base';
@@ -16,6 +17,7 @@ import Helper from '../share/Helper'
 import EventDispatcher from '../share/EventDispatcher'
 import SessionManager from '../share/SessionManager'
 import BackgroundService from '../share/BackgroundService'
+import RMHeader from '../component/RMHeader'
 
 class DanhSachOrder extends BaseScreen {
     constructor(props) {
@@ -72,13 +74,8 @@ class DanhSachOrder extends BaseScreen {
         });
         return (
             <Container>
-                <Header>
-                    <Body>
-                    <Title>
-                        Danh sách Order
-                    </Title>
-                    </Body>
-                </Header>
+
+                <RMHeader headerTitle={"Danh sách Order"}/>
                 <ScrollView style={styles.container}>
                     {orderArg}
                 </ScrollView>

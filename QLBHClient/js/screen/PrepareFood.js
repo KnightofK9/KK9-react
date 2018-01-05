@@ -14,6 +14,8 @@ import BaseScreen from './BaseScreen'
 import SessionManager from '../share/SessionManager'
 import BackgroundService from "../share/BackgroundService";
 import EventDispatcher from "../share/EventDispatcher";
+import RMHeader from '../component/RMHeader'
+
 export default class PrepareFood extends BaseScreen {
     constructor(props) {
         super(props);
@@ -69,13 +71,7 @@ export default class PrepareFood extends BaseScreen {
         });
         return (
             <Container>
-                <Header>
-                    <Body>
-                    <Title>
-                        Chuẩn bị món ăn
-                    </Title>
-                    </Body>
-                </Header>
+                <RMHeader headerTitle={"Chuẩn bị món ăn"}/>
                 <Content>
                     <ScrollView style={styles.scrView}>
                         {arg}

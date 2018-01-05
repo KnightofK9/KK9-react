@@ -46,9 +46,12 @@ export default class OrderRow extends Component {
                     <Text style={styles.orderTxtBox}>
                         Order {this.state.order.OrderId}
                     </Text>
-                    <Text style={styles.tableTxtBox}>
-                        Table {this.state.order.TableId}
-                    </Text>
+                    <View style={{flexDirection: 'row', alignItems:'center', justifyContent: 'flex-start', marginTop:5}}>
+                        <Icon name='restaurant' style={{fontSize: 30, color: '#f9b045'}} active={true}/>
+                        <Text style={[styles.tableTxtBox, {alignSelf:'center'}]}>
+                            {this.state.order.TableId}
+                        </Text>
+                    </View>
                 </View>
                 <Button onPress={this.onCancelOrderClick} style={styles.button} transparent dark>
                     <Icon name='ios-trash'/>
@@ -79,12 +82,10 @@ const styles = StyleSheet.create({
         flex: 1,
     },
     orderTxtBox: {
-        flex: 1,
         fontWeight: 'bold',
     },
     tableTxtBox: {
-        flex: 2,
-        marginTop: 10,
+        marginLeft: 10,
     },
     button: {
         height: 70,

@@ -68,9 +68,9 @@ const TabNavigationScreen = TabNavigator({
             labelStyle: {
                 fontWeight: 'bold',
             },
-            // style: {
-            //     backgroundColor: '#3c3d41',
-            // },
+            style: {
+                backgroundColor: 'rgba(255,255,255,1)',
+            },
         }
     }
 );

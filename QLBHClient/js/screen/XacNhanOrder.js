@@ -162,7 +162,7 @@ export default class XacNhanOrder extends BaseScreen {
             placeholder="Chọn số bàn"
             iosHeader="Chọn số bàn"
             mode="dropdown"
-            headerBackButtonText={"Quay lại"}
+            headerBackButtonText={"Trở về"}
             selectedValue={this.state.order.TableId}
             style={styles.tablePicker}
             textStyle={styles.tablePickerItem}

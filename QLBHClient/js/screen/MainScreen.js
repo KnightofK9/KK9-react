@@ -3,7 +3,8 @@ import {
     Platform,
     StyleSheet,
     Text,
-    View
+    View,
+    Image
 } from 'react-native';
 
 import {
@@ -90,9 +91,21 @@ class MainScreen extends BaseScreen {
         // let prepareFoodButton = this.createButton(2, "list-box", "Món chờ",false,prepareFoodBadge);
         // let accountButton = this.createButton(3, "build", "Tài khoản");
         return (
-            <Container>
+            <Container style={{backgroundColor: 'rgba(0,0,0,0)'}}>
                 {/*<AppComponent topEventDispatcher={this.props.topEventDispatcher}*/}
                               {/*navigation={this.props.navigation}/>*/}
+                <Image
+                    style={{
+                        flex: 1,
+                        resizeMode: 'stretch',
+                        position: 'absolute',
+                        width: '100%',
+                        height: '100%',
+                        justifyContent: 'center',
+                    }}
+                    source={require('../../assets/Morning.png')}
+                />
+
                 <TabNavigationScreen screenProps={{mainNavigation:this.props.navigation}} />
                 {/*<Footer>*/}
                     {/*<FooterTab>*/}

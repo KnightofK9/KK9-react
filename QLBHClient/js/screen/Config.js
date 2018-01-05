@@ -10,6 +10,7 @@ import {Container, Body, Title, Label, Button, Header, Content, Form, Item, Inpu
 import {NavigationActions} from 'react-navigation'
 import BaseScreen from './BaseScreen'
 import SessionManager from '../share/SessionManager'
+import RMHeader from "../component/RMHeader";
 
 export default class Config extends BaseScreen {
     constructor(props) {
@@ -31,13 +32,7 @@ export default class Config extends BaseScreen {
     render() {
         return (
             <Container>
-                <Header>
-                    <Body>
-                    <Title>
-                        Cài đặt
-                    </Title>
-                    </Body>
-                </Header>
+                <RMHeader headerTitle={"Cài đặt"}/>
                 <View style={styles.content}>
                     <Button style={styles.logOutBtn} onPress={this.onLogoutPress}>
                         <Text style={styles.logoOutBtnText}>
