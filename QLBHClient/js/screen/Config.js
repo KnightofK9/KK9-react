@@ -58,6 +58,10 @@ const styles = StyleSheet.create({
         justifyContent:"center",
         flexDirection:"row",
         alignSelf:"center",
+        shadowColor: '#000',
+        shadowOffset: {width: 1, height: 2},
+        shadowOpacity: 0.4,
+        shadowRadius: 2,
     },
     logoOutBtnText:{
         color:"white"

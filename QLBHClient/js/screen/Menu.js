@@ -166,6 +166,10 @@ const styles = StyleSheet.create({
     confirmBtn: {
         position: 'absolute',
         right: 10,
-        bottom: 70
+        bottom: 70,
+        shadowColor: '#000',
+        shadowOffset: {width: 1, height: 2},
+        shadowOpacity: 0.4,
+        shadowRadius: 2,
     }
 });

@@ -103,7 +103,7 @@ class MainScreen extends BaseScreen {
                         height: '100%',
                         justifyContent: 'center',
                     }}
-                    source={require('../../assets/Morning.png')}
+                    source={require('../../assets/Background.png')}
                 />
 
                 <TabNavigationScreen screenProps={{mainNavigation:this.props.navigation}} />

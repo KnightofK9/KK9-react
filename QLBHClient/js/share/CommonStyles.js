@@ -15,6 +15,10 @@ module.exports = StyleSheet.create({
        position:'absolute',
         right:10,
         bottom:10,
+        shadowColor: '#000',
+        shadowOffset: {width: 1, height: 2},
+        shadowOpacity: 0.4,
+        shadowRadius: 2,
     }
 
 });

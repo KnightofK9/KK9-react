@@ -191,7 +191,7 @@ const styles = StyleSheet.create({
     foodPriceView: {
         flexDirection: 'row',
         width: '55%',
-        left: -7,
+        left: -5,
         marginTop:5,
         height: 30,
         // position: 'absolute',
