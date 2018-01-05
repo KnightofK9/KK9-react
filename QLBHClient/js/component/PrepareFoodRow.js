@@ -127,16 +127,21 @@ export default class PrepareFoodRow extends Component {
                             {this.state.prepareFood.Food.Name}
                         </Text>
                         <View style={styles.extraInfoGrid}>
-                            <Text style={styles.foodInfo}>
-                                Bàn số {this.state.prepareFood.TableId}
-                            </Text>
-                            <Text style={[styles.foodInfo]}>
-                                {createdTime}
-                            </Text>
+                            <View style={{flexDirection: 'row', alignItems:'center'}}>
+                                <Icon name='restaurant' style={{fontSize: 25, color: '#f9b045'}} active={true}/>
+                                <Text style={styles.foodInfo}>
+                                     {this.state.prepareFood.TableId}
+                                </Text>
+                            </View>
+                            <View style={{flexDirection: 'row', alignItems:'center'}}>
+                                <Icon name='stopwatch' style={{fontSize: 25, color: '#f9b045'}} active={true}/>
+                                <Text style={[styles.foodInfo]}>
+                                    {createdTime}
+                                </Text>
+                            </View>
                         </View>
                         <View style={styles.btnGrid}>
                             <View style={styles.flexRow}>
-
                                 <Button onPress={this.onProcessClick}
                                         {...processBtnProperty}
                                         style={styles.button}>
@@ -217,13 +222,14 @@ const styles = StyleSheet.create({
         justifyContent: 'space-between'
     },
     foodNameTxt: {
-        marginBottom: 8,
+        marginBottom: 5,
         fontWeight: 'bold',
         fontSize: 17,
     },
     foodInfo: {
+        marginLeft: 10,
         fontWeight: '100',
-        fontSize: 13,
+        fontSize: 14,
         backgroundColor: 'rgba(0,0,0,0)',
         color: 'black',
     },
