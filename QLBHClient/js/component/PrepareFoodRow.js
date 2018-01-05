@@ -3,7 +3,8 @@ import {
     Platform,
     StyleSheet,
     Text,
-    View
+    View,
+    Dimensions
 } from 'react-native';
 
 import {Container, Thumbnail, Icon, Label, Button, Header, Content, Form, Item, Input} from 'native-base';
@@ -125,12 +126,14 @@ export default class PrepareFoodRow extends Component {
                         <Text style={styles.foodNameTxt}>
                             {this.state.prepareFood.Food.Name}
                         </Text>
-                        <Text>
-                            Bàn số {this.state.prepareFood.TableId}
-                        </Text>
-                        <Text>
-                            {createdTime}
-                        </Text>
+                        <View style={styles.extraInfoGrid}>
+                            <Text style={styles.foodInfo}>
+                                Bàn số {this.state.prepareFood.TableId}
+                            </Text>
+                            <Text style={[styles.foodInfo]}>
+                                {createdTime}
+                            </Text>
+                        </View>
                         <View style={styles.btnGrid}>
                             <View style={styles.flexRow}>
 
@@ -184,14 +187,19 @@ const styles = StyleSheet.create({
         marginTop: 12,
         borderRadius: 10,
         backgroundColor: 'white',
+        height: 120,
         shadowColor: '#000',
         shadowOffset: {width: 1, height: 2},
         shadowOpacity: 0.4,
         shadowRadius: 2,
     },
     foodImage: {
-        width: 128,
-        height: 128,
+        width: 80,
+        height: 80,
+        marginLeft: 10,
+        marginRight: 10,
+        resizeMode: 'contain',
+        alignSelf: 'center',
     },
     content: {
         borderRadius: 10,
@@ -204,9 +212,20 @@ const styles = StyleSheet.create({
         flex:1,
         flexDirection: 'column',
     },
+    extraInfoGrid: {
+        flexDirection: 'row',
+        justifyContent: 'space-between'
+    },
     foodNameTxt: {
+        marginBottom: 8,
         fontWeight: 'bold',
-        marginBottom: 5,
+        fontSize: 17,
+    },
+    foodInfo: {
+        fontWeight: '100',
+        fontSize: 13,
+        backgroundColor: 'rgba(0,0,0,0)',
+        color: 'black',
     },
     btnGrid: {
         flexDirection: 'row',
@@ -223,7 +242,7 @@ const styles = StyleSheet.create({
         height: 35,
     },
     cancelButton: {
-        marginRight: 10,
+        marginRight: 0,
         width: 60,
         height: 35,
     },
