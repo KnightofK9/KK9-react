@@ -27,19 +27,21 @@ class Network {
         return request(body, callback);
     };
 
-    createOrder = (tableId, FoodWithOrderList, callback) => {
+    createOrder = (tableId, FoodWithOrderList,note, callback) => {
         let request = this.createRequest("CreateOrder", "POST");
         let body = {
             tableId,
+            note,
             foodWithOrder: FoodWithOrderList
         };
         return request(body, callback);
     };
 
-    updateOrder = (orderId, FoodWithOrderList, callback) => {
+    updateOrder = (orderId, FoodWithOrderList,note, callback) => {
         let request = this.createRequest("UpdateOrder", "POST");
         let body = {
             orderId,
+            note,
             foodWithOrder: FoodWithOrderList
         };
         return request(body, callback);

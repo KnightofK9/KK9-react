@@ -113,8 +113,8 @@ export default class XacNhanOrder extends BaseScreen {
     doCreateOrder = () =>{
         let foodWithOrderList = Helper.getFoodWithOrderList(this.state.order);
         let tableId = this.state.order.TableId;
-        //TODO dummy table Id
-        Network.createOrder(tableId,foodWithOrderList,(err,data,response)=>{
+        let note = this.state.order.Note;
+        Network.createOrder(tableId,foodWithOrderList,note,(err,data,response)=>{
             if(!err) Popup.showSuccess(()=>{
                 this.goBackToMain();
             });
@@ -123,7 +123,8 @@ export default class XacNhanOrder extends BaseScreen {
     doUpdateOrder = () =>{
         let foodWithOrderList = Helper.getFoodWithOrderList(this.state.order);
         let orderId = this.state.order.OrderId;
-        Network.updateOrder(orderId,foodWithOrderList,(err,data,response)=>{
+        let note = this.state.order.Note;
+        Network.updateOrder(orderId,foodWithOrderList,note,(err,data,response)=>{
             if(!err) Popup.showSuccess(()=>{
                 this.goBackToMain();
             });
@@ -151,6 +152,21 @@ export default class XacNhanOrder extends BaseScreen {
             <Text style={styles.totalMoneyTitle}>Bàn số </Text>
             <Text >{tableId}</Text>
         </View>
+    };
+    setNote = (text) =>{
+        let order = Object.assign({},this.state.order,{Note:text});
+        this.setState({
+            order
+        });
+    };
+    createNoteInput = () =>{
+        return <Item regular>
+            <Input
+                placeholder={"Nhập note"}
+                   multiline={true}
+                   onChangeText={(text) => this.setNote(text)}
+                   value={this.state.order.Note} />
+        </Item>
     };
     createTablePicker = () =>{
         let tableList = SessionManager.getSession().getTables();
@@ -184,7 +200,8 @@ export default class XacNhanOrder extends BaseScreen {
         return modifyFoods.length !== 0 && this.state.order.TableId !== null;
     };
     createConfirmBtn = ()=>{
-        let isAbleToClick = this.isConfirmAbleToClick();
+        // let isAbleToClick = this.isConfirmAbleToClick();
+        let isAbleToClick = true;
         return <View style={styles.confirmBtnRow}>
             <Button style={[CommonStyles.txtBtn]} onPress={this.updateOrder}
                     primary={isAbleToClick}
@@ -213,6 +230,7 @@ export default class XacNhanOrder extends BaseScreen {
         let addFoodOrderMenuBtn = this.createMenuOrderButton();
         let tableBox = this.selectTableIdBox();
         let confirmBtn = this.createConfirmBtn();
+        let noteInput = this.createNoteInput();
         this.state.totalMoney = Helper.calTotalMoneyToOrder(this.state.order);
         return (
             <Container>
@@ -232,6 +250,7 @@ export default class XacNhanOrder extends BaseScreen {
                 <ScrollView style={styles.confirmOrderListScrV}>
                     {arg}
                 </ScrollView>
+                {noteInput}
                 {tableBox}
                 <View style={styles.totalMoneyView}>
                     <Text style={styles.totalMoneyTitle}>Tổng tiền: </Text>

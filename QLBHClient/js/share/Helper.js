@@ -105,6 +105,7 @@ export default class Helper {
         let table = order.TableId;
         let body = `Bạn sẽ tạo order tại bàn số ${table} với danh sách món ăn\n`+
             modifyFoodListText.join("\n");
+        if(order.Note !== null) body += "\nNote:\n" + order.Note;
         let title = "Xác nhận";
         return {title,body};
     };
@@ -113,6 +114,7 @@ export default class Helper {
         let modifyFoodListText = Helper.getTextForModifyFoodList(modifyFoodList);
         let body = `Bạn sẽ cập nhật order với các món ăn thêm vào sau\n`+
             modifyFoodListText.join("\n");
+        if(order.Note !== null) body += "\nNote:\n" + order.Note;
         let title = "Xác nhận";
         return {title,body};
     };
