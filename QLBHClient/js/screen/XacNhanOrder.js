@@ -181,7 +181,7 @@ export default class XacNhanOrder extends BaseScreen {
     };
     isConfirmAbleToClick = () =>{
         let modifyFoods = Helper.getModifyFoodList(this.state.order);
-        return modifyFoods.length !== 0;
+        return modifyFoods.length !== 0 && this.state.order.TableId !== null;
     };
     createConfirmBtn = ()=>{
         let isAbleToClick = this.isConfirmAbleToClick();

@@ -3,7 +3,8 @@ import {
     Platform,
     StyleSheet,
     Text,
-    View
+    View,
+    Image,
 } from 'react-native';
 
 import {Container,Title,Body, Label, Button, Header, Content, Form, Item, Input} from 'native-base';
@@ -16,12 +17,16 @@ export default class LoginBox extends Component {
         super(props);
         this.state = {
             username: 'admin',
-            password: 'admin2'
+            password: 'admin'
         }
     }
 
     login = () => {
         Network.login(this.state.username,this.state.password,false,(err,data,result)=>{
+            if(err) {
+                Network.setSpinner(false);
+                return;
+            }
             SessionManager.createSession(data);
             Network.getScheduleInfo((err,data,result)=>{
                 if(err) return;
@@ -55,6 +60,7 @@ export default class LoginBox extends Component {
                     flexDirection: 'column',
                     justifyContent: 'center'
                 }}>
+                    <Image style={styles.image} source={require("../../assets/logo.png")}/>
                     <Form>
                         <Item floatingLabel>
                             <Label>Username</Label>
@@ -94,5 +100,10 @@ const styles = StyleSheet.create({
     },
     bgBlue: {
         backgroundColor: 'blue'
+    },image:{
+        width:128,
+        height:128,
+        alignSelf:"center",
+        marginBottom:60
     }
 });
