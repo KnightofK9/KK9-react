@@ -6,7 +6,7 @@ class DummyData {
         let prepareFoodRows = [];
         let dummyUrl = DummyData.dummyImage();
         prepareFoodRows.push(DummyData.createPrepareFoodRow(1, dummyUrl, "Thịt bò", Constant.PREPARE_STATE.QUEUE));
-        prepareFoodRows.push(DummyData.createPrepareFoodRow(2, dummyUrl, "Thịt bò", Constant.PREPARE_STATE.CANCEL));
+        prepareFoodRows.push(DummyData.createPrepareFoodRow(2, dummyUrl, "Thịt bò", Constant.PREPARE_STATE.PROCESSING_CANCEL));
         prepareFoodRows.push(DummyData.createPrepareFoodRow(3, dummyUrl, "Thịt bò", Constant.PREPARE_STATE.COOKED));
         prepareFoodRows.push(DummyData.createPrepareFoodRow(4, dummyUrl, "Thịt bò", Constant.PREPARE_STATE.COOKED));
         prepareFoodRows.push(DummyData.createPrepareFoodRow(5, dummyUrl, "Thịt bò", Constant.PREPARE_STATE.COOKED));

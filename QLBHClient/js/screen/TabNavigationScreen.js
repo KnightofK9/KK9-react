@@ -26,6 +26,7 @@ import {TabNavigator, TabBarBottom} from 'react-navigation';
 import Menu from './Menu'
 import DanhSachOrder from './DanhSachOrder'
 import PrepareFood from './PrepareFood'
+import PrepareFoodWithOrder from './PrepareFoodWithOrder'
 import Config from './Config'
 import CommonComponent from '../share/CommonComponent'
 
@@ -44,14 +45,14 @@ const TabNavigationScreen = TabNavigator({
                 tabBarIcon: CommonComponent.createFunctionIcon("pizza"),
             }
         },
-        PrepareFood: {
-            screen: PrepareFood,
+        PrepareFoodWithOrder: {
+            screen: PrepareFoodWithOrder,
             navigationOptions: {
                 title: "Món chờ",
                 tabBarIcon: CommonComponent.createFunctionIcon("list-box"),
             }
         },
-        Config: {
+    Config: {
             screen: Config,
             navigationOptions: {
                 title: "Cài đặt",

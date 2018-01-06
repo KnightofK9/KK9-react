@@ -13,6 +13,7 @@ import * as Constant from '../share/Constant'
 import {CachedImage} from "react-native-img-cache";
 import Helper from '../share/Helper'
 import Network from '../share/Network'
+import Popup from "../share/Popup";
 
 export default class PrepareFoodRow extends Component {
     constructor(props) {
@@ -26,7 +27,8 @@ export default class PrepareFoodRow extends Component {
 
     getPrepText = (prepareState) => {
         switch (prepareState) {
-            case Constant.PREPARE_STATE.CANCEL:
+            case Constant.PREPARE_STATE.PROCESSING_CANCEL:
+            case Constant.PREPARE_STATE.QUEUE_CANCEL:
                 return "ĐÃ HUỶ";
             case Constant.PREPARE_STATE.QUEUE:
                 return "NẤU";
@@ -48,7 +50,8 @@ export default class PrepareFoodRow extends Component {
             case Constant.PREPARE_STATE.COOKED:
                 return Constant.PREPARE_STATE.SERVED;
             case Constant.PREPARE_STATE.SERVED:
-            case Constant.PREPARE_STATE.CANCEL:
+            case Constant.PREPARE_STATE.PROCESSING_CANCEL:
+            case Constant.PREPARE_STATE.QUEUE_CANCEL:
                 return null;
         }
     };
@@ -64,7 +67,8 @@ export default class PrepareFoodRow extends Component {
             case Constant.PREPARE_STATE.COOKED:
                 break;
             case Constant.PREPARE_STATE.SERVED:
-            case Constant.PREPARE_STATE.CANCEL:
+            case Constant.PREPARE_STATE.PROCESSING_CANCEL:
+            case Constant.PREPARE_STATE.QUEUE_CANCEL:
                 btn.disabled = true;
                 btn.light = true;
                 btn.success = false;
@@ -84,7 +88,8 @@ export default class PrepareFoodRow extends Component {
             case Constant.PREPARE_STATE.COOKED:
             case Constant.PREPARE_STATE.SERVED:
                 break;
-            case Constant.PREPARE_STATE.CANCEL:
+            case Constant.PREPARE_STATE.PROCESSING_CANCEL:
+            case Constant.PREPARE_STATE.QUEUE_CANCEL:
                 btn.danger = false;
                 btn.light = true;
                 btn.disabled = true;
@@ -93,10 +98,15 @@ export default class PrepareFoodRow extends Component {
         return btn;
     };
     onCancelClick = () => {
-        let nextPrepareState = Constant.PREPARE_STATE.CANCEL;
-        Network.setPrepareFoodStateTo(this.state.prepareFood.PrepareFoodId,nextPrepareState,(err,data,result)=>{
+        Popup.showInput("Xóa","Vui lòng nhập lý do xóa món ăn",(reason)=>{
+            this.processCancel(reason);
+        });
+
+    };
+    processCancel = (reason) =>{
+        Network.cancelPrepareFood(this.state.prepareFood.PrepareFoodId,reason,(err,data,result)=>{
             if(err) return;
-            this.state.prepareFood.PrepareStateId = nextPrepareState;
+            this.state.prepareFood.PrepareStateId = Constant.PREPARE_STATE.PROCESSING_CANCEL;
             this.refreshUi();
         })
     };
@@ -109,7 +119,8 @@ export default class PrepareFoodRow extends Component {
         })
     };
     refreshUi = () =>{
-        this.prevDispatcher.dispatch("refresh");
+        // this.prevDispatcher.dispatch("refresh");
+        this.forceUpdate();
     };
     render() {
         this.state.prepareFood = this.props.prepareFood;

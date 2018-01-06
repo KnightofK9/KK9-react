@@ -34,24 +34,32 @@ export default class ConfirmOrderRow extends Component {
     };
 
     render() {
+        let leftButton = null;
+        if (this.state.food.ModifyQuantities > 0) leftButton =
+            <Button  transparent onPress={() => {
+                this.addValueToQuantities(-1);
+            }}>
+                <Icon name='ios-arrow-dropdown'/>
+            </Button>;
         return (
             <View style={styles.container}>
                 <Text style={styles.indexTxt}>{this.state.index}</Text>
                 <Text style={styles.foodNameTxt}>{this.state.food.Food.Name}</Text>
-                <Text style={{color: 'rgb(255,160,0)', fontWeight: 'bold'}}>{this.state.food.Food.Price.format()} đ</Text>
-                <Button style={{marginLeft: 10}} transparent onPress={() => {
-                    this.addValueToQuantities(-1);
-                }}>
-                    <Icon name='ios-arrow-dropdown'/>
-                </Button>
-                <Text>
-                    {this.state.food.Quantities + this.state.food.ModifyQuantities}
-                </Text>
-                <Button style={{marginRight: -10}} transparent onPress={() => {
-                    this.addValueToQuantities(1);
-                }}>
-                    <Icon name='ios-arrow-dropup'/>
-                </Button>
+                <Text style={{color: 'rgb(255,160,0)', fontWeight: 'bold'}}>{this.state.food.Food.Price.format()}
+                    đ</Text>
+                <View style={{marginLeft: 10,width:100,flexDirection:"row",alignItems: 'center', justifyContent:"flex-end"}}>
+
+                    {leftButton}
+                    <Text>
+                        {this.state.food.Quantities + this.state.food.ModifyQuantities}
+                    </Text>
+                    <Button style={{marginRight: -10}} transparent onPress={() => {
+                        this.addValueToQuantities(1);
+                    }}>
+                        <Icon name='ios-arrow-dropup'/>
+                    </Button>
+                </View>
+
                 {/*<Button dange>*/}
                 {/*<Icon name='ios-trash'/>*/}
                 {/*</Button>*/}

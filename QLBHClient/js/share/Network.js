@@ -15,7 +15,7 @@ class Network {
         this.topEventDispatcher = topEventDispatcher;
     };
     getScheduleInfo = (callback, useLoadingAnimation = false) => {
-        let request = this.createRequest("GetAllScheduleInfo", "GET", true, true, useLoadingAnimation);
+        let request = this.createRequest("GetAllScheduleInfoV2", "GET", true, true, useLoadingAnimation);
         return request(null, callback);
     };
 
@@ -63,6 +63,14 @@ class Network {
         let body = {
             prepareFoodId,
             prepareStateId,
+        };
+        return request(body, callback);
+    };
+    cancelPrepareFood = (prepareFoodId, reason, callback)=>{
+        let request = this.createRequest("CancelPrepareFood","POST");
+        let body = {
+            prepareFoodId,
+            reason,
         };
         return request(body, callback);
     };
