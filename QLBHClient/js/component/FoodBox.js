@@ -63,6 +63,7 @@ export default class FoodBox extends Component {
     };
 
     render() {
+        if(this.props.food !== undefined && this.props.food !== null) this.state.food = this.props.food;
         let foodText = this.createFoodText();
         let foodPrice = this.createFoodPrice();
         let imageId = this.state.food.Food.ImageId;

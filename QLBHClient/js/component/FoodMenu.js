@@ -24,6 +24,7 @@ export default class FoodMenu extends Component {
         return this.state.order !== undefined && this.state.order !== null;
     };
     render() {
+        this.state.foodCategorize = this.props.foodCategorize;
         let foodListArr = this.state.foodCategorize.Foods.map((e, i) => {
             let orderFood = null;
             if(this.isCreateOrder()) orderFood = this.state.order.FoodWithOrders.find(k => k.FoodId === e.FoodId);

@@ -5,6 +5,7 @@ import {
     Text,
     View,
     ScrollView,
+    FlatList,
 } from 'react-native';
 import {Container, Body, Title, Label, Button, Header, Content, Form, Item, Input} from 'native-base';
 import PrepareFoodRow from '../component/PrepareFoodRow';
@@ -21,7 +22,8 @@ export default class PrepareFood extends BaseScreen {
         super(props);
         let prepareFoodList = SessionManager.getSession().getPrepareFoods();
         this.state = {
-            prepareFoodList:prepareFoodList
+            prepareFoodList:prepareFoodList,
+            refreshing:false
         };
         this.navigation = props.screenProps !== undefined ? props.screenProps.mainNavigation : props.navigation;
         this.loadScheduleHandle();
@@ -61,21 +63,31 @@ export default class PrepareFood extends BaseScreen {
             prepareFoodList:DummyData.dummyPrepareFoodList()
         }
     };
+    renderItem = ({item})=>{
+        return <PrepareFoodRow
+            // key={item.PrepareFoodId}
+                                prepareFood = {item}
+                                dispatcher={this.dispatcher}
+        />
+    };
+    handleUpdate = ()=>{
 
+    };
     render() {
-        let arg = this.state.prepareFoodList.map((e,i)=>{
-           return <PrepareFoodRow  key={e.PrepareFoodId}
-                                  prepareFood = {e}
-                                   dispatcher={this.dispatcher}
-           />
-        });
         return (
             <Container>
                 <RMHeader headerTitle={"Chuẩn bị món ăn"}/>
                 <Content>
-                    <ScrollView style={styles.scrView}>
-                        {arg}
-                    </ScrollView>
+
+                    <FlatList
+                        style={styles.scrView}
+                        data={this.state.prepareFoodList}
+                        keyExtractor={(item) =>{return item.PrepareFoodId}}
+                        renderItem={this.renderItem}
+                        extraData={this.state}
+                        // refreshing = {this.state.refreshing}
+                        // onRefresh={this.handleUpdate}
+                    />
                 </Content>
             </Container>
         )

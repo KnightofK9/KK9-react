@@ -112,6 +112,7 @@ export default class PrepareFoodRow extends Component {
         this.prevDispatcher.dispatch("refresh");
     };
     render() {
+        this.state.prepareFood = this.props.prepareFood;
         let foodUrl = Helper.createUrlFromImageId(this.state.prepareFood.Food.ImageId);
         let processBtnProperty = this.processButtonProperty(this.state.prepareFood.PrepareStateId);
         let cancelBtnProperty = this.cancelButtonProperty(this.state.prepareFood.PrepareStateId);
