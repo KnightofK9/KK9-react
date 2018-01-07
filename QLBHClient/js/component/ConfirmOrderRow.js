@@ -86,7 +86,7 @@ export default class ConfirmOrderRow extends Component {
                     {/*<Icon name='ios-trash'/>*/}
                     {/*</Button>*/}
                 </View>
-                <View>
+                <View style={{marginLeft: 10, marginRight: 0}}>
                     {prepareFoodRows}
                 </View>
             </View>

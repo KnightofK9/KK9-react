@@ -32,9 +32,17 @@ export default class PrepareFoodWithOrderRow extends Component {
             return this.renderItem(e);
         });
         return (
-            <View>
-                <Text>Order {this.state.orderWithPrepareFood.orderId}</Text>
-                <Text>Note: {this.state.orderWithPrepareFood.note}</Text>
+            <View style={{marginTop: 20}}>
+                <Text style={styles.foodCategoryHeaderTitle}>Order {this.state.orderWithPrepareFood.orderId}</Text>
+
+                <View style={{flexDirection: 'row', marginLeft : 10,}}>
+                    <Text style={[styles.foodNote, {fontWeight: 'bold'}]}>
+                        {"Ghi chú: "}
+                    </Text>
+                    <Text style={styles.foodNote}>
+                        {this.state.orderWithPrepareFood.note}
+                    </Text>
+                </View>
                 {arg}
             </View>
         )
@@ -43,4 +51,12 @@ export default class PrepareFoodWithOrderRow extends Component {
 
 const styles = StyleSheet.create({
     container: {},
+    foodCategoryHeaderTitle: {
+        fontSize: 20,
+        fontWeight: 'bold',
+        marginLeft : 10,
+    },
+    foodNote: {
+        fontWeight: '100',
+    },
 });
