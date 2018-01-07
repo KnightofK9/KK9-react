@@ -53,9 +53,9 @@ export default class OrderRow extends Component {
                         </Text>
                     </View>
                 </View>
-                <Button onPress={this.onCancelOrderClick} style={styles.button} transparent dark>
-                    <Icon name='ios-trash'/>
-                </Button>
+                {/*<Button onPress={this.onCancelOrderClick} style={styles.button} transparent dark>*/}
+                    {/*<Icon name='ios-trash'/>*/}
+                {/*</Button>*/}
             </TouchableOpacity>
         )
     }
