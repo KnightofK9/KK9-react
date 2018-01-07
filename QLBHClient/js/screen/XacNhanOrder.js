@@ -121,10 +121,10 @@ export default class XacNhanOrder extends BaseScreen {
         });
     };
     doUpdateOrder = () =>{
-        let foodWithOrderList = Helper.getFoodWithOrderList(this.state.order);
+        let modifyFoodList = Helper.getModifyFoodList(this.state.order);
         let orderId = this.state.order.OrderId;
         let note = this.state.order.Note;
-        Network.updateOrder(orderId,foodWithOrderList,note,(err,data,response)=>{
+        Network.updateOrderByQuantities(orderId,modifyFoodList,note,(err,data,response)=>{
             if(!err) Popup.showSuccess(()=>{
                 this.goBackToMain();
             });

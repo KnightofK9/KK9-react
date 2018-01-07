@@ -57,6 +57,7 @@ export default class Helper {
             if(food.ModifyQuantities !== 0){
                 modifyFoodList.push({
                     Name:food.Food.Name,
+                    FoodId: food.Food.FoodId,
                     ModifyQuantities:food.ModifyQuantities
                 })
             }

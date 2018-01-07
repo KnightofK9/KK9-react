@@ -8,6 +8,7 @@ import {
 
 import {Container, Icon, Label, Button, Header, Content, Form, Item, Input} from 'native-base';
 import Helper from '../share/Helper'
+import PrepareFoodRow from "./PrepareFoodRow";
 
 export default class ConfirmOrderRow extends Component {
     constructor(props) {
@@ -32,37 +33,62 @@ export default class ConfirmOrderRow extends Component {
             this.prevDispatcher.dispatch("refresh");
         }
     };
+    renderPrepareFoodRow = (item) =>{
+        return  <PrepareFoodRow
+            prepareFood = {item}
+            key={item.PrepareFoodId}
+            dispatcher={this.prevDispatcher}
+        />
+    };
+    createPrepareFoodRow = () => {
+        let prepareFoods = this.state.food.PrepareFoods;
+        if(prepareFoods === null || prepareFoods === undefined) return null;
+        let arg = prepareFoods.map(this.renderPrepareFoodRow);
+        return arg;
+    };
 
     render() {
         let leftButton = null;
+        let prepareFoodRows = this.createPrepareFoodRow();
         if (this.state.food.ModifyQuantities > 0) leftButton =
-            <Button  transparent onPress={() => {
+            <Button transparent onPress={() => {
                 this.addValueToQuantities(-1);
             }}>
                 <Icon name='ios-arrow-dropdown'/>
             </Button>;
         return (
-            <View style={styles.container}>
-                <Text style={styles.indexTxt}>{this.state.index}</Text>
-                <Text style={styles.foodNameTxt}>{this.state.food.Food.Name}</Text>
-                <Text style={{color: 'rgb(255,160,0)', fontWeight: 'bold'}}>{this.state.food.Food.Price.format()}
-                    đ</Text>
-                <View style={{marginLeft: 10,width:100,flexDirection:"row",alignItems: 'center', justifyContent:"flex-end"}}>
-
-                    {leftButton}
-                    <Text>
-                        {this.state.food.Quantities + this.state.food.ModifyQuantities}
-                    </Text>
-                    <Button style={{marginRight: -10}} transparent onPress={() => {
-                        this.addValueToQuantities(1);
+            <View>
+                <View style={styles.container}>
+                    <Text style={styles.indexTxt}>{this.state.index}</Text>
+                    <Text style={styles.foodNameTxt}>{this.state.food.Food.Name}</Text>
+                    <Text style={{color: 'rgb(255,160,0)', fontWeight: 'bold'}}>{this.state.food.Food.Price.format()}
+                        đ</Text>
+                    <View style={{
+                        marginLeft: 10,
+                        width: 100,
+                        flexDirection: "row",
+                        alignItems: 'center',
+                        justifyContent: "flex-end"
                     }}>
-                        <Icon name='ios-arrow-dropup'/>
-                    </Button>
-                </View>
 
-                {/*<Button dange>*/}
-                {/*<Icon name='ios-trash'/>*/}
-                {/*</Button>*/}
+                        {leftButton}
+                        <Text>
+                            {this.state.food.Quantities + this.state.food.ModifyQuantities}
+                        </Text>
+                        <Button style={{marginRight: -10}} transparent onPress={() => {
+                            this.addValueToQuantities(1);
+                        }}>
+                            <Icon name='ios-arrow-dropup'/>
+                        </Button>
+                    </View>
+
+                    {/*<Button dange>*/}
+                    {/*<Icon name='ios-trash'/>*/}
+                    {/*</Button>*/}
+                </View>
+                <View>
+                    {prepareFoodRows}
+                </View>
             </View>
         )
     }

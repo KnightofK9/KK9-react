@@ -20,11 +20,14 @@ class Network {
     };
 
     getOrderById = (orderId, callback) => {
-        let request = this.createRequest("GetOrderById", "POST");
+        let request = this.createRequest("GetOrderByIdV2", "POST");
         let body = {
             orderId
         };
-        return request(body, callback);
+        return request(body, (err,data,result)=>{
+            if(err) callback(err,null,result);
+            callback(err,JSON.parse(data),result);
+        });
     };
 
     createOrder = (tableId, FoodWithOrderList,note, callback) => {
@@ -43,6 +46,15 @@ class Network {
             orderId,
             note,
             foodWithOrder: FoodWithOrderList
+        };
+        return request(body, callback);
+    };
+    updateOrderByQuantities = (orderId, modifyQuantitiesInfos,note, callback) => {
+        let request = this.createRequest("UpdateOrderByModifyQuantities", "POST");
+        let body = {
+            orderId,
+            note,
+            modifyQuantitiesInfos: modifyQuantitiesInfos
         };
         return request(body, callback);
     };
